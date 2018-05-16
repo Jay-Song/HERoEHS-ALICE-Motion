@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<launch>    
+
+    <param name="gazebo"                   value="false"     type="bool"/>
+    <param name="gazebo_robot_name"        value="ski_simulation_test" />
+
+    <param name="offset_table"             value="$(find alice_manager)/config/offset.yaml"/>
+    <param name="robot_file_path"          value="$(find alice_manager)/config/alice.robot"/>
+    <param name="init_file_path"           value="$(find alice_manager)/config/dxl_init.yaml"/>
+      
+    <!-- alice Manager -->
+    <node name="alice_manager_node" pkg="alice_manager" type="alice_manager_node" output="screen"/>
+    <!--<node name="decision_module" pkg="decision_module" type="decision_module" output="screen"/>-->
+    
+</launch>
+

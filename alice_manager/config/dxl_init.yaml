@@ -1,0 +1,7 @@
+l_hip_pitch:
+  position_p_gain: 850
+  return_delay_time: 10
+r_hip_pitch:
+  position_p_gain: 850
+  return_delay_time: 10
+
