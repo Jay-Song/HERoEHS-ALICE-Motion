@@ -48,15 +48,18 @@ public:
 	bool isRunning();
 
 	bool gazebo_check;
+	bool is_moving_state;
 
 	/* ROS Topic Callback Functions */
 
 	void initPoseMsgCallback(const std_msgs::String::ConstPtr& msg);
+	void go_to_init_pose(std::string data);
 	std::map<std::string, heroehs_math::FifthOrderTrajectory *> motion_trajectory;
 
 private:
 	void queueThread();
 	void parse_init_pose_data_(const std::string &path);
+	void parse_init_offset_pose_data_(const std::string &path, const std::string &data);
 	void init_pose_trajectory_();
 	bool running_;
 
@@ -68,7 +71,6 @@ private:
 	std::map<std::string, int> joint_name_to_id_;
 	std::map<int, std::string> joint_id_to_name_;
 
-	bool is_moving_state;
 	double mov_time_state;
 	std::map<std::string, double> joint_name_to_ini_pose_state_;
 	std::map<std::string, double> joint_name_to_ini_pose_goal_;

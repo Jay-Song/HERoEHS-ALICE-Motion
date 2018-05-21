@@ -121,6 +121,40 @@ void BaseModule::parse_init_pose_data_(const std::string &path)
 		joint_name_to_ini_pose_goal_[joint_id_to_name_[id]] = value * DEGREE2RADIAN; // YAML에 로드된 초기 포즈 값을 라디안으로 바꾸고, eigen matrix 에 id 개수만큼 열을 생성한다.
 	}
 }
+void BaseModule::parse_init_offset_pose_data_(const std::string &path, const std::string &data)
+{
+	YAML::Node doc; // YAML file class 선언!
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+
+	mov_time_state = 4.0;
+
+	YAML::Node tar_pose_node;
+	if(data.compare("init_offset_pose") == 0) // offset 이  0 이여야 한다.
+	{
+		tar_pose_node = doc["offset"];// YAML 에 string "tar_pose"을 읽어온다.
+	}
+	if(data.compare("init_offset_pose_zero") == 0) // offset 이  0 이여야 한다.
+	{
+		tar_pose_node = doc["init_pose_for_offset_tuner"];// YAML 에 string "tar_pose"을 읽어온다.
+	}
+	for (YAML::iterator it = tar_pose_node.begin(); it != tar_pose_node.end(); ++it) //tar_pose_node 벡터의 처음과 시작 끝까지 for 문으로 반복한다.
+	{
+		std::string joint_name = it->first.as<std::string>();
+		double value;
+		// 한 줄에서 int 와 double 을 분리한다.
+		value = it->second.as<double>();
+		joint_name_to_ini_pose_goal_[joint_name] = value; //
+	}
+}
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg) // GUI 에서 init pose topic을 sub 받아 실
 {
 	std::string init_pose_path;// 로스 패키지에서 YAML파일의 경로를 읽어온다.
@@ -176,8 +210,20 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
 			if(gazebo_check == true)
 				result_[joint_name]->goal_position_ = result_[joint_name]->present_position_; // 가제보 상 초기위치 0
 			else
-				result_[joint_name]->goal_position_ = dxls[joint_name]->dxl_state_->present_position_; // 다이나믹셀에서 읽어옴
-			joint_name_to_ini_pose_state_[joint_name] = dxls[joint_name]->dxl_state_->present_position_; // 초기위치 저장
+				if(dxls[joint_name]->direction_==1)
+				{
+					result_[joint_name]->goal_position_ = dxls[joint_name]->dxl_state_->present_position_; // 다이나믹셀에서 읽어옴
+					joint_name_to_ini_pose_state_[joint_name] = dxls[joint_name]->dxl_state_->present_position_; // 초기위치 저장
+					printf("value == 1 ::  %s  :: %d \n", joint_name.c_str(), dxls[joint_name]->direction_);
+				}
+
+				else
+				{
+					result_[joint_name]->goal_position_ = -dxls[joint_name]->dxl_state_->present_position_; // 다이나믹셀에서 읽어옴
+					joint_name_to_ini_pose_state_[joint_name] = -dxls[joint_name]->dxl_state_->present_position_; // 초기위치 저장
+					printf("value == - 1 ::  %s  :: %f \n", joint_name.c_str(), -dxls[joint_name]->dxl_state_->present_position_);
+				}
+			//printf("value1 ::  %s  :: %f", joint_name.c_str(), dxls[joint_name]->dxl_state_->present_position_);
 		} // 등록된 다이나믹셀의 위치값을 읽어와서 goal position 으로 입력
 		ROS_INFO("Base module :: Read position and Send goal position");
 	}
@@ -195,7 +241,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
 	}
 	else
 	{
-		ROS_INFO("Base Trajectory Start");
+		//ROS_INFO("Base Trajectory Start");
 		for (std::map<std::string, robotis_framework::Dynamixel*>::iterator state_iter = dxls.begin();
 				state_iter != dxls.end(); state_iter++)
 		{
@@ -203,16 +249,29 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
 
 			result_[joint_name]->goal_position_ =  motion_trajectory[joint_name]->fifth_order_traj_gen(joint_name_to_ini_pose_state_[joint_name],
 					joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
-
-
-
 			is_moving_state = motion_trajectory[joint_name]->is_moving_traj;
 		} // 등록된 다이나믹셀  goal position 으로 입력
+		//printf("value2 ::  l_hip_pitch :: %f \n", result_["l_hip_pitch"]->goal_position_);
 	}
 }
 void BaseModule::stop()
 {
 	return;
+}
+void BaseModule::go_to_init_pose(std::string data)
+{
+
+	std::string init_pose_path;// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	if(data.compare("init_offset_pose") == 0 || data.compare("init_offset_pose_zero") == 0)
+	{
+		init_pose_path = ros::package::getPath("alice_manager") + "/config/offset.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+		parse_init_offset_pose_data_(init_pose_path, data); // YAML 파일 로드
+		ROS_INFO("FILE LOAD  ::  %s", data.c_str());
+	}
+
+	new_count_ = 1;
+	is_moving_state = true;
+	ROS_INFO("FILE LOAD complete");
 }
 
 
