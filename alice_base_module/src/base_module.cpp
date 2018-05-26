@@ -59,6 +59,19 @@ BaseModule::BaseModule()
 	// TEST
 	result_["l_hip_pitch"]     = new robotis_framework::DynamixelState();  // joint 17
 	result_["r_hip_pitch"]     = new robotis_framework::DynamixelState();  // joint 18
+	/*result_["l_hip_pitch"]      = new robotis_framework::DynamixelState();  // joint 11
+	result_["l_hip_roll"]       = new robotis_framework::DynamixelState();  // joint 13
+	result_["l_hip_yaw"]        = new robotis_framework::DynamixelState();  // joint 15
+	result_["l_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 17
+	result_["l_ankle_pitch"]    = new robotis_framework::DynamixelState();  // joint 19
+	result_["l_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 21
+
+	result_["r_hip_pitch"]      = new robotis_framework::DynamixelState();  // joint 12
+	result_["r_hip_roll"]       = new robotis_framework::DynamixelState();  // joint 14
+	result_["r_hip_yaw"]        = new robotis_framework::DynamixelState();  // joint 16
+	result_["r_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 18
+	result_["r_ankle_pitch"]    = new robotis_framework::DynamixelState();  // joint 20
+	result_["r_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 22*/
 
 	//init
 	new_count_ = 1;
