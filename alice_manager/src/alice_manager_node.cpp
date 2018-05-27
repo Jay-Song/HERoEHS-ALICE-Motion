@@ -7,8 +7,10 @@
 
 #include "robotis_controller/robotis_controller.h"
 #include "alice_base_module/base_module.h"
+#include "alice_leg_module/alice_leg_module.h"
 
 using namespace alice;
+using namespace alice_leg_module;
 
 
 
@@ -53,6 +55,7 @@ int main(int argc, char **argv)
 
     sleep(1);
     controller->addMotionModule((robotis_framework::MotionModule*)BaseModule::getInstance());
+    controller->addMotionModule((robotis_framework::MotionModule*)AliceLegModule::getInstance());
 
     controller->startTimer();
 

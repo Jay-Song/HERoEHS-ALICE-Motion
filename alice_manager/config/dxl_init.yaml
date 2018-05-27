@@ -37,5 +37,14 @@ r_ankle_pitch:
 r_ankle_roll:
   position_p_gain: 850
   return_delay_time: 10
+  
+  
+waist_pitch:
+  position_p_gain: 850
+  return_delay_time: 10
+  
+waist_yaw:
+  position_p_gain: 850
+  return_delay_time: 10
 
 

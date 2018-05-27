@@ -57,9 +57,7 @@ BaseModule::BaseModule()
 	 */
 
 	// TEST
-	result_["l_hip_pitch"]     = new robotis_framework::DynamixelState();  // joint 17
-	result_["r_hip_pitch"]     = new robotis_framework::DynamixelState();  // joint 18
-	/*result_["l_hip_pitch"]      = new robotis_framework::DynamixelState();  // joint 11
+	result_["l_hip_pitch"]      = new robotis_framework::DynamixelState();  // joint 11
 	result_["l_hip_roll"]       = new robotis_framework::DynamixelState();  // joint 13
 	result_["l_hip_yaw"]        = new robotis_framework::DynamixelState();  // joint 15
 	result_["l_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 17
@@ -71,7 +69,11 @@ BaseModule::BaseModule()
 	result_["r_hip_yaw"]        = new robotis_framework::DynamixelState();  // joint 16
 	result_["r_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 18
 	result_["r_ankle_pitch"]    = new robotis_framework::DynamixelState();  // joint 20
-	result_["r_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 22*/
+	result_["r_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 22
+
+	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
+	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
+
 
 	//init
 	new_count_ = 1;
@@ -263,8 +265,9 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
 			result_[joint_name]->goal_position_ =  motion_trajectory[joint_name]->fifth_order_traj_gen(joint_name_to_ini_pose_state_[joint_name],
 					joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
 			is_moving_state = motion_trajectory[joint_name]->is_moving_traj;
+
+			printf("value2 ::  %s :: %f \n", joint_name.c_str(), result_[joint_name]->goal_position_);
 		} // 등록된 다이나믹셀  goal position 으로 입력
-		//printf("value2 ::  l_hip_pitch :: %f \n", result_["l_hip_pitch"]->goal_position_);
 	}
 }
 void BaseModule::stop()
