@@ -4,7 +4,6 @@
  *  Created on: May 27, 2018
  *      Author: robotemperor
  */
-
 #include <stdio.h>
 #include "alice_leg_module/alice_leg_module.h"
 
@@ -263,32 +262,6 @@ void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel 
 	r_kinematics_->InverseKinematics(result_pose_r_modified_.x, result_pose_r_modified_.y + 0.09, result_pose_r_modified_.z,
 			result_pose_r_modified_.yaw, result_pose_r_modified_.pitch, result_pose_r_modified_.roll); // pX pY pZ alpha betta kamma
 
-
-	if(new_count_ == 1)
-	{
-		new_count_ ++;
-		/*for (std::map<std::string, robotis_framework::Dynamixel*>::iterator state_iter = dxls.begin();
-					state_iter != dxls.end(); state_iter++)
-			{
-				std::string joint_name = state_iter->first;
-				robotis_framework::Dynamixel* dxl_info = state_iter->second;
-				if(dxl_info->id_ > 10 && dxl_info->id_ < 23)
-				{
-					if(gazebo_check == true)
-						result_[joint_name]->goal_position_ = result_[joint_name]->present_position_; // 가제보 상 초기위치 0
-				}
-			} //*/
-		for(int joint_num = 1; joint_num <7 ; joint_num++)
-		{
-			printf("11111111111111LEFT  ::  %d ::  %f \n", joint_num, l_kinematics_->joint_radian(joint_num,0));
-			//printf("RIGHT ::  %d ::  %f", joint_num, r_kinematics_->joint_radian(joint_num,0));
-		}
-		for(int joint_num = 1; joint_num <7 ; joint_num++)
-		{
-			//printf("LEFT  ::  %d ::  %f", joint_num, l_kinematics_->joint_radian(joint_num,0));
-			printf("11111111111111111RIGHT ::  %d ::  %f \n", joint_num, r_kinematics_->joint_radian(joint_num,0));
-		}
-	}
 	//<---  test control --->
 
 	//	result_[joint_id_to_name_[18]]->goal_position_ = r_kinematics_->joint_radian(4,0);

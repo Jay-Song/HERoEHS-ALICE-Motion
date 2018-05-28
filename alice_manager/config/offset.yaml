@@ -18,6 +18,9 @@ offset:
   waist_yaw: 0.0 
   waist_pitch: 0.0
 
+  head_yaw: 0.0 
+  head_pitch: 0.0
+
  
 init_pose_for_offset_tuner:
   l_hip_pitch: 0.0
@@ -38,5 +41,9 @@ init_pose_for_offset_tuner:
   
   waist_yaw: 0.0 
   waist_pitch: 0.0
+
+  head_yaw: 0.0 
+  head_pitch: 0.0
+
 
 

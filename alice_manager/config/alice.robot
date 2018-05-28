@@ -8,16 +8,19 @@ control_cycle = 8   # milliseconds
 
 [ device info ]
 ## TYPE   | PORT NAME    | ID   | MODEL         | PROTOCOL | DEV NAME           | BULK READ ITEMS
-#dynamixel | /dev/ttyUSB0 |  1   | MX-28-1       | 2.0      | l_shoulder_pitch   | present_position
-#dynamixel | /dev/ttyUSB0 |  2   | MX-28-2       | 2.0      | r_shoulder_pitch   | present_position
-#dynamixel | /dev/ttyUSB0 |  3   | MX-64-3       | 2.0      | l_shoulder_roll    | present_position
+#dynamixel | /dev/ttyUSB0 |  1   | MX-28-1       | 2.0      | l_shoulder_pitch  | present_position
+#dynamixel | /dev/ttyUSB0 |  2   | MX-28-2       | 2.0      | r_shoulder_pitch  | present_position
+#dynamixel | /dev/ttyUSB0 |  3   | MX-64-3       | 2.0      | l_shoulder_roll   | present_position
 
-#dynamixel | /dev/ttyUSB0 |  4   | MX-64-4       | 2.0      | r_shoulder_roll    | present_position
-#dynamixel | /dev/ttyUSB0 |  5   | MX-28-5       | 2.0      | l_elbow_pitch      | present_position
-#dynamixel | /dev/ttyUSB0 |  6   | MX-28-6       | 2.0      | r_elbow_pitch      | present_position
+#dynamixel | /dev/ttyUSB0 |  4   | MX-64-4       | 2.0      | r_shoulder_roll   | present_position
+#dynamixel | /dev/ttyUSB0 |  5   | MX-28-5       | 2.0      | l_elbow_pitch     | present_position
+#dynamixel | /dev/ttyUSB0 |  6   | MX-28-6       | 2.0      | r_elbow_pitch     | present_position
+
+dynamixel | /dev/ttyUSB0 |  7   | MX-64-7       | 2.0      | head_pitch         | present_position
+dynamixel | /dev/ttyUSB0 |  8   | MX-64-8       | 2.0      | head_yaw           | present_position
 
 dynamixel | /dev/ttyUSB0 |  9   | MX-106-2-9    | 2.0      | waist_yaw          | present_position
-dynamixel | /dev/ttyUSB0 | 10   | MX-106-2-10   | 2.0      | waist_pitch         | present_position
+dynamixel | /dev/ttyUSB0 | 10   | MX-106-2-10   | 2.0      | waist_pitch        | present_position
 
 dynamixel | /dev/ttyUSB0 | 11   | MX-106-2-11   | 2.0      | l_hip_pitch        | present_position
 dynamixel | /dev/ttyUSB0 | 12   | MX-106-2-12   | 2.0      | r_hip_pitch        | present_position
@@ -33,6 +36,6 @@ dynamixel | /dev/ttyUSB0 | 20   | MX-106-2-20   | 2.0      | r_ankle_pitch      
 dynamixel | /dev/ttyUSB0 | 21   | MX-106-2-21   | 2.0      | l_ankle_roll       | present_position
 dynamixel | /dev/ttyUSB0 | 22   | MX-106-2-22   | 2.0      | r_ankle_roll       | present_position
 
-#dynamixel | /dev/ttyUSB0 | 23   | MX-28-23      | 2.0      | head_yaw           | present_position
-#dynamixel | /dev/ttyUSB0 | 24   | MX-28-24      | 2.0      | head_pitch         | present_position
-#dynamixel | /dev/ttyUSB0 | 25   | MX-28-25      | 2.0      | head_roll          | present_position
+#dynamixel | /dev/ttyUSB0 | 23   | MX-28-23      | 2.0      | head_yaw          | present_position
+#dynamixel | /dev/ttyUSB0 | 24   | MX-28-24      | 2.0      | head_pitch        | present_position
+#dynamixel | /dev/ttyUSB0 | 25   | MX-28-25      | 2.0      | head_roll         | present_position

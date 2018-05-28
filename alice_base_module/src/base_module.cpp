@@ -74,6 +74,9 @@ BaseModule::BaseModule()
 	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
 	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
 
+        result_["head_yaw"]         = new robotis_framework::DynamixelState();  // joint 7
+	result_["head_pitch"]       = new robotis_framework::DynamixelState();  // joint 8
+
 
 	//init
 	new_count_ = 1;

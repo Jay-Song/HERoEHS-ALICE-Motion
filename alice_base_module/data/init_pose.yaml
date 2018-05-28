@@ -12,6 +12,9 @@ tar_pose :
 #  5  : 0.0                  # l_elbow_pitch
 #  6  : 0.0                   # r_elbow_pitch
 
+  7  :  0.0 		        # head_yaw
+  8  :  0.0 		        # head_pitch
+
   9  :  0.0 		        # waist_yaw
   10 :  0.0 		        # waist_pitch
 
@@ -26,7 +29,7 @@ tar_pose :
   19 : -22.6437	        # l_ankle_pitch	 
   20 : -22.6437	        # r_ankle_pitch  
   21 : 0.0	                # l_ankle_roll  
-  22 : 0.0 	                # r_ankle_roll  Z :: 0.57 
+  22 : 0.0 	                # r_ankle_roll  
  
 #  23 : 0.0                      # head_yaw
 #  24 : 0.0                      # head_pitch
