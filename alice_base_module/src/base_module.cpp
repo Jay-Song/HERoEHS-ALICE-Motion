@@ -71,11 +71,11 @@ BaseModule::BaseModule()
 	result_["r_ankle_pitch"]    = new robotis_framework::DynamixelState();  // joint 20
 	result_["r_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 22
 
-	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
-	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
+//	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
+//	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
 
     //    result_["head_yaw"]         = new robotis_framework::DynamixelState();  // joint 7
-	result_["head_pitch"]       = new robotis_framework::DynamixelState();  // joint 8
+//	result_["head_pitch"]       = new robotis_framework::DynamixelState();  // joint 8
 
 
 	//init

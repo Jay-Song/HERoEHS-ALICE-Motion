@@ -15,11 +15,11 @@ offset:
   r_ankle_pitch: 0.0
   r_ankle_pitch: 0.0
   
-  waist_yaw: 0.0 
-  waist_pitch: 0.0
+#  waist_yaw: 0.0 
+#  waist_pitch: 0.0
 
 #  head_yaw: 0.0 
-  head_pitch: 0.0
+#  head_pitch: 0.0
 
  
 init_pose_for_offset_tuner:
@@ -39,11 +39,11 @@ init_pose_for_offset_tuner:
   r_ankle_pitch: 0.0
   r_ankle_pitch: 0.0
   
-  waist_yaw: 0.0 
-  waist_pitch: 0.0
+#  waist_yaw: 0.0 
+#  waist_pitch: 0.0
 
 #  head_yaw: 0.0 
-  head_pitch: 0.0
+#  head_pitch: 0.0
 
 
 
