@@ -17,7 +17,7 @@ control_cycle = 8   # milliseconds
 #dynamixel | /dev/ttyUSB0 |  6   | MX-28-6       | 2.0      | r_elbow_pitch     | present_position
 
 dynamixel | /dev/ttyUSB0 |  7   | MX-64-7       | 2.0      | head_pitch         | present_position
-dynamixel | /dev/ttyUSB0 |  8   | MX-64-8       | 2.0      | head_yaw           | present_position
+#dynamixel | /dev/ttyUSB0 |  8   | MX-64-8       | 2.0      | head_yaw           | present_position
 
 dynamixel | /dev/ttyUSB0 |  9   | MX-106-2-9    | 2.0      | waist_yaw          | present_position
 dynamixel | /dev/ttyUSB0 | 10   | MX-106-2-10   | 2.0      | waist_pitch        | present_position
