@@ -22,8 +22,8 @@ tar_pose :
   12 : -22.6437		# r_hip_pitch  
   13 : 0.0 		        # l_hip_roll 
   14 : 0.0 		        # r_hip_roll 
-  15 : 10.0 		        # l_hip_yaw  
-  16 : 10.0 		        # r_hip_yaw 
+  15 : 0.0 		        # l_hip_yaw  
+  16 : 0.0 		        # r_hip_yaw 
   17 : 45.2875		# l_knee_pitch 
   18 : 45.2875		# r_knee_pitch 
   19 : -22.6437	        # l_ankle_pitch	 
