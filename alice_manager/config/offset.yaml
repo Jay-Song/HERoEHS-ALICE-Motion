@@ -1,49 +1,26 @@
 offset:
-  l_hip_pitch: 0.0
-  l_hip_roll: 0.0
-  l_hip_yaw: 0.0
-  
-  l_knee_pitch: 0.0
-  l_ankle_pitch: 0.0
-  l_ankle_pitch: 0.0
- 
-  r_hip_pitch: 0.0
-  r_hip_roll: 0.0
-  r_hip_yaw: 0.0
-  
-  r_knee_pitch: 0.0
-  r_ankle_pitch: 0.0
-  r_ankle_pitch: 0.0
-  
-#  waist_yaw: 0.0 
-#  waist_pitch: 0.0
-
-#  head_yaw: 0.0 
-#  head_pitch: 0.0
-
- 
+  l_ankle_pitch: 0.006710664437172775
+  l_ankle_roll: 0.01477187018661456
+  l_hip_pitch: 0.07712216840418575
+  l_hip_roll: 0.0248314691953125
+  l_hip_yaw: 0.01678621612115291
+  l_knee_pitch: 0.01276262126959896
+  r_ankle_pitch: -0.006045086143024163
+  r_ankle_roll: -0.0006711207890625
+  r_hip_pitch: -0.01275687702103623
+  r_hip_roll: -0.00537158915876893
+  r_hip_yaw: -0.0006711207890625
+  r_knee_pitch: -0.009256054539393939
 init_pose_for_offset_tuner:
-  l_hip_pitch: 0.0
-  l_hip_roll: 0.0
-  l_hip_yaw: 0.0
-  
-  l_knee_pitch: 0.0
-  l_ankle_pitch: 0.0
-  l_ankle_pitch: 0.0
-  
-  r_hip_pitch: 0.0
-  r_hip_roll: 0.0
-  r_hip_yaw: 0.0
-  
-  r_knee_pitch: 0.0
-  r_ankle_pitch: 0.0
-  r_ankle_pitch: 0.0
-  
-#  waist_yaw: 0.0 
-#  waist_pitch: 0.0
-
-#  head_yaw: 0.0 
-#  head_pitch: 0.0
-
-
-
+  l_ankle_pitch: 0
+  l_ankle_roll: 0
+  l_hip_pitch: 0
+  l_hip_roll: 0
+  l_hip_yaw: 0
+  l_knee_pitch: 0
+  r_ankle_pitch: 0
+  r_ankle_roll: 0
+  r_hip_pitch: 0
+  r_hip_roll: 0
+  r_hip_yaw: 0
+  r_knee_pitch: 0
