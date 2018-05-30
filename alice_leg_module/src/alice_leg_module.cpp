@@ -108,21 +108,24 @@ void AliceLegModule::initialize(const int control_cycle_msec, robotis_framework:
 	cop_compensation->pidControllerFz_y->max_ = 0.05;
 	cop_compensation->pidControllerFz_y->min_ = -0.05;*/
 
+	zmp_compensation->pidControllerFz_x->max_ = 0.05;
+	zmp_compensation->pidControllerFz_x->min_ = -0.05;
+	zmp_compensation->pidControllerFz_y->max_ = 0.05;
+	zmp_compensation->pidControllerFz_y->min_ = -0.05;
+
 	ROS_INFO("< -------  Initialize Module : LEG Module !!  ------->");
 }
 bool AliceLegModule::isRunning()
 {
 	return running_;
 }
-/*void AliceLegModule::updateBalanceParameter()
+void AliceLegModule::updateBalanceParameter()
 {
 	if(balance_update_ == false)
 		return;
-
-	double coeff = 0.0;
 	balance_updating_sys_time_sec_ += control_cycle_msec_ * 0.001;
 
-	if(balance_updating_sys_time_sec_ > balance_updating_duration_sec_)
+	/*if(balance_updating_sys_time_sec_ > balance_updating_duration_sec_)
 	{
 		balance_updating_sys_time_sec_ = balance_updating_duration_sec_;
 
@@ -148,25 +151,38 @@ bool AliceLegModule::isRunning()
 
 		balance_ctrl_.foot_pitch_gyro_ctrl_.p_gain_ = (desired_balance_param_.foot_pitch_gyro_p_gain - previous_balance_param_.foot_pitch_gyro_p_gain)*coeff + previous_balance_param_.foot_pitch_gyro_p_gain;
 		balance_ctrl_.foot_pitch_gyro_ctrl_.d_gain_ = (desired_balance_param_.foot_pitch_gyro_d_gain - previous_balance_param_.foot_pitch_gyro_d_gain)*coeff + previous_balance_param_.foot_pitch_gyro_d_gain;
-	}
+	}*/
 
-	Eigen::MatrixXd value;
+	/*Eigen::MatrixXd value;
 	value.resize(1,8);
 	value.fill(0);
 	value(0,7) = updating_duration;
 	value(0,1) = gyro_pitch_p_gain;
 	gyro_pitch_function->kp_ = gain_pitch_p_adjustment -> fifth_order_traj_gen_one_value(value);
 	value(0,1) = gyro_pitch_d_gain;
-	gyro_pitch_function->kd_ = gain_pitch_d_adjustment -> fifth_order_traj_gen_one_value(value);
+	gyro_pitch_function->kd_ = gain_pitch_d_adjustment -> fifth_order_traj_gen_one_value(value);*/
+	if(balance_updating_sys_time_sec_ > updating_duration_cop)
+	{
+		balance_updating_sys_time_sec_ = updating_duration_cop;
 
-	value(0,7) = updating_duration_cop;
-	value(0,1) = copFz_p_gain;
-	cop_compensation->pidControllerFz_x->kp_ = gain_copFz_p_adjustment -> fifth_order_traj_gen_one_value(value);
-	cop_compensation->pidControllerFz_y->kp_ = cop_compensation->pidControllerFz_x->kp_;
-	value(0,1) = copFz_d_gain;
-	cop_compensation->pidControllerFz_x->kd_ = gain_copFz_d_adjustment -> fifth_order_traj_gen_one_value(value);
-	cop_compensation->pidControllerFz_y->kd_ = cop_compensation->pidControllerFz_x->kd_;
-}*/
+
+		balance_update_ = false;
+	}
+	else
+	{
+		Eigen::MatrixXd value;
+		value.resize(1,8);
+		value.fill(0);
+		value(0,7) = updating_duration_cop;
+		value(0,1) = zmpFz_p_gain;
+		zmp_compensation->pidControllerFz_x->kp_ = gain_zmpFz_p_adjustment -> fifth_order_traj_gen_one_value(value);
+		zmp_compensation->pidControllerFz_y->kp_ = zmp_compensation->pidControllerFz_x->kp_;
+		value(0,1) = zmpFz_d_gain;
+		zmp_compensation->pidControllerFz_x->kd_ = gain_zmpFz_d_adjustment -> fifth_order_traj_gen_one_value(value);
+		zmp_compensation->pidControllerFz_y->kd_ = zmp_compensation->pidControllerFz_x->kd_;
+
+	}
+}
 void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel *> dxls,
 		std::map<std::string, double> sensors)
 {
@@ -175,7 +191,9 @@ void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel 
 	{
 		return;
 	}
-	//updateBalanceParameter();
+	updateBalanceParameter();
+	//printf("zmp x kp :: %f   Kd  ::  %f\n",zmp_compensation->pidControllerFz_x->kp_, zmp_compensation->pidControllerFz_x->kd_);
+	//printf("zmp y kp :: %f   Kd  ::  %f\n",zmp_compensation->pidControllerFz_y->kp_, zmp_compensation->pidControllerFz_y->kd_);
 
 	//// read current position ////
 	/*if(new_count_ == 1)
@@ -248,13 +266,13 @@ void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel 
 	result_pose_r_modified_ = robotis_framework::getPose3DfromTransformMatrix(result_mat_r_modified_);
 
 	// cop compensation
-	//cop_compensation->centerOfPressureCompensationFz(cop_cal->cop_fz_point_x, cop_cal->cop_fz_point_y);
+	zmp_compensation->centerOfPressureCompensationFz(zmp_cal->zmp_fz_point_x, zmp_cal->zmp_fz_point_y);
 
-	/*result_pose_l_modified_.x = result_pose_l_modified_.x + cop_compensation->control_value_Fz_x;
-	result_pose_l_modified_.y = result_pose_l_modified_.y + cop_compensation->control_value_Fz_y;
+	result_pose_l_modified_.x = result_pose_l_modified_.x + zmp_compensation->control_value_Fz_x;
+	result_pose_l_modified_.y = result_pose_l_modified_.y + zmp_compensation->control_value_Fz_y;
 
-	result_pose_r_modified_.x = result_pose_r_modified_.x + cop_compensation->control_value_Fz_x;
-	result_pose_r_modified_.y = result_pose_r_modified_.y + cop_compensation->control_value_Fz_y;*/
+	result_pose_r_modified_.x = result_pose_r_modified_.x + zmp_compensation->control_value_Fz_x;
+	result_pose_r_modified_.y = result_pose_r_modified_.y + zmp_compensation->control_value_Fz_y;
 
 	//IK
 	l_kinematics_->InverseKinematics(result_pose_l_modified_.x, result_pose_l_modified_.y - 0.09, result_pose_l_modified_.z,
@@ -262,26 +280,21 @@ void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel 
 	r_kinematics_->InverseKinematics(result_pose_r_modified_.x, result_pose_r_modified_.y + 0.09, result_pose_r_modified_.z,
 			result_pose_r_modified_.yaw, result_pose_r_modified_.pitch, result_pose_r_modified_.roll); // pX pY pZ alpha betta kamma
 
-	//<---  test control --->
-
-	//	result_[joint_id_to_name_[18]]->goal_position_ = r_kinematics_->joint_radian(4,0);
-	//	result_[joint_id_to_name_[17]]->goal_position_ = -l_kinematics_->joint_radian(4,0);
-
 	//<---  cartesian space control  --->
-	result_[joint_id_to_name_[11]]->goal_position_ =  l_kinematics_->joint_radian(1,0); //+ gyro_pitch_function->PID_calculate(0,tf_current_gyro_y));
-	result_[joint_id_to_name_[13]]->goal_position_ =  l_kinematics_->joint_radian(2,0);
+	result_[joint_id_to_name_[11]]->goal_position_ =  -l_kinematics_->joint_radian(1,0); //+ gyro_pitch_function->PID_calculate(0,tf_current_gyro_y));
+	result_[joint_id_to_name_[13]]->goal_position_ =  -l_kinematics_->joint_radian(2,0);
 	result_[joint_id_to_name_[15]]->goal_position_ =  l_kinematics_->joint_radian(3,0);
 
-	result_[joint_id_to_name_[17]]->goal_position_ =  l_kinematics_->joint_radian(4,0);
+	result_[joint_id_to_name_[17]]->goal_position_ =  -l_kinematics_->joint_radian(4,0);
 	result_[joint_id_to_name_[19]]->goal_position_ =  l_kinematics_->joint_radian(5,0);
 	result_[joint_id_to_name_[21]]->goal_position_ =  l_kinematics_->joint_radian(6,0);
 
 	result_[joint_id_to_name_[12]]->goal_position_ =  r_kinematics_->joint_radian(1,0); //+ gyro_pitch_function->PID_calculate(0,tf_current_gyro_y);
-	result_[joint_id_to_name_[14]]->goal_position_ =  r_kinematics_->joint_radian(2,0);
+	result_[joint_id_to_name_[14]]->goal_position_ =  -r_kinematics_->joint_radian(2,0);
 	result_[joint_id_to_name_[16]]->goal_position_ =  r_kinematics_->joint_radian(3,0);
 
 	result_[joint_id_to_name_[18]]->goal_position_ =  r_kinematics_->joint_radian(4,0);
-	result_[joint_id_to_name_[20]]->goal_position_ =  r_kinematics_->joint_radian(5,0);
+	result_[joint_id_to_name_[20]]->goal_position_ =  -r_kinematics_->joint_radian(5,0);
 	result_[joint_id_to_name_[22]]->goal_position_ =  r_kinematics_->joint_radian(6,0);
 
 	/*for(int joint_num = 1; joint_num <7 ; joint_num++)
@@ -295,68 +308,12 @@ void AliceLegModule::process(std::map<std::string, robotis_framework::Dynamixel 
 		printf("RIGHT ::  %d ::  %f \n", joint_num, r_kinematics_->joint_radian(joint_num,0));
 	}*/
 
-	/*	cop_fz_msg_.data.push_back(cop_cal->cop_fz_point_x); // current cop value
-	cop_fz_msg_.data.push_back(cop_cal->cop_fz_point_y);
-	cop_fz_msg_.data.push_back(cop_compensation->reference_point_Fz_x); // current cop value
-	cop_fz_msg_.data.push_back(cop_compensation->reference_point_Fz_y);
-	cop_fz_pub.publish(cop_fz_msg_);
-	cop_fz_msg_.data.clear();*/
-
-	/*	for(int id = 1; id<7 ; id++)
-	{
-		current_leg_pose_msg_.data.push_back(l_kinematics_->joint_radian(id,0));
-	}
-	for(int id = 1; id<7 ; id++)
-	{
-		current_leg_pose_msg_.data.push_back(r_kinematics_->joint_radian(id,0));
-	}
-	current_leg_pose_pub.publish(current_leg_pose_msg_);
-	current_leg_pose_msg_.data.clear();*/
-
-
-	/*	// l_ endpoint xyz
-	l_leg_point_xyz_msg_.x=  result_pose_l_modified_.x;
-	l_leg_point_xyz_msg_.y=  result_pose_l_modified_.y;
-	l_leg_point_xyz_msg_.z=  result_pose_l_modified_.z;
-	l_leg_point_xyz_pub.publish(l_leg_point_xyz_msg_);
-	// l_ endpoint radian alpha betta kamma
-	l_leg_point_rpy_msg_.x=  result_pose_l_modified_.roll;
-	l_leg_point_rpy_msg_.y=  result_pose_l_modified_.pitch;
-	l_leg_point_rpy_msg_.z=  result_pose_l_modified_.yaw;
-	l_leg_point_rpy_pub.publish(l_leg_point_rpy_msg_);
-
-	// r_ endpoint xyz
-	r_leg_point_xyz_msg_.x=  result_pose_r_modified_.x;
-	r_leg_point_xyz_msg_.y=  result_pose_r_modified_.y;
-	r_leg_point_xyz_msg_.z=  result_pose_r_modified_.z;
-	r_leg_point_xyz_pub.publish(r_leg_point_xyz_msg_);
-	// r_ endpoint radian alpha betta kamma
-	r_leg_point_rpy_msg_.x=  result_pose_r_modified_.roll;
-	r_leg_point_rpy_msg_.y=  result_pose_r_modified_.pitch;
-	r_leg_point_rpy_msg_.z=  result_pose_r_modified_.yaw;
-	r_leg_point_rpy_pub.publish(r_leg_point_rpy_msg_);
-
-	// l_ compensation xyz
-	l_compensation_xyz_msg_.x=  cop_compensation->control_value_Fz_x;
-	l_compensation_xyz_msg_.y=  cop_compensation->control_value_Fz_y;
-	l_compensation_xyz_msg_.z=  0;
-	l_compensation_xyz_pub.publish(l_compensation_xyz_msg_);
-	// l_ compensation radian alpha betta kamma
-	l_compensation_rpy_msg_.x=  balance_ctrl_.foot_roll_adjustment_by_gyro_roll_;
-	l_compensation_rpy_msg_.y=  gyro_pitch_function->PID_calculate(0,tf_current_gyro_y);
-	l_compensation_rpy_msg_.z=  0;
-	l_compensation_rpy_pub.publish(l_compensation_rpy_msg_);
-
-	// r_ compensation xyz
-	r_compensation_xyz_msg_.x=  cop_compensation->control_value_Fz_x;
-	r_compensation_xyz_msg_.y=  cop_compensation->control_value_Fz_y;
-	r_compensation_xyz_msg_.z=  0;
-	r_compensation_xyz_pub.publish(r_compensation_xyz_msg_);
-	// r_ compensation radian alpha betta kamma
-	r_compensation_rpy_msg_.x=  balance_ctrl_.foot_roll_adjustment_by_gyro_roll_;
-	r_compensation_rpy_msg_.y=  gyro_pitch_function->PID_calculate(0,tf_current_gyro_y);
-	r_compensation_rpy_msg_.z=  0;
-	r_compensation_rpy_pub.publish(r_compensation_rpy_msg_);*/
+	zmp_fz_msg_.data.push_back(zmp_cal->zmp_fz_point_x); // current cop value
+	zmp_fz_msg_.data.push_back(zmp_cal->zmp_fz_point_y);
+	zmp_fz_msg_.data.push_back(zmp_compensation->reference_point_Fz_x); // current cop value
+	zmp_fz_msg_.data.push_back(zmp_compensation->reference_point_Fz_y);
+	zmp_fz_pub.publish(zmp_fz_msg_);
+	zmp_fz_msg_.data.clear();
 }
 void AliceLegModule::stop()
 {

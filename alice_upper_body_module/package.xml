@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="2">
+<package>
   <name>alice_upper_body_module</name>
   <version>0.0.0</version>
   <description>The alice_upper_body_module package</description>
@@ -51,10 +51,25 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>std_msgs</build_export_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>robotis_math</build_depend>
+  <build_depend>robotis_framework_common</build_depend>
+  <build_depend>robotis_controller_msgs</build_depend>
+  <build_depend>yaml-cpp</build_depend>
+  <build_depend>heroehs_math</build_depend>
+  <build_depend>alice_balance_control</build_depend>
+  <build_depend>alice_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>robotis_math</run_depend>
+  <run_depend>robotis_framework_common</run_depend>
+  <run_depend>robotis_controller_msgs</run_depend>
+  <run_depend>yaml-cpp</run_depend>
+  <run_depend>heroehs_math</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

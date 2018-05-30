@@ -2,23 +2,18 @@
 # CMake
 ################################################################################
 cmake_minimum_required(VERSION 2.8.3)
-project(alice_leg_module)
+project(alice_balance_control)
+
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 ################################################################################
 # Packages
 ################################################################################
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
-  std_msgs
-  geometry_msgs
   cmake_modules
   robotis_math
-  robotis_framework_common
-  robotis_controller_msgs
   heroehs_math
-  alice_msgs
-  alice_balance_control
 )
 
 find_package(Eigen REQUIRED)
@@ -40,8 +35,7 @@ pkg_check_modules(yaml_cpp yaml-cpp REQUIRED)
 ################################################################################
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES alice_leg_module
-  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs
+  LIBRARIES alice_balance_control
 )
 
 ################################################################################
@@ -51,14 +45,37 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
-  ${yaml_cpp_INCLUDE_DIRS}
 )
 
-add_library(alice_leg_module
-  src/alice_leg_module.cpp
-  src/ros_communication.cpp
+add_library(alice_balance_control
+  src/alice_balance_control.cpp
+  src/balance_pd_control.cpp
+  src/balance_pid_control.cpp
+  src/zmp_calculation_function.cpp
+  src/control_function.cpp
 )
 
-add_dependencies(alice_leg_module ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(alice_leg_module ${yaml_cpp_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(alice_balance_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+target_link_libraries(alice_balance_control
+  ${catkin_LIBRARIES}
+  ${yaml_cpp_LIBRARIES}
+)
+
+
+################################################################################
+# Install
+################################################################################
+install(TARGETS alice_balance_control
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
+
+################################################################################
+# Test
+################################################################################

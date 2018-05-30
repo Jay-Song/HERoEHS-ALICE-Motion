@@ -38,10 +38,6 @@ AliceLegModule::AliceLegModule()
 	result_["r_ankle_pitch"] = new robotis_framework::DynamixelState();  // joint 20
 	result_["r_ankle_roll"]  = new robotis_framework::DynamixelState();  // joint 22
 
-	// test
-	//	result_["l_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 17
-	//	result_["r_knee_pitch"]     = new robotis_framework::DynamixelState();  // joint 18
-
 	///////////////////////////
 	l_kinematics_ = new heroehs_math::Kinematics;
 	r_kinematics_ = new heroehs_math::Kinematics;
@@ -49,7 +45,7 @@ AliceLegModule::AliceLegModule()
 	end_to_rad_r_ = new heroehs_math::CalRad;
 
 	//////////////////////////
-/*	currentGyroX = 0;
+	/*	currentGyroX = 0;
 	currentGyroY = 0;
 	currentGyroZ = 0;*/
 	//////////////////////////
@@ -84,7 +80,7 @@ AliceLegModule::AliceLegModule()
 	result_mat_l_modified_ = result_mat_l_;
 	result_mat_r_modified_ = result_mat_r_;
 
-/*	balance_updating_duration_sec_ = 2.0;
+	/*	balance_updating_duration_sec_ = 2.0;
 	balance_updating_sys_time_sec_ = 2.0;
 	balance_update_= false;
 	// gyro joint space
@@ -109,7 +105,8 @@ AliceLegModule::AliceLegModule()
 	temp_time_edge_change = 0;
 	temp_turn_type = "basic";
 	temp_change_type = "basic";*/
-/*	currentFX_l=0.0;
+
+	/*	currentFX_l=0.0;
 	currentFY_l=0.0;
 	currentFZ_l=0.0;
 	currentTX_l=0.0;
@@ -128,6 +125,30 @@ AliceLegModule::AliceLegModule()
 	updating_duration_cop = 0;
 	copFz_p_gain = 0;
 	copFz_d_gain = 0;*/
+	balance_updating_duration_sec_ = 2.0;
+	balance_updating_sys_time_sec_ = 2.0;
+	balance_update_ = false;
+
+	zmp_cal = new alice::ZmpCalculationFunc;
+	currentFX_l=0.0;
+	currentFY_l=0.0;
+	currentFZ_l=0.0;
+	currentTX_l=0.0;
+	currentTY_l=0.0;
+	currentTZ_l=0.0;
+	currentFX_r=0.0;
+	currentFY_r=0.0;
+	currentFZ_r=0.0;
+	currentTX_r=0.0;
+	currentTY_r=0.0;
+	currentTZ_r=0.0;
+	// cop compensation
+	zmp_compensation = new alice::ZmpCompensationFunc();
+	gain_zmpFz_p_adjustment = new heroehs_math::FifthOrderTrajectory;
+	gain_zmpFz_d_adjustment = new heroehs_math::FifthOrderTrajectory;
+	updating_duration_cop = 0;
+	zmpFz_p_gain = 0;
+	zmpFz_d_gain = 0;
 }
 AliceLegModule::~AliceLegModule()
 {
@@ -140,7 +161,7 @@ void AliceLegModule::queueThread()
 	ros::CallbackQueue callback_queue;
 	ros_node.setCallbackQueue(&callback_queue);
 	/* publisher topics */
-	l_leg_point_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_leg_point_xyz",100);
+/*	l_leg_point_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_leg_point_xyz",100);
 	l_leg_point_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_leg_point_rpy",100);
 	r_leg_point_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_leg_point_xyz",100);
 	r_leg_point_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_leg_point_rpy",100);
@@ -148,21 +169,17 @@ void AliceLegModule::queueThread()
 	l_compensation_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_compensation_xyz",100);;
 	l_compensation_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_compensation_rpy",100);;
 	r_compensation_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_compensation_xyz",100);;
-	r_compensation_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_compensation_rpy",100);;
+	r_compensation_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_compensation_rpy",100);;*/
 
-	cop_fz_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/cop_fz",100);
-
-	current_leg_pose_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/current_leg_pose",100);
+	zmp_fz_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/zmp_fz",100);
+	//current_leg_pose_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/current_leg_pose",100);
 
 	/* subscribe topics */
 	//get_imu_data_sub_ = ros_node.subscribe("/imu/data", 100, &AliceLegModule::imuDataMsgCallback, this);
-	//get_ft_data_sub_ = ros_node.subscribe("/diana/force_torque_data", 100, &AliceLegModule::ftDataMsgCallback, this);
-	ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/desired_pose_leg", 5, &AliceLegModule::desiredPoseMsgCallback, this);
-
-	//desired_pose_all_sub = ros_node.subscribe("/desired_pose_all", 5, &AliceLegModule::desiredPoseAllMsgCallback, this);
-
+	get_ft_data_sub_ = ros_node.subscribe("/alice/force_torque_data", 100, &AliceLegModule::ftDataMsgCallback, this);
+	//ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/desired_pose_leg", 5, &AliceLegModule::desiredPoseMsgCallback, this);
 	// for gui
-	//set_balance_param_sub_ = ros_node.subscribe("/diana/balance_parameter", 5, &AliceLegModule::setBalanceParameterCallback, this);
+	set_balance_param_sub_ = ros_node.subscribe("/alice/balance_parameter", 5, &AliceLegModule::setBalanceParameterCallback, this);
 
 	ros::WallDuration duration(control_cycle_msec_ / 1000.0);
 	while(ros_node.ok())
@@ -190,8 +207,8 @@ void AliceLegModule::gyroRotationTransformation(double gyro_z, double gyro_y, do
 	tf_current_gyro_x = tf_gyro_value(0,0);
 	tf_current_gyro_y = tf_gyro_value(1,0);
 	tf_current_gyro_z = tf_gyro_value(2,0);
-}
-void AliceLegModule::ftDataMsgCallback(const diana_msgs::ForceTorque::ConstPtr& msg)// force torque sensor data get
+}*/
+void AliceLegModule::ftDataMsgCallback(const alice_msgs::ForceTorque::ConstPtr& msg)// force torque sensor data get
 {
 	currentFX_l = (double) msg->force_x_raw_l;
 	currentFY_l = (double) msg->force_y_raw_l;
@@ -213,26 +230,24 @@ void AliceLegModule::ftDataMsgCallback(const diana_msgs::ForceTorque::ConstPtr& 
 
 	if(currentFX_l && currentFY_l && currentFZ_l && currentTX_l && currentTY_l && currentTZ_l)
 	{
-		copFz_p_gain = 0;
-		copFz_d_gain = 0;
+		zmpFz_p_gain = 0;
+		zmpFz_d_gain = 0;
 	} // cop control disable
 
-	cop_cal->ftSensorDataLeftGet(currentFX_l, currentFY_l, currentFZ_l, currentTX_l, currentTY_l, currentTZ_l);
-	cop_cal->ftSensorDataRightGet(currentFX_r, currentFY_r, currentFZ_r, currentTX_r, currentTY_r, currentTZ_r);
-
-	cop_cal->jointStateGetForTransForm(l_kinematics_->joint_radian, r_kinematics_->joint_radian);
-	cop_cal->copCalculationResult();
+	zmp_cal->ftSensorDataLeftGet(currentFX_l, currentFY_l, currentFZ_l, currentTX_l, currentTY_l, currentTZ_l);
+	zmp_cal->ftSensorDataRightGet(currentFX_r, currentFY_r, currentFZ_r, currentTX_r, currentTY_r, currentTZ_r);
+	zmp_cal->jointStateGetForTransForm(l_kinematics_->joint_radian, r_kinematics_->joint_radian);
+	zmp_cal->ZmpCalculationResult();
 	//cop_compensation->centerOfPressureReferencePoint(temp_turn_type,   cop_cal->cf_px_l, cop_cal->cf_py_l, cop_cal->cf_pz_l,
 			//cop_cal->cf_px_r, cop_cal->cf_py_r, cop_cal->cf_pz_r, temp_change_value_center);
 }
-void AliceLegModule::setBalanceParameterCallback(const diana_msgs::BalanceParam::ConstPtr& msg)
+void AliceLegModule::setBalanceParameterCallback(const alice_msgs::BalanceParam::ConstPtr& msg)
 {
 	if(balance_update_ == true)
 	{
 		ROS_ERROR("the previous task is not finished");
 		return;
 	}
-
 	ROS_INFO("SET BALANCE_PARAM");
 
 	balance_updating_duration_sec_ = 2.0;
@@ -241,7 +256,7 @@ void AliceLegModule::setBalanceParameterCallback(const diana_msgs::BalanceParam:
 	else
 		balance_updating_duration_sec_ = msg->updating_duration;
 
-	desired_balance_param_.cob_x_offset_m         = 0;
+	/*desired_balance_param_.cob_x_offset_m         = 0;
 	desired_balance_param_.cob_y_offset_m         = 0;
 	desired_balance_param_.foot_roll_gyro_p_gain  = 0;
 	desired_balance_param_.foot_roll_gyro_d_gain  = 0;
@@ -250,21 +265,20 @@ void AliceLegModule::setBalanceParameterCallback(const diana_msgs::BalanceParam:
 
 	updating_duration = msg->updating_duration;
 	gyro_pitch_p_gain  = msg->foot_pitch_gyro_p_gain;
-	gyro_pitch_d_gain  = msg->foot_pitch_gyro_d_gain;
+	gyro_pitch_d_gain  = msg->foot_pitch_gyro_d_gain;*/
 
 	updating_duration_cop = msg->updating_duration;
-	copFz_p_gain = msg->foot_copFz_p_gain;
-	copFz_d_gain = msg->foot_copFz_d_gain;
+	zmpFz_p_gain = msg->foot_zmpFz_p_gain;
+	zmpFz_d_gain = msg->foot_zmpFz_d_gain;
 
 
 	balance_param_update_coeff_.changeTrajectory(0,0,0,0, balance_updating_duration_sec_, 1, 0, 0);
 
 	balance_update_ = true;
 	balance_updating_sys_time_sec_ = 0;
-
-	cop_compensation->parse_margin_data(); // cop margin data ;
-}*/
-void AliceLegModule::desiredPoseMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg) // GUI 에서 init pose topic을 sub 받아 실행
+	//zmp_compensation->parse_margin_data(); // cop margin data ;
+}
+/*void AliceLegModule::desiredPoseMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg) // GUI 에서 init pose topic을 sub 받아 실행
 {
 	for(int joint_num_= 0; joint_num_< 6; joint_num_++)
 	{
@@ -275,7 +289,7 @@ void AliceLegModule::desiredPoseMsgCallback(const std_msgs::Float64MultiArray::C
 	}
 	is_moving_l_ = true;
 	is_moving_r_ = true;
-}
+}*/
 
 /*void AliceLegModule::desiredPoseAllMsgCallback(const diana_msgs::DesiredPoseCommand::ConstPtr& msg)
 {
