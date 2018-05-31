@@ -62,6 +62,8 @@
   <build_depend>alice_base_module</build_depend>
   <build_depend>alice_leg_module</build_depend>
   <build_depend>alice_balance_control</build_depend>
+   <build_depend>alice_upper_body_module</build_depend>
+  
   <run_depend>roscpp</run_depend>
   <run_depend>robotis_controller</run_depend>
 

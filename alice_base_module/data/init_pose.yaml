@@ -12,11 +12,11 @@ tar_pose :
 #  5  : 0.0                  # l_elbow_pitch
 #  6  : 0.0                   # r_elbow_pitch
 
-#  7  :  0.0 		        # head_yaw
-#  8  :  0.0 		        # head_pitch
+  7  :  0.0 		        # head_yaw
+  8  :  0.0 		        # head_pitch
 
-#  9  :  0.0 		        # waist_yaw
-#  10 :  0.0 		        # waist_pitch
+  9  :  0.0 		        # waist_yaw
+  10 :  0.0 		        # waist_pitch
 
   11 : -22.6437 		# l_hip_pitch 
   12 : -22.6437		# r_hip_pitch  

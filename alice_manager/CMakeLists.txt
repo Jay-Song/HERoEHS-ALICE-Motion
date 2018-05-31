@@ -21,6 +21,7 @@ find_package(catkin REQUIRED
   #heroehs_pd_balance_controller
   alice_base_module
   alice_leg_module
+  alice_upper_body_module
   alice_balance_control
 )
 

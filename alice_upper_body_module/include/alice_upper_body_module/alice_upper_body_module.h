@@ -70,32 +70,32 @@ public:
 	bool gazebo_check;
 	double traj_time_test;
 	// publisher
-	ros::Publisher  current_waist_pose_pub;
-	ros::Publisher  current_orientation_z_pub;
+	//ros::Publisher  current_waist_pose_pub;
+	//ros::Publisher  current_orientation_z_pub;
 
-	ros::Publisher  current_flag_position1_pub;
-	ros::Publisher  current_flag_position2_pub;
-	ros::Publisher  top_view_robot_pub;
+	//ros::Publisher  current_flag_position1_pub;
+	//ros::Publisher  current_flag_position2_pub;
+	//ros::Publisher  top_view_robot_pub;
 
 	// Subscriber
 	ros::Subscriber head_test;
 	ros::Subscriber waist_test;
-	ros::Subscriber get_imu_data_sub_;
+	//ros::Subscriber get_imu_data_sub_;
 	//ros::Subscriber get_nav_data_sub_;
-	ros::Subscriber init_check_sub;
+	//ros::Subscriber init_check_sub;
 
-	ros::Subscriber balance_param_waist_sub;
-	ros::Subscriber head_balance_sub;
-	ros::Subscriber flag_position_get_sub;
+	//ros::Subscriber balance_param_waist_sub;
+	//ros::Subscriber head_balance_sub;
+	//ros::Subscriber flag_position_get_sub;
 
-	ros::Subscriber desired_pose_all_sub;
+	//ros::Subscriber desired_pose_all_sub;
 
 
 	//current cop and reference cop from leg module
-	ros::Subscriber cop_fz_sub;
+	//ros::Subscriber cop_fz_sub;
 
-	void desiredPoseWaistMsgCallbackTEST(const std_msgs::Float64MultiArray::ConstPtr& msg);
-	void desiredPoseHeadMsgCallbackTEST(const std_msgs::Float64MultiArray::ConstPtr& msg);
+	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
+	void desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	//void desiredPoseAllMsgCallback(const diana_msgs::DesiredPoseCommand::ConstPtr& msg);
 
 	//sensor

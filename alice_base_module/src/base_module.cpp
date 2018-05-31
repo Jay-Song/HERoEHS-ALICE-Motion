@@ -71,11 +71,11 @@ BaseModule::BaseModule()
 	result_["r_ankle_pitch"]    = new robotis_framework::DynamixelState();  // joint 20
 	result_["r_ankle_roll"]     = new robotis_framework::DynamixelState();  // joint 22
 
-	//	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
-	//	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
+	result_["waist_yaw"]        = new robotis_framework::DynamixelState();  // joint 9
+	result_["waist_pitch"]       = new robotis_framework::DynamixelState();  // joint 10
 
-	//    result_["head_yaw"]         = new robotis_framework::DynamixelState();  // joint 7
-	//	result_["head_pitch"]       = new robotis_framework::DynamixelState();  // joint 8
+	result_["head_yaw"]         = new robotis_framework::DynamixelState();  // joint 7
+	result_["head_pitch"]       = new robotis_framework::DynamixelState();  // joint 8
 
 
 	//init
@@ -266,13 +266,13 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
 			if(dxls[joint_name]->direction_==1)
 			{
 				result_[joint_name]->goal_position_ =  motion_trajectory[joint_name]->fifth_order_traj_gen(joint_name_to_ini_pose_state_[joint_name],
-									joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
+						joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
 			}
 
 			else
 			{
 				result_[joint_name]->goal_position_ =  -motion_trajectory[joint_name]->fifth_order_traj_gen(joint_name_to_ini_pose_state_[joint_name],
-									joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
+						joint_name_to_ini_pose_goal_[joint_name],0,0,0,0,0,mov_time_state);
 			}
 			is_moving_state = motion_trajectory[joint_name]->is_moving_traj;
 

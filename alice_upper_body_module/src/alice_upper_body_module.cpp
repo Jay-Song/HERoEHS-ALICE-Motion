@@ -34,11 +34,11 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 	result_rad_head_.resize(6,1);
 	result_rad_head_.fill(0);
 
-	head_end_point_(4,0) = -10*DEGREE2RADIAN; // pitch 초기값
-	head_end_point_(4,1) = -10*DEGREE2RADIAN; //
-	end_to_rad_head_->cal_end_point_tra_betta->current_pose = -10*DEGREE2RADIAN;
-	end_to_rad_head_->current_pose_change(4,0) = -10*DEGREE2RADIAN;
-	temp_pre_pitch = -10*DEGREE2RADIAN; // low pass filter initialize
+	head_end_point_(4,0) = 0; // pitch 초기값
+	head_end_point_(4,1) = 0; //
+	end_to_rad_head_->cal_end_point_tra_betta->current_pose = 0;
+	end_to_rad_head_->current_pose_change(4,0) = 0;
+	temp_pre_pitch = 0; // low pass filter initialize
 
 
 	for(int joint_num_= 3; joint_num_< 6 ; joint_num_ ++)  // waist 3, 5번 // head 345 초기화
@@ -50,37 +50,6 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 
 	ROS_INFO("< -------  Initialize Module : Upper Body Module  [HEAD  && WAIST] !!  ------->");
 }
-/*
-void UpperBodyModule::updateBalanceGyroParameter()
-{
-	Eigen::MatrixXd value;
-	value.resize(1,8);
-	value.fill(0);
-
-	value(0,7) = updating_duration;
-	value(0,1) = gyro_roll_p_gain;
-	gyro_roll_function->kp_ = gain_roll_p_adjustment -> fifth_order_traj_gen_one_value(value);
-	value(0,1) = gyro_roll_d_gain;
-	gyro_roll_function->kd_ = gain_roll_d_adjustment -> fifth_order_traj_gen_one_value(value);
-
-	value(0,1) = gyro_yaw_p_gain;
-	gyro_yaw_function->kp_ = gain_yaw_p_adjustment -> fifth_order_traj_gen_one_value(value);
-	value(0,1) = gyro_yaw_d_gain;
-	gyro_yaw_function->kd_ = gain_yaw_d_adjustment -> fifth_order_traj_gen_one_value(value);
-
-	value(0,1) = copFz_p_gain;
-	cop_compensation_waist->pidControllerFz_x->kp_ = gain_copFz_p_adjustment -> fifth_order_traj_gen_one_value(value);
-	cop_compensation_waist->pidControllerFz_y->kp_ = cop_compensation_waist->pidControllerFz_x->kp_;
-
-	value(0,1) = copFz_d_gain;
-	cop_compensation_waist->pidControllerFz_x->kd_ = gain_copFz_d_adjustment -> fifth_order_traj_gen_one_value(value);
-	cop_compensation_waist->pidControllerFz_y->kd_ = cop_compensation_waist->pidControllerFz_x->kd_;
-
-	value(0,7) = head_enable_time;
-	value(0,1) = head_enable;
-	result_head_enable = head_balance_enable->fifth_order_traj_gen_one_value(value);
-
-}*/
 double UpperBodyModule::limitCheck(double calculated_value, double max, double min)
 {
 	if(calculated_value > (max*DEGREE2RADIAN))
@@ -101,55 +70,31 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	{
 		return;
 	}
-	//updateBalanceGyroParameter();
-	//motion();
-	/*if(new_count_ == 1)
-	{
-		new_count_ ++;
-		for (std::map<std::string, robotis_framework::Dynamixel*>::iterator state_iter = dxls.begin();
-				state_iter != dxls.end(); state_iter++)
-		{
-			std::string joint_name = state_iter->first;
-			if(!joint_name.compare("waist_yaw")|| !joint_name.compare("waist_roll") || !joint_name.compare("head_yaw") ||
-					!joint_name.compare("head_pitch") || !joint_name.compare("head_roll"))
-			{
-				if(gazebo_check == true)
-					result_[joint_name]->goal_position_ = result_[joint_name]->present_position_; // 가제보 상 초기위치 0
-			}
-		} // 등록된 다이나믹셀의 위치값을 읽어와서 goal position 으로 입력
-		ROS_INFO("Upper Start");
-		initial_tf_current_gyro_orientation_z = tf_current_gyro_orientation_z;
-			initial_tf_current_position_x = tf_current_position_x;
-		initial_tf_current_position_y = tf_current_position_y;
-		initial_tf_current_position_z = tf_current_position_z;
-	}*/
 	if(is_moving_waist_ == false) // desired pose
 	{
-		ROS_INFO("Upper body Stay");
+		ROS_INFO("Upper waist Stay");
 	}
 	else
 	{
-		ROS_INFO("Upper Module start!!!!");
-		waist_end_point_(3,1)   = limitCheck(result_rad_head_(3,0),60,-60);
-		waist_end_point_(4,1)   = limitCheck(result_rad_head_(4,0),85,-15);
+		ROS_INFO("Upper Module waist!!!!");
+		waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
+		waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
 
 		result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
 		is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 	}
-	///////////////////////////////////////////////////// control //////////////////////////////////////////////////////////
 	if(is_moving_head_ == false)
 	{
-		//ROS_INFO("Upper Head Stay");
+		ROS_INFO("Upper Head Stay");
 	}
 	else
 	{
-		//ROS_INFO("Upper Module head!!!!");
+		ROS_INFO("Upper Module head!!!!");
 		// limit must be calculated 23 24 25
 		head_end_point_(3,1) = limitCheck(head_end_point_(3,1),78,-78);
 		head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,-25);
 
 		result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
-
 		is_moving_head_  = end_to_rad_head_  -> is_moving_check;
 	}
 
