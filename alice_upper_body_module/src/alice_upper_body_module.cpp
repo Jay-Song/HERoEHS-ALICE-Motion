@@ -66,40 +66,27 @@ bool UpperBodyModule::isRunning()
 void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel *> dxls,
 		std::map<std::string, double> sensors)
 {
+
+	finding_motion();
 	if (enable_ == false)
 	{
 		return;
 	}
-	if(is_moving_waist_ == false) // desired pose
-	{
-		ROS_INFO("Upper waist Stay");
-	}
-	else
-	{
-		ROS_INFO("Upper Module waist!!!!");
-		waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
-		waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
+	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),135,-135);
+	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,-25);
 
-		result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
-		is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
-	}
-	if(is_moving_head_ == false)
-	{
-		ROS_INFO("Upper Head Stay");
-	}
-	else
-	{
-		ROS_INFO("Upper Module head!!!!");
-		// limit must be calculated 23 24 25
-		head_end_point_(3,1) = limitCheck(head_end_point_(3,1),78,-78);
-		head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,-25);
+	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
+	//is_moving_head_  = end_to_rad_head_  -> is_moving_check;
 
-		result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
-		is_moving_head_  = end_to_rad_head_  -> is_moving_check;
-	}
-
-	temp_head_yaw   = limitCheck(result_rad_head_(3,0),78,-78);
+	temp_head_yaw   = limitCheck(result_rad_head_(3,0),135,-135);
 	temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
+
+
+	waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
+	waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
+
+	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
+	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 
 
 	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
@@ -107,6 +94,14 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	result_[joint_id_to_name_[9]] -> goal_position_  = -result_rad_waist_ (3,0); // waist pitch
 	result_[joint_id_to_name_[10]]-> goal_position_  = -result_rad_waist_ (4,0); // waist yaw
+
+
+
+	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
+	result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.02, 0.008);
+
+
+
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
@@ -116,6 +111,94 @@ void UpperBodyModule::stop()
 {
 	return;
 }
+
+// algorithm
+void UpperBodyModule::finding_motion()
+{
+	double motion_time_ = 4.0;
+	static double current_time_ = 0.0;
+	static int motion_num_ = 1;
+
+
+	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
+	{
+		waist_end_point_(3, 1) = 0;
+		waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0;
+		head_end_point_(4, 1)  = 70*DEGREE2RADIAN;
+
+	}
+	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
+	{
+		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 90*DEGREE2RADIAN;
+		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
+
+	}
+	else if(current_time_ >= motion_time_*2 && current_time_ < motion_time_*3 && motion_num_ == 3)
+	{
+		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
+		//waist_end_point_(3, 7)  = 6;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = -90*DEGREE2RADIAN;
+		//head_end_point_(3, 7)  = 6;
+		//head_end_point_(4, 1)  = 0;
+
+	}
+	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
+	{
+		waist_end_point_(3, 1) = 0;
+		waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0;
+		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+/*	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
+	{
+		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		waist_end_point_(4, 1) = 0;
+	    head_end_point_(3, 1)  = 0;
+		head_end_point_(4, 1)  = 0;
+	}
+	else if(current_time_ >= motion_time_*5 && current_time_ < motion_time_*6 && motion_num_ == 6)
+	{
+		waist_end_point_(3, 1) = 0;
+		waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0;
+		head_end_point_(4, 1)  = 20*DEGREE2RADIAN;
+	}*/
+	else
+	{
+		motion_num_++;
+		if(motion_num_ == 5)
+		{
+			motion_num_ = 0;
+			current_time_ = 0;
+		}
+	}
+	current_time_ = current_time_+ 0.008;
+}
+void UpperBodyModule::algorithm_process(std::string command_)
+{
+	if(!command_.compare("finding"))
+	{
+		finding_motion();
+	}
+	else if(!command_.compare("initial"))
+	{
+		waist_end_point_(3, 1) = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
+		waist_end_point_(4, 1) = 0; // pitch
+
+		head_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
+		head_end_point_(4, 1)  = 0; // pitch
+	}
+	else // tracking algorithm
+	{
+
+	}
+
+}
+
 
 
 

@@ -66,14 +66,8 @@ UpperBodyModule::UpperBodyModule()
 	temp_pre_pitch = 0;
 	temp_pre_yaw = 0;
 
-	head_balance_enable = new heroehs_math::FifthOrderTrajectory ;
-	head_enable = 0;
-	result_head_enable = 0;
-	head_enable_time = 2.0;
-	init_check = false;
+	command = "tracking";
 
-	pre_tf_current_gyro_orientation_z = 0;
-	final_tf_current_orientation_z = 0;
 }
 UpperBodyModule::~UpperBodyModule()
 {
@@ -117,6 +111,14 @@ void UpperBodyModule::desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArr
 	head_end_point_ (3, 7) = msg->data[2];
 	head_end_point_ (4, 7) = msg->data[3];
 	is_moving_head_ = true;
+}
+void UpperBodyModule::environmentDetectorMsgCallback(const std_msgs::String::ConstPtr& msg)
+{
+
+}
+void UpperBodyModule::headMovingMsgCallback(const std_msgs::String::ConstPtr& msg)
+{
+		command = msg -> data;
 }
 
 
