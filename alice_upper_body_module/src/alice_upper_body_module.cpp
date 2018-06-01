@@ -67,7 +67,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		std::map<std::string, double> sensors)
 {
 
-	finding_motion();
+	algorithm_process(command);
+
 	if (enable_ == false)
 	{
 		return;
@@ -115,10 +116,13 @@ void UpperBodyModule::stop()
 // algorithm
 void UpperBodyModule::finding_motion()
 {
-	double motion_time_ = 4.0;
+	double motion_time_ = 3.0;
 	static double current_time_ = 0.0;
 	static int motion_num_ = 1;
-
+	waist_end_point_(3, 7)  = motion_time_;
+	waist_end_point_(4, 7)  = motion_time_;
+	head_end_point_(3, 7)   = motion_time_;
+	head_end_point_(4, 7)   = motion_time_;
 
 	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
 	{
@@ -136,7 +140,15 @@ void UpperBodyModule::finding_motion()
 		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
 
 	}
-	else if(current_time_ >= motion_time_*2 && current_time_ < motion_time_*3 && motion_num_ == 3)
+	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
+		{
+			waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
+			//waist_end_point_(4, 1) = 0;
+			head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+			//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
+
+		}
+	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
@@ -146,7 +158,7 @@ void UpperBodyModule::finding_motion()
 		//head_end_point_(4, 1)  = 0;
 
 	}
-	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
+	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
@@ -170,13 +182,17 @@ void UpperBodyModule::finding_motion()
 	else
 	{
 		motion_num_++;
-		if(motion_num_ == 5)
+		if(motion_num_ == 6)
 		{
 			motion_num_ = 0;
 			current_time_ = 0;
 		}
 	}
 	current_time_ = current_time_+ 0.008;
+}
+void UpperBodyModule::tracking_function()
+{
+
 }
 void UpperBodyModule::algorithm_process(std::string command_)
 {

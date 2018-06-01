@@ -120,6 +120,7 @@ private:
 	//algorithm
 	void algorithm_process(std::string command_);
 	void finding_motion();
+	void tracking_function();
 	std::string command;
 
 
