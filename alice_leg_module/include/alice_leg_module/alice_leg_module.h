@@ -78,9 +78,11 @@ public:
 	ros::Publisher zmp_fz_pub;
 	ros::Subscriber get_ft_data_sub_;
 	ros::Subscriber set_balance_param_sub_;
+	//ros::Subscriber walking_path_sub_;
 
 	void ftDataMsgCallback(const alice_msgs::ForceTorque::ConstPtr& msg);
 	void setBalanceParameterCallback(const alice_msgs::BalanceParam::ConstPtr& msg);
+	//void walkingPathMsgCAllBack(const alice_msgs::BalanceParam::ConstPtr& msg);
 
 	// sensor data & balance on off
 	//ros::Subscriber get_imu_data_sub_;

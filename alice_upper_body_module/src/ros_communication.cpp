@@ -66,8 +66,34 @@ UpperBodyModule::UpperBodyModule()
 	temp_pre_pitch = 0;
 	temp_pre_yaw = 0;
 
+	// tracking
 	command = "tracking";
+	pidController_x = new control_function::PID_function(0.008,90*DEGREE2RADIAN,-90*DEGREE2RADIAN,0,0,0);
+	pidController_y = new control_function::PID_function(0.008,80*DEGREE2RADIAN,-30*DEGREE2RADIAN,0,0,0);
 
+	control_angle_yaw = 0;
+	control_angle_pitch = 0;
+	current_x = 0;
+	current_y = 0;
+	frame_x = 640;
+	frame_y = 480;
+	int margin_desired_x = 0;
+	int margin_desired_y = 110;
+	desired_x = (frame_x/2) + margin_desired_x;
+	desired_y = (frame_y/2) + margin_desired_y;
+
+	//balance param
+	balance_updating_duration_sec_ = 2.0;
+	balance_updating_sys_time_sec_ = 0;
+	balance_update_ = false;
+	gain_x_p_adjustment = new heroehs_math::FifthOrderTrajectory;
+	gain_x_d_adjustment = new heroehs_math::FifthOrderTrajectory;
+	gain_y_p_adjustment = new heroehs_math::FifthOrderTrajectory;
+	gain_y_d_adjustment = new heroehs_math::FifthOrderTrajectory;
+	x_p_gain = 0;
+	x_d_gain = 0;
+	y_p_gain = 0;
+	y_d_gain = 0;
 }
 UpperBodyModule::~UpperBodyModule()
 {
@@ -87,6 +113,10 @@ void UpperBodyModule::queueThread()
 	// test desired pose
 	head_test = ros_node.subscribe("/desired_pose_head", 5, &UpperBodyModule::desiredPoseHeadMsgCallback, this);
 	waist_test = ros_node.subscribe("/desired_pose_waist", 5, &UpperBodyModule::desiredPoseWaistMsgCallback, this);
+
+	//test ball
+	ball_test_sub = ros_node.subscribe("/ball_test", 5, &UpperBodyModule::ballTestMsgCallback, this);
+	ball_param_sub = ros_node.subscribe("/ball_param", 5, &UpperBodyModule::ballTestParamMsgCallback, this);
 
 	//desired_pose_all_sub = ros_node.subscribe("/desired_pose_all", 5, &UpperBodyModule::desiredPoseAllMsgCallback, this);
 
@@ -118,7 +148,26 @@ void UpperBodyModule::environmentDetectorMsgCallback(const std_msgs::String::Con
 }
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
-		command = msg -> data;
+	command = msg -> data;
+}
+//test
+void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
+{
+	current_x = msg->data[0];
+	current_y = msg->data[1];
+}
+void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
+{
+	balance_update_ = true;
+	balance_updating_duration_sec_ = msg->data[0];
+	x_p_gain = msg->data[1];
+	x_d_gain = msg->data[2];
+	y_p_gain = msg->data[3];
+	y_d_gain = msg->data[4];
+
+	printf("sec value ::  %f \n",balance_updating_duration_sec_ );
+	printf("P value ::  %f \n",x_p_gain );
+	printf("D P value ::  %f \n",x_d_gain );
 }
 
 

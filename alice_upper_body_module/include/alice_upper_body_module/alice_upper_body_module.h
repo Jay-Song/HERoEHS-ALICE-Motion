@@ -49,6 +49,7 @@
 
 
 
+
 namespace alice_upper_body_module
 {
 
@@ -77,11 +78,18 @@ public:
 	ros::Subscriber environment_detector_sub;
 	ros::Subscriber head_moving_sub;
 
+	ros::Subscriber ball_test_sub;
+	ros::Subscriber ball_param_sub;
+
 
 	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void environmentDetectorMsgCallback(const std_msgs::String::ConstPtr& msg);
 	void headMovingMsgCallback(const std_msgs::String::ConstPtr& msg);
+
+
+	void ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
+	void ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 
 
 private:
@@ -122,6 +130,26 @@ private:
 	void finding_motion();
 	void tracking_function();
 	std::string command;
+
+	//tracking control function
+	void updateBalanceParameter();
+	double balance_updating_duration_sec_;
+	double balance_updating_sys_time_sec_;
+	bool balance_update_;
+	control_function::PID_function *pidController_x;
+	control_function::PID_function *pidController_y;
+	heroehs_math::FifthOrderTrajectory *gain_x_p_adjustment;
+	heroehs_math::FifthOrderTrajectory *gain_x_d_adjustment;
+	heroehs_math::FifthOrderTrajectory *gain_y_p_adjustment;
+	heroehs_math::FifthOrderTrajectory *gain_y_d_adjustment;
+
+	double x_p_gain, x_d_gain, y_p_gain, y_d_gain;
+
+	double current_x,current_y;
+	int frame_x, frame_y;
+	double desired_x, desired_y;
+
+	double control_angle_yaw, control_angle_pitch;
 
 
 

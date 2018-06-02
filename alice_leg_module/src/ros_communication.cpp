@@ -161,25 +161,15 @@ void AliceLegModule::queueThread()
 	ros::CallbackQueue callback_queue;
 	ros_node.setCallbackQueue(&callback_queue);
 	/* publisher topics */
-/*	l_leg_point_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_leg_point_xyz",100);
-	l_leg_point_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_leg_point_rpy",100);
-	r_leg_point_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_leg_point_xyz",100);
-	r_leg_point_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_leg_point_rpy",100);
-
-	l_compensation_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_compensation_xyz",100);;
-	l_compensation_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/l_compensation_rpy",100);;
-	r_compensation_xyz_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_compensation_xyz",100);;
-	r_compensation_rpy_pub = ros_node.advertise<geometry_msgs::Vector3>("/r_compensation_rpy",100);;*/
-
 	zmp_fz_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/zmp_fz",100);
-	//current_leg_pose_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/current_leg_pose",100);
+
 
 	/* subscribe topics */
-	//get_imu_data_sub_ = ros_node.subscribe("/imu/data", 100, &AliceLegModule::imuDataMsgCallback, this);
 	get_ft_data_sub_ = ros_node.subscribe("/alice/force_torque_data", 100, &AliceLegModule::ftDataMsgCallback, this);
-	//ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/desired_pose_leg", 5, &AliceLegModule::desiredPoseMsgCallback, this);
 	// for gui
 	set_balance_param_sub_ = ros_node.subscribe("/alice/balance_parameter", 5, &AliceLegModule::setBalanceParameterCallback, this);
+
+
 
 	ros::WallDuration duration(control_cycle_msec_ / 1000.0);
 	while(ros_node.ok())
