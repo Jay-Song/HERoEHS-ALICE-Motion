@@ -93,8 +93,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
 	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
-	result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(3,1);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  head_end_point_(4,1);
+	result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(4,1);
+	result_[joint_id_to_name_[8]]-> goal_position_  =  head_end_point_(3,1);
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
