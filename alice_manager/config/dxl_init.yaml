@@ -39,10 +39,10 @@ r_ankle_roll:
   return_delay_time: 10
 
 head_pitch:
-  position_p_gain: 850
+  position_p_gain: 200
   return_delay_time: 10
 head_yaw:
-  position_p_gain: 850
+  position_p_gain: 450
   return_delay_time: 10
 waist_pitch:
   position_p_gain: 850
