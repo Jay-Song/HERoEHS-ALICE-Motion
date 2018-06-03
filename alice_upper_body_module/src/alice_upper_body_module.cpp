@@ -83,6 +83,9 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
 	temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
 
+	//temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
+	//temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
+
 
 	waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
 	waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
@@ -235,8 +238,8 @@ void UpperBodyModule::tracking_function()
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch + 20*DEGREE2RADIAN;
-	head_end_point_(3, 7)  = 0.3;
-	head_end_point_(4, 7)  = 0.3;
+	head_end_point_(3, 7)  = 0.1;
+	head_end_point_(4, 7)  = 0.1;
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
