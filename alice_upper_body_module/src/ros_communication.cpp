@@ -157,6 +157,7 @@ void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::Con
 {
 	current_x = msg->data[0];
 	current_y = msg->data[1];
+
 }
 void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
