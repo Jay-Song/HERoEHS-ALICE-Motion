@@ -74,17 +74,15 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	{
 		return;
 	}
-	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),135,-135);
+	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),90,-90);
 	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,-25);
 
-	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
+	//result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 	//is_moving_head_  = end_to_rad_head_  -> is_moving_check;
-
-	temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
-	temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
 
 	//temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
 	//temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
+
 
 
 	waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
@@ -95,8 +93,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
 	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
-	result_[joint_id_to_name_[7]]-> goal_position_  =  temp_head_pitch;
-	result_[joint_id_to_name_[8]]-> goal_position_  =  temp_head_yaw;
+	result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(3,1);
+	result_[joint_id_to_name_[8]]-> goal_position_  =  head_end_point_(4,1);
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
@@ -238,8 +236,8 @@ void UpperBodyModule::tracking_function()
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch + 20*DEGREE2RADIAN;
-	head_end_point_(3, 7)  = 0.8;
-	head_end_point_(4, 7)  = 0.8;
+	//head_end_point_(3, 7)  = 0.8;
+	//head_end_point_(4, 7)  = 0.8;
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
