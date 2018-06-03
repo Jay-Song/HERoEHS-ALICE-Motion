@@ -146,6 +146,7 @@ private:
 	double x_p_gain, x_d_gain, y_p_gain, y_d_gain;
 
 	double current_x,current_y;
+	double pre_current_x,pre_current_y;
 	int frame_x, frame_y;
 	double desired_x, desired_y;
 

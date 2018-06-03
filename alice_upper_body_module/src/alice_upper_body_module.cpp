@@ -90,10 +90,10 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
 	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 
-	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
-	//result_[joint_id_to_name_[7]]-> goal_position_  =  temp_head_pitch;
-	//result_[joint_id_to_name_[8]]-> goal_position_  =  temp_head_yaw;
+	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
+	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
+	result_[joint_id_to_name_[7]]-> goal_position_  =  temp_head_pitch;
+	result_[joint_id_to_name_[8]]-> goal_position_  =  temp_head_yaw;
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
@@ -220,6 +220,10 @@ void UpperBodyModule::updateBalanceParameter()
 }
 void UpperBodyModule::tracking_function()
 {
+	current_x = filter_head->lowPassFilter(current_x, pre_current_x, 0.01, 0.008);
+	current_y = filter_head->lowPassFilter(current_y, pre_current_y, 0.01, 0.008);
+	printf("X   control value ::  %f \n",current_x);
+	printf("Y   control value ::  %f \n",current_y);
 
 	updateBalanceParameter();
 
@@ -236,7 +240,8 @@ void UpperBodyModule::tracking_function()
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
-
+    pre_current_x = current_x;
+	pre_current_y = current_y;
 
 }
 void UpperBodyModule::algorithm_process(std::string command_)

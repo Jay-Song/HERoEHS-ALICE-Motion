@@ -75,6 +75,8 @@ UpperBodyModule::UpperBodyModule()
 	control_angle_pitch = 0;
 	current_x = 0;
 	current_y = 0;
+    pre_current_x = 0;
+	pre_current_y = 0;
 	frame_x = 640;
 	frame_y = 480;
 	int margin_desired_x = 0;
