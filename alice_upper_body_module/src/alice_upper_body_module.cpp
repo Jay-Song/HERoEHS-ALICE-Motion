@@ -80,7 +80,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 	//is_moving_head_  = end_to_rad_head_  -> is_moving_check;
 
-	temp_head_yaw   = limitCheck(result_rad_head_(3,0),135,-135);
+	temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
 	temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
 
 
@@ -90,13 +90,15 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
 	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 
-	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.02, 0.008);
+	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
+	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.02, 0.008);
+	result_[joint_id_to_name_[7]]-> goal_position_  =  temp_head_pitch;
+	result_[joint_id_to_name_[8]]-> goal_position_  =  temp_head_yaw;
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
-//result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
-//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
+	//result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
+	//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
@@ -229,8 +231,8 @@ void UpperBodyModule::tracking_function()
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch + 20*DEGREE2RADIAN;
-	head_end_point_(3, 7)  = 0.5;
-	head_end_point_(4, 7)  = 0.5;
+	head_end_point_(3, 7)  = 0.3;
+	head_end_point_(4, 7)  = 0.3;
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
