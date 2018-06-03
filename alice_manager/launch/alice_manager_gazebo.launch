@@ -13,5 +13,8 @@
     <node name="alice_manager_node" pkg="alice_manager" type="alice_manager_node" output="screen"/>
     <!--<node name="decision_module" pkg="decision_module" type="decision_module" output="screen"/>-->
     
+    <!-- Robot Model & TF -->
+    <include file="$(find alice_description)/launch/alice_soccer_motion.launch"/> 
+
 </launch>
 
