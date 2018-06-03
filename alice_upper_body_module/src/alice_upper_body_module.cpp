@@ -34,10 +34,10 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 	result_rad_head_.resize(6,1);
 	result_rad_head_.fill(0);
 
-	head_end_point_(4,0) = 0; // pitch 초기값
-	head_end_point_(4,1) = 0; //
-	end_to_rad_head_->cal_end_point_tra_betta->current_pose = 0;
-	end_to_rad_head_->current_pose_change(4,0) = 0;
+	head_end_point_(4,0) = 20*DEGREE2RADIAN; // pitch 초기값
+	head_end_point_(4,1) = 20*DEGREE2RADIAN; //
+	end_to_rad_head_->cal_end_point_tra_betta->current_pose = 20*DEGREE2RADIAN;
+	end_to_rad_head_->current_pose_change(4,0) = 20*DEGREE2RADIAN;
 	temp_pre_pitch = 0; // low pass filter initialize
 
 
@@ -95,8 +95,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
 	result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.02, 0.008);
 
-	result_[joint_id_to_name_[9]] -> goal_position_  = -result_rad_waist_ (3,0); // waist pitch
-	result_[joint_id_to_name_[10]]-> goal_position_  = -result_rad_waist_ (4,0); // waist yaw
+	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
+	result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
