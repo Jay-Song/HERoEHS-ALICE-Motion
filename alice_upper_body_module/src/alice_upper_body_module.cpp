@@ -95,8 +95,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
-	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
-	result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
+//result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
+//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
