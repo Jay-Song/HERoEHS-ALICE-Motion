@@ -238,8 +238,8 @@ void UpperBodyModule::tracking_function()
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch + 20*DEGREE2RADIAN;
-	head_end_point_(3, 7)  = 0.1;
-	head_end_point_(4, 7)  = 0.1;
+	head_end_point_(3, 7)  = 0.8;
+	head_end_point_(4, 7)  = 0.8;
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
