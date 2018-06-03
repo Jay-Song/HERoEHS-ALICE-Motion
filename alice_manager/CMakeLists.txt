@@ -52,9 +52,14 @@ include_directories(
 )
 
 add_executable(alice_manager_node src/alice_manager_node.cpp)
+add_executable(alice_manager_python_node src/alice_manager_python_node.cpp)
 
 add_dependencies(alice_manager_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(alice_manager_python_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(alice_manager_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(alice_manager_python_node
   ${catkin_LIBRARIES}
 )

@@ -38,7 +38,7 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 	head_end_point_(4,1) = 20*DEGREE2RADIAN; //
 	end_to_rad_head_->cal_end_point_tra_betta->current_pose = 20*DEGREE2RADIAN;
 	end_to_rad_head_->current_pose_change(4,0) = 20*DEGREE2RADIAN;
-	temp_pre_pitch = 0; // low pass filter initialize
+	temp_pre_pitch = 20*DEGREE2RADIAN; // low pass filter initialize
 
 
 	for(int joint_num_= 3; joint_num_< 6 ; joint_num_ ++)  // waist 3, 5번 // head 345 초기화
@@ -69,7 +69,6 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//algorithm_process(command);
 	tracking_function();
-	printf("!!!!!!!!!1");
 
 	if (enable_ == false)
 	{
@@ -91,9 +90,10 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
 	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 
-
 	result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.02, 0.008);
 	result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.02, 0.008);
+
+	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
 	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
 	result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
@@ -232,8 +232,8 @@ void UpperBodyModule::tracking_function()
 	head_end_point_(3, 7)  = 0.5;
 	head_end_point_(4, 7)  = 0.5;
 
-	printf("yaw   control value ::  %f \n",control_angle_yaw);
-	printf("pitch control value ::  %f \n",control_angle_pitch);
+	//printf("yaw   control value ::  %f \n",control_angle_yaw);
+	//printf("pitch control value ::  %f \n",control_angle_pitch);
 
 
 }
