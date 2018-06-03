@@ -161,7 +161,7 @@ void AliceLegModule::queueThread()
 	ros::CallbackQueue callback_queue;
 	ros_node.setCallbackQueue(&callback_queue);
 	/* publisher topics */
-	zmp_fz_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/zmp_fz",100);
+	zmp_fz_pub = ros_node.advertise<std_msgs::Float64MultiArray>("/zmp",100);
 
 
 	/* subscribe topics */
