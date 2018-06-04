@@ -2,31 +2,27 @@
 # CMake
 ################################################################################
 cmake_minimum_required(VERSION 2.8.3)
-project(alice_manager)
+project(alice_online_walking_module)
 
 ################################################################################
 # Packages
 ################################################################################
-find_package(catkin REQUIRED
+find_package(catkin REQUIRED COMPONENTS
   roscpp
-  dynamixel_sdk
-  robotis_framework_common
-  robotis_device
-  robotis_controller
-  robotis_controller_msgs
-  robotis_math
+  std_msgs
+  sensor_msgs
+  geometry_msgs
   cmake_modules
-  heroehs_math
-  #heroehs_online_walking_pattern_generator
-  #heroehs_pd_balance_controller
-  alice_base_module
-  alice_leg_module
-  alice_upper_body_module
-  alice_balance_control
-  alice_online_walking_module
+  robotis_framework_common
+  robotis_controller_msgs
+  heroehs_online_walking_pattern_generator
+  heroehs_pd_balance_controller
+  alice_kinematics_dynamics
+  alice_walking_module_msgs
 )
 
-find_package(Eigen3 REQUIRED)
+find_package(Eigen REQUIRED)
+
 
 ################################################################################
 # Declare ROS messages, services and actions
@@ -40,7 +36,10 @@ find_package(Eigen3 REQUIRED)
 # Catkin specific configuration
 ################################################################################
 catkin_package(
-  LIBRARIES alice_manager
+  INCLUDE_DIRS include
+  LIBRARIES alice_online_walking_module
+  CATKIN_DEPENDS roscpp heroehs_online_walking_pattern_generator heroehs_pd_balance_controller alice_kinematics_dynamics
+  DEPENDS system_lib
 )
 
 ################################################################################
@@ -48,19 +47,17 @@ catkin_package(
 ################################################################################
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(alice_manager_node src/alice_manager_node.cpp)
-add_executable(alice_manager_python_node src/alice_manager_python_node.cpp)
-
-add_dependencies(alice_manager_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(alice_manager_python_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(alice_manager_node
-  ${catkin_LIBRARIES}
+add_library(alice_online_walking_module
+  src/alice_online_walking.cpp
+  src/online_walking_module.cpp
 )
-target_link_libraries(alice_manager_python_node
-  ${catkin_LIBRARIES}
+
+add_dependencies(alice_online_walking_module ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(alice_online_walking_module
+  ${catkin_INCLUDE_DIRS}
 )
