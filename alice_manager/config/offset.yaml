@@ -17,6 +17,19 @@ offset:
 
   waist_yaw : 0.0
   waist_pitch : 0.0
+  
+  l_shoulder_pitch: 0.0
+
+l_shoulder_roll: 0.0
+
+l_elbow_pitch: 0.0
+
+  r_shoulder_pitch: 0.0
+
+r_shoulder_roll: 0.0
+
+r_elbow_pitch: 0.0
+
 
 
 init_pose_for_offset_tuner:
@@ -38,5 +51,17 @@ init_pose_for_offset_tuner:
 
   waist_yaw : 0.0
   waist_pitch : 0.0
+  
+  l_shoulder_pitch: 0.0
+
+l_shoulder_roll: 0.0
+
+l_elbow_pitch: 0.0
+
+  r_shoulder_pitch: 0.0
+
+r_shoulder_roll: 0.0
+
+r_elbow_pitch: 0.0
 
 

@@ -177,7 +177,7 @@ void OnlineWalkingModule::queueThread()
 
   /* sensor topic subscribe */
   ros::Subscriber imu_data_sub = ros_node.subscribe("/imu/data", 3, &OnlineWalkingModule::imuDataOutputCallback,        this);
-  ros::Subscriber ft_data_sub  = ros_node.subscribe("/diana/force_torque_data", 3, &OnlineWalkingModule::ftDataOutputCallback, this);
+  ros::Subscriber ft_data_sub  = ros_node.subscribe("/alice/force_torque_data", 3, &OnlineWalkingModule::ftDataOutputCallback, this);
 
   ros::WallDuration duration(control_cycle_msec_ / 1000.0);
   if(ros::param::get("gazebo", gazebo_) == false)

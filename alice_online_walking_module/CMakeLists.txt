@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   heroehs_pd_balance_controller
   alice_kinematics_dynamics
   alice_walking_module_msgs
+heroehs_math
 )
 
 find_package(Eigen REQUIRED)

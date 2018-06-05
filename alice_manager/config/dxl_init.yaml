@@ -52,6 +52,26 @@ waist_yaw:
   return_delay_time: 10
   
 
+l_shoulder_pitch:
+  position_p_gain: 850
+  return_delay_time: 10 
+l_shoulder_roll:
+  position_p_gain: 850
+  return_delay_time: 10
+l_elbow_pitch:
+  position_p_gain: 850
+  return_delay_time: 10
+  
+r_shoulder_pitch:
+  position_p_gain: 850
+  return_delay_time: 10 
+r_shoulder_roll:
+  position_p_gain: 850
+  return_delay_time: 10
+r_elbow_pitch:
+  position_p_gain: 850
+  return_delay_time: 10
+
 
 
 
