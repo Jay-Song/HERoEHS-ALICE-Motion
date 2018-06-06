@@ -217,6 +217,10 @@ int OnlineWalkingModule::convertStepDataMsgToStepData(alice_walking_module_msgs:
   des.position_data.moving_foot         = src.position_data.moving_foot;
   des.position_data.shoulder_swing_gain = 0;
   des.position_data.elbow_swing_gain    = 0;
+
+  des.position_data.x_zmp_shift         = src.position_data.x_zmp_shift;
+  des.position_data.y_zmp_shift         = src.position_data.y_zmp_shift;
+
   des.position_data.foot_z_swap         = src.position_data.foot_z_swap;
   des.position_data.waist_pitch_angle   = 0;
   des.position_data.waist_yaw_angle     = src.position_data.torso_yaw_angle_rad;
@@ -295,8 +299,6 @@ int OnlineWalkingModule::convertStepDataMsgToStepData(alice_walking_module_msgs:
 
 
 int OnlineWalkingModule::convertStepDataToStepDataMsg(robotis_framework::StepData& src, alice_walking_module_msgs::StepData& des)
-
-
 {
   des.time_data.walking_state   = src.time_data.walking_state;
   des.time_data.abs_step_time   = src.time_data.abs_step_time;
@@ -313,6 +315,9 @@ int OnlineWalkingModule::convertStepDataToStepDataMsg(robotis_framework::StepDat
   des.position_data.foot_z_swap         = src.position_data.foot_z_swap;
   des.position_data.torso_yaw_angle_rad = src.position_data.waist_yaw_angle;
   des.position_data.body_z_swap         = src.position_data.body_z_swap;
+
+  des.position_data.x_zmp_shift         = src.position_data.x_zmp_shift;
+  des.position_data.y_zmp_shift         = src.position_data.y_zmp_shift;
 
   des.position_data.body_pose.z           = src.position_data.body_pose.z;
   des.position_data.body_pose.roll        = src.position_data.body_pose.roll;

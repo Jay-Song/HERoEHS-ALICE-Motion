@@ -237,6 +237,13 @@ void ALICEOnlineWalking::process()
      break;
    }
 
+  //std::cout << l_target_fz_N << " " << r_target_fz_N <<" ";
+
+  l_target_fz_N = walking_pattern_.switching_ratio_*left_dsp_fz_N_ + left_dsp_fz_N_;
+  r_target_fz_N = right_ssp_fz_N_ - l_target_fz_N;
+
+  //std::cout << l_target_fz_N << " " << r_target_fz_N << std::endl;
+
   balance_ctrl_.setDesiredCOBGyro(0,0);
   balance_ctrl_.setDesiredCOBOrientation(walking_pattern_.pose_g_to_pelvis_.roll, walking_pattern_.pose_g_to_pelvis_.pitch);
   balance_ctrl_.setDesiredFootForceTorque(r_target_fx_N*1.0, r_target_fy_N*1.0, r_target_fz_N, 0, 0, 0,
