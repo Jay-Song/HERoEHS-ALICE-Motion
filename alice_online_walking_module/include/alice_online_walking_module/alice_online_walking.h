@@ -78,10 +78,13 @@ public:
   double current_left_fx_N_,  current_left_fy_N_,  current_left_fz_N_;
   double current_left_tx_Nm_, current_left_ty_Nm_, current_left_tz_Nm_;
 
+ Eigen::MatrixXd mat_g_to_acc_, mat_robot_to_acc_;
+
 private:
   heroehs::OnlineWalkingPatternGenerator walking_pattern_;
   KinematicsDynamics* alice_kd_;
 
+  double total_robot_mass_;
   double right_dsp_fz_N_, left_dsp_fz_N_;
   double right_ssp_fz_N_, left_ssp_fz_N_;
 

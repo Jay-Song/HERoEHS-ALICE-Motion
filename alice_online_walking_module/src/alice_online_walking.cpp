@@ -24,10 +24,11 @@ ALICEOnlineWalking::ALICEOnlineWalking()
   mat_imu_frame_ref_ = robotis_framework::getRotationX(M_PI) * robotis_framework::getRotationZ(-0.5*M_PI);
   mat_imu_frame_ref_inv_ = mat_imu_frame_ref_.transpose();
 
-  right_dsp_fz_N_ = -0.5* 16.0 * 9.8;
-  left_dsp_fz_N_  = -0.5* 16.0 * 9.8;
-  right_ssp_fz_N_ = -16.0 * 9.8;
-  left_ssp_fz_N_  = -16.0 * 9.8;
+  total_robot_mass_ = 16.0;
+  right_dsp_fz_N_ = -0.5* total_robot_mass_ * 9.8;
+  left_dsp_fz_N_  = -0.5* total_robot_mass_ * 9.8;
+  right_ssp_fz_N_ = -total_robot_mass_ * 9.8;
+  left_ssp_fz_N_  = -total_robot_mass_ * 9.8;
 
   current_imu_roll_rad_ = current_imu_pitch_rad_ = 0;
   current_gyro_roll_rad_per_sec_ = current_gyro_pitch_rad_per_sec_ = 0;
@@ -38,6 +39,9 @@ ALICEOnlineWalking::ALICEOnlineWalking()
   current_left_tx_Nm_  = current_left_ty_Nm_   = current_left_tz_Nm_  =0;
 
   balance_index_ = 0;
+
+  mat_g_to_acc_.resize(4, 1);
+  mat_g_to_acc_.fill(0);
 }
 
 ALICEOnlineWalking::~ALICEOnlineWalking()
@@ -79,6 +83,9 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
     leg_angle_feed_back_[feed_forward_idx].p_gain_ = 0;
     leg_angle_feed_back_[feed_forward_idx].d_gain_ = 0;
   }
+
+  mat_g_to_acc_.resize(4, 1);
+  mat_g_to_acc_.fill(0);
 }
 
 void ALICEOnlineWalking::start()
@@ -139,6 +146,10 @@ void ALICEOnlineWalking::process()
   double l_target_fz_N = left_dsp_fz_N_;
   double target_fz_N  = 0;
 
+  mat_g_to_acc_.coeffRef(0,0) = walking_pattern_.x_lipm_.coeff(2,0);
+  mat_g_to_acc_.coeffRef(1,0) = walking_pattern_.y_lipm_.coeff(2,0);
+  mat_robot_to_acc_ = (mat_robot_to_pelvis_* mat_pelvis_to_g_) * mat_g_to_acc_;
+
   switch(balance_index_)
    {
    case 0:
@@ -151,8 +162,8 @@ void ALICEOnlineWalking::process()
      break;
    case 1:
      //fprintf(stderr, "DSP : R--O->L\n");
-     r_target_fx_N = l_target_fx_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = l_target_fy_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
@@ -163,8 +174,8 @@ void ALICEOnlineWalking::process()
      r_target_fy_N = 0;
      r_target_fz_N = 0;
 
-     l_target_fx_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     l_target_fy_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     l_target_fx_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     l_target_fy_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      l_target_fz_N = left_ssp_fz_N_;
      target_fz_N = left_ssp_fz_N_;
      break;
@@ -174,31 +185,31 @@ void ALICEOnlineWalking::process()
      r_target_fy_N = 0;
      r_target_fz_N = 0;
 
-     l_target_fx_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     l_target_fy_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     l_target_fx_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     l_target_fy_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      l_target_fz_N = left_ssp_fz_N_;
      target_fz_N = left_ssp_fz_N_;
      break;
    case 4:
      //fprintf(stderr, "DSP : R--O<-L\n");
-     r_target_fx_N = l_target_fx_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = l_target_fy_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
      break;
    case 5:
      //fprintf(stderr, "DSP : R<-O--L\n");
-     r_target_fx_N = l_target_fx_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = l_target_fy_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
      break;
    case 6:
      //fprintf(stderr, "SSP : R_BALANCING1\n");
-     r_target_fx_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_ssp_fz_N_;
 
      l_target_fx_N = 0;
@@ -208,8 +219,8 @@ void ALICEOnlineWalking::process()
      break;
    case 7:
      //fprintf(stderr, "SSP : R_BALANCING2\n");
-     r_target_fx_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = 0;//-1.0*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = -1.0*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_ssp_fz_N_;
 
      l_target_fx_N = 0;
@@ -219,16 +230,16 @@ void ALICEOnlineWalking::process()
      break;
    case 8:
      //fprintf(stderr, "DSP : R->O--L");
-     r_target_fx_N = l_target_fx_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = l_target_fy_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
      break;
    case 9:
      //fprintf(stderr, "DSP : END");
-     r_target_fx_N = l_target_fx_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(0,0);
-     r_target_fy_N = l_target_fy_N = 0;//-0.5*total_mass_of_robot_*mat_robot_to_acc.coeff(1,0);
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
