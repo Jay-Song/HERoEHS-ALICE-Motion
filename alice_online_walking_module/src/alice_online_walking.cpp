@@ -154,8 +154,8 @@ void ALICEOnlineWalking::process()
    {
    case 0:
      //fprintf(stderr, "DSP : START\n");
-     r_target_fx_N = l_target_fx_N = 0;
-     r_target_fy_N = l_target_fy_N = 0;
+     r_target_fx_N = l_target_fx_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(0,0);
+     r_target_fy_N = l_target_fy_N = -0.5*total_robot_mass_*mat_robot_to_acc_.coeff(1,0);
      r_target_fz_N = right_dsp_fz_N_;
      l_target_fz_N = left_dsp_fz_N_;
      target_fz_N = left_dsp_fz_N_ - right_dsp_fz_N_;
@@ -253,7 +253,10 @@ void ALICEOnlineWalking::process()
   l_target_fz_N = walking_pattern_.switching_ratio_*left_dsp_fz_N_ + left_dsp_fz_N_;
   r_target_fz_N = right_ssp_fz_N_ - l_target_fz_N;
 
-  //std::cout << l_target_fz_N << " " << r_target_fz_N << std::endl;
+//  std::cout << walking_pattern_.x_lipm_.coeff(0) << " " << walking_pattern_.x_lipm_.coeff(1) << " " << walking_pattern_.x_lipm_.coeff(2) << " "
+//      << walking_pattern_.y_lipm_.coeff(0) << " " << walking_pattern_.y_lipm_.coeff(1) << " " << walking_pattern_.y_lipm_.coeff(2) << " "
+//      << l_target_fx_N <<" " << l_target_fy_N<< " " << l_target_fz_N << " "
+//      << r_target_fx_N <<" " << r_target_fy_N << " " << r_target_fz_N << " " << std::endl;
 
   balance_ctrl_.setDesiredCOBGyro(0,0);
   balance_ctrl_.setDesiredCOBOrientation(walking_pattern_.pose_g_to_pelvis_.roll, walking_pattern_.pose_g_to_pelvis_.pitch);
