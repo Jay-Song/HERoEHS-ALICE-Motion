@@ -24,10 +24,10 @@ ALICEOnlineWalking::ALICEOnlineWalking()
   mat_imu_frame_ref_ = robotis_framework::getRotationX(M_PI) * robotis_framework::getRotationZ(-0.5*M_PI);
   mat_imu_frame_ref_inv_ = mat_imu_frame_ref_.transpose();
 
-  right_dsp_fz_N_ = -0.5* 20.0 * 9.8;
-  left_dsp_fz_N_  = -0.5* 20.0 * 9.8;
-  right_ssp_fz_N_ = -20.0 * 9.8;
-  left_ssp_fz_N_  = -20.0 * 9.8;
+  right_dsp_fz_N_ = -0.5* 16.0 * 9.8;
+  left_dsp_fz_N_  = -0.5* 16.0 * 9.8;
+  right_ssp_fz_N_ = -16.0 * 9.8;
+  left_ssp_fz_N_  = -16.0 * 9.8;
 
   current_imu_roll_rad_ = current_imu_pitch_rad_ = 0;
   current_gyro_roll_rad_per_sec_ = current_gyro_pitch_rad_per_sec_ = 0;
@@ -50,17 +50,17 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
   alice_kd_ = new KinematicsDynamics();
 
   robotis_framework::Pose3D r_foot, l_foot, pelvis;
-  r_foot.x = 0.0;    r_foot.y = -0.09;  r_foot.z = -0.57;
+  r_foot.x = 0.0;    r_foot.y = -0.09;  r_foot.z = -0.55;
   r_foot.roll = 0.0; r_foot.pitch = 0.0; r_foot.yaw = 0.0;
 
-  l_foot.x = 0.0;    l_foot.y = 0.09;   l_foot.z = -0.57;
+  l_foot.x = 0.0;    l_foot.y = 0.09;   l_foot.z = -0.55;
   l_foot.roll = 0.0; l_foot.pitch = 0.0; l_foot.yaw = 0.0;
 
   pelvis.x = 0.0;    pelvis.y = 0.0;     pelvis.z = 0.0;
   pelvis.roll = 0.0; pelvis.pitch = 0.0; pelvis.yaw = 0;
 
   walking_pattern_.setInitialPose(r_foot, l_foot, pelvis);
-  walking_pattern_.initialize(0.6, 1.6, control_cycle_sec);
+  walking_pattern_.initialize(0.4, 1.6, control_cycle_sec);
 
   // initialize balance
   balance_ctrl_.initialize(control_cycle_sec);
