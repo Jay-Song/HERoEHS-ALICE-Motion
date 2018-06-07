@@ -24,6 +24,7 @@ find_package(catkin REQUIRED
   alice_upper_body_module
   alice_balance_control
   alice_online_walking_module
+  alice_op3_walking_module
 )
 
 find_package(Eigen3 REQUIRED)

@@ -20,6 +20,7 @@ offset:
   r_shoulder_pitch: 0
   r_shoulder_roll: 0
   waist_yaw: 0
+  
 init_pose_for_offset_tuner:
   head_pitch: 0
   head_yaw: 0
