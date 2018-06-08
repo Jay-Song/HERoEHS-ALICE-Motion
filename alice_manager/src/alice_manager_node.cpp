@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     controller->addMotionModule((robotis_framework::MotionModule*)OnlineWalkingModule::getInstance());
     controller->addMotionModule((robotis_framework::MotionModule*)WalkingModule::getInstance());
 
+//    controller->DEBUG_PRINT = true;
     controller->startTimer();
 
     while(ros::ok())

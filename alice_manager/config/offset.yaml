@@ -1,13 +1,13 @@
 offset:
   l_ankle_pitch: -0.0006714145800545383
   l_ankle_roll: 0
-  l_hip_pitch: 0.08798958719290725
-  l_hip_roll: -0.0369116433984375
-  l_hip_yaw: -0.00268448315625
-  l_knee_pitch: -0.05306563580517465
+  l_hip_pitch: 0.09134796838347622
+  l_hip_roll: -0.0463073344453125
+  l_hip_yaw: -0.0375827641875
+  l_knee_pitch: -0.0678434078015524
   r_ankle_pitch: 0
   r_ankle_roll: 0.05170154565315095
-  r_hip_pitch: -0.1248831118901441
+  r_hip_pitch: -0.1315972576906895
   r_hip_roll: 0.01678621612115291
   r_hip_yaw: -0.020133623671875
   r_knee_pitch: 0.0167972687176501
