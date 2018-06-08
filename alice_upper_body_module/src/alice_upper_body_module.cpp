@@ -86,7 +86,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 
 	waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
-	waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
+	//waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
 
 	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
 	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
@@ -98,8 +98,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
-	//result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist pitch
-	//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist yaw
+	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist yaw
+	//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist pitch
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
