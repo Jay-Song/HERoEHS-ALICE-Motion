@@ -16,8 +16,8 @@ dynamixel | /dev/ttyUSB0 |  2   | MX-106-       | 2.0      | r_shoulder_pitch  |
 #dynamixel | /dev/ttyUSB0 |  5   | MX-64       | 2.0      | l_elbow_pitch     | present_position
 #dynamixel | /dev/ttyUSB0 |  6   | MX-64       | 2.0      | r_elbow_pitch     | present_position
 
-#dynamixel | /dev/ttyUSB0 |  7   | MX-64-7       | 2.0      | head_pitch         | present_position
-#dynamixel | /dev/ttyUSB0 |  8   | MX-64-8       | 2.0      | head_yaw           | present_position
+dynamixel | /dev/ttyUSB0 |  7   | MX-64-7       | 2.0      | head_pitch         | present_position
+dynamixel | /dev/ttyUSB0 |  8   | MX-64-8       | 2.0      | head_yaw           | present_position
 
 dynamixel | /dev/ttyUSB0 |  9   | MX-106-2-9    | 2.0      | waist_yaw          | present_position
 #dynamixel | /dev/ttyUSB0 | 10   | MX-106-2-10   | 2.0      | waist_pitch        | present_position
@@ -35,7 +35,3 @@ dynamixel | /dev/ttyUSB0 | 19   | MX-106-2-19   | 2.0      | l_ankle_pitch      
 dynamixel | /dev/ttyUSB0 | 20   | MX-106-2-20   | 2.0      | r_ankle_pitch      | present_position
 dynamixel | /dev/ttyUSB0 | 21   | MX-106-2-21   | 2.0      | l_ankle_roll       | present_position
 dynamixel | /dev/ttyUSB0 | 22   | MX-106-2-22   | 2.0      | r_ankle_roll       | present_position
-
-#dynamixel | /dev/ttyUSB0 | 23   | MX-28-23      | 2.0      | head_yaw          | present_position
-#dynamixel | /dev/ttyUSB0 | 24   | MX-28-24      | 2.0      | head_pitch        | present_position
-#dynamixel | /dev/ttyUSB0 | 25   | MX-28-25      | 2.0      | head_roll         | present_position
