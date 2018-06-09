@@ -28,6 +28,9 @@ UpperBodyModule::UpperBodyModule()
 	result_["head_pitch"]   = new robotis_framework::DynamixelState(); // joint 7
 	result_["head_yaw"]   = new robotis_framework::DynamixelState(); // joint 8
 
+	result_["l_shoulder_pitch"] = new robotis_framework::DynamixelState();  // joint 1
+	result_["r_shoulder_pitch"] = new robotis_framework::DynamixelState();  // joint 2
+
 	///////////////////////////
 	// motion control variables
 	waist_kinematics_ = new heroehs_math::KinematicsEulerAngle;

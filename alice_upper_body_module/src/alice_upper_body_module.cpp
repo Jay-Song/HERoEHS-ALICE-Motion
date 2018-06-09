@@ -75,7 +75,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		return;
 	}
 	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),90,-90);
-	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,-25);
+	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,0);
 
 	//result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 	//is_moving_head_  = end_to_rad_head_  -> is_moving_check;
@@ -127,7 +127,6 @@ void UpperBodyModule::finding_motion()
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
 		head_end_point_(4, 1)  = 70*DEGREE2RADIAN;
-
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
 	{
@@ -135,7 +134,6 @@ void UpperBodyModule::finding_motion()
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 90*DEGREE2RADIAN;
 		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
-
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
 	{
@@ -143,7 +141,6 @@ void UpperBodyModule::finding_motion()
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
 		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
-
 	}
 	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
@@ -153,7 +150,6 @@ void UpperBodyModule::finding_motion()
 		head_end_point_(3, 1)  = -90*DEGREE2RADIAN;
 		//head_end_point_(3, 7)  = 6;
 		//head_end_point_(4, 1)  = 0;
-
 	}
 	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
@@ -196,8 +192,6 @@ void UpperBodyModule::updateBalanceParameter()
 	if(balance_updating_sys_time_sec_ > balance_updating_duration_sec_)
 	{
 		balance_updating_sys_time_sec_ = 0;
-
-
 		balance_update_ = false;
 	}
 	else
@@ -214,10 +208,7 @@ void UpperBodyModule::updateBalanceParameter()
 		pidController_x->kd_ = gain_x_d_adjustment -> fifth_order_traj_gen_one_value(value);
 		value(0,1) = y_d_gain;
 		pidController_y->kd_ = gain_y_d_adjustment -> fifth_order_traj_gen_one_value(value);
-
 	}
-
-
 }
 void UpperBodyModule::tracking_function()
 {
