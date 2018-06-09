@@ -70,7 +70,7 @@ UpperBodyModule::UpperBodyModule()
 	temp_pre_yaw = 0;
 
 	// tracking
-	command = "tracking";
+	command = 2;
 	pidController_x = new control_function::PID_function(0.008,90*DEGREE2RADIAN,-90*DEGREE2RADIAN,0,0,0);
 	pidController_y = new control_function::PID_function(0.008,80*DEGREE2RADIAN,-30*DEGREE2RADIAN,0,0,0);
 
@@ -80,10 +80,10 @@ UpperBodyModule::UpperBodyModule()
 	current_y = 0;
     pre_current_x = 0;
 	pre_current_y = 0;
-	frame_x = 640;
-	frame_y = 480;
+	frame_x = 672;
+	frame_y = 376;
 	int margin_desired_x = 0;
-	int margin_desired_y = 110;
+	int margin_desired_y = 93;
 	desired_x = (frame_x/2) + margin_desired_x;
 	desired_y = (frame_y/2) + margin_desired_y;
 
@@ -114,6 +114,7 @@ void UpperBodyModule::queueThread()
 
 
 	// subscribe topics
+	environment_detector_sub = ros_node.subscribe("/heroehs/environment_detector", 5, &UpperBodyModule::environmentDetectorMsgCallback, this);
 
 	// test desired pose
 	head_test = ros_node.subscribe("/desired_pose_head", 5, &UpperBodyModule::desiredPoseHeadMsgCallback, this);
@@ -122,6 +123,8 @@ void UpperBodyModule::queueThread()
 	//test ball
 	ball_test_sub = ros_node.subscribe("/ball_test", 5, &UpperBodyModule::ballTestMsgCallback, this);
 	ball_param_sub = ros_node.subscribe("/ball_param", 5, &UpperBodyModule::ballTestParamMsgCallback, this);
+
+
 
 	//desired_pose_all_sub = ros_node.subscribe("/desired_pose_all", 5, &UpperBodyModule::desiredPoseAllMsgCallback, this);
 
@@ -147,24 +150,33 @@ void UpperBodyModule::desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArr
 	head_end_point_ (4, 7) = msg->data[3];
 	is_moving_head_ = true;
 }
-void UpperBodyModule::environmentDetectorMsgCallback(const std_msgs::String::ConstPtr& msg)
+void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg)
 {
-
+	for(int i = 0; i < msg->length; i++)
+	{
+		if(!msg->data[i].name.compare("ball"))
+		{
+			current_x = msg->data[i].roi.x_offset + msg->data[i].roi.width/2;
+			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
+		}
+		else
+			return;
+	}
 }
-void UpperBodyModule::headMovingMsgCallback(const std_msgs::String::ConstPtr& msg)
+void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {
 	command = msg -> data;
 }
 //test
 void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
-	current_x = msg->data[0];
-	current_y = msg->data[1];
+/*	current_x = msg->data[0];
+	current_y = msg->data[1];*/
 
 }
 void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
-	balance_update_ = true;
+/*	balance_update_ = true;
 	balance_updating_duration_sec_ = msg->data[0];
 	x_p_gain = msg->data[1];
 	x_d_gain = msg->data[2];
@@ -173,7 +185,7 @@ void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray
 
 	printf("sec value ::  %f \n",balance_updating_duration_sec_ );
 	printf("P value ::  %f \n",x_p_gain );
-	printf("D P value ::  %f \n",x_d_gain );
+	printf("D P value ::  %f \n",x_d_gain );*/
 }
 
 

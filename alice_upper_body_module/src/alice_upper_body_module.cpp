@@ -67,8 +67,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		std::map<std::string, double> sensors)
 {
 
-	//algorithm_process(command);
-	tracking_function();
+	algorithm_process(command);
+
 
 	if (enable_ == false)
 	{
@@ -232,28 +232,30 @@ void UpperBodyModule::tracking_function()
 
 	//printf("yaw   control value ::  %f \n",control_angle_yaw);
 	//printf("pitch control value ::  %f \n",control_angle_pitch);
-    pre_current_x = current_x;
+	pre_current_x = current_x;
 	pre_current_y = current_y;
 
 }
-void UpperBodyModule::algorithm_process(std::string command_)
+void UpperBodyModule::algorithm_process(uint8_t command_)
 {
-	if(!command_.compare("finding"))
+	if(command_ == 0)
+	{
+		waist_end_point_(3, 1) = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
+		//waist_end_point_(4, 1) = 0; // pitch
+
+		head_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
+		head_end_point_(4, 1)  = 20*DEGREE2RADIAN; // pitch
+	}
+	else if(command_ == 1)
 	{
 		finding_motion();
 	}
-	else if(!command_.compare("initial"))
+	else if(command_ == 2)// tracking algorithm
 	{
-		waist_end_point_(3, 1) = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
-		waist_end_point_(4, 1) = 0; // pitch
-
-		head_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
-		head_end_point_(4, 1)  = 0; // pitch
+		tracking_function();
 	}
-	else // tracking algorithm
-	{
-
-	}
+	else
+		return;
 
 }
 

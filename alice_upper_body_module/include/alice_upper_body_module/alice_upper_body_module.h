@@ -37,6 +37,7 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/UInt8.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/PointStamped.h>
@@ -45,6 +46,7 @@
 //m - personal
 #include "alice_msgs/BalanceParam.h"
 #include "alice_msgs/ForceTorque.h"
+#include "alice_msgs/FoundObjectArray.h"
 #include "robotis_controller_msgs/StatusMsg.h"
 
 
@@ -84,8 +86,8 @@ public:
 
 	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
-	void environmentDetectorMsgCallback(const std_msgs::String::ConstPtr& msg);
-	void headMovingMsgCallback(const std_msgs::String::ConstPtr& msg);
+	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
+	void headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg);
 
 
 	void ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
@@ -126,10 +128,10 @@ private:
 	double temp_pre_roll, temp_pre_pitch, temp_pre_yaw;
 
 	//algorithm
-	void algorithm_process(std::string command_);
+	void algorithm_process(uint8_t command_);
 	void finding_motion();
 	void tracking_function();
-	std::string command;
+	uint8_t command;
 
 	//tracking control function
 	void updateBalanceParameter();
