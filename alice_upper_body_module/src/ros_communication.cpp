@@ -81,7 +81,7 @@ UpperBodyModule::UpperBodyModule()
 	frame_x = 672;
 	frame_y = 376;
 	int margin_desired_x = 0;
-	int margin_desired_y = 93;
+	int margin_desired_y = 20;
 	desired_x = (frame_x/2) + margin_desired_x;
 	desired_y = (frame_y/2) + margin_desired_y;
 	current_x = desired_x;

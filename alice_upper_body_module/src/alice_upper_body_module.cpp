@@ -223,7 +223,7 @@ void UpperBodyModule::tracking_function()
 	control_angle_pitch = pidController_y->PID_calculate(desired_y, current_y);
 
 	control_angle_yaw   += control_angle_yaw;
-	control_angle_pitch += control_angle_pitch;
+	control_angle_pitch -= control_angle_pitch;
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch + 20*DEGREE2RADIAN;
