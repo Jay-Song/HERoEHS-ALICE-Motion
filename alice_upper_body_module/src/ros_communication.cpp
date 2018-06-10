@@ -115,6 +115,7 @@ void UpperBodyModule::queueThread()
 
 	// subscribe topics
 	environment_detector_sub = ros_node.subscribe("/heroehs/environment_detector", 5, &UpperBodyModule::environmentDetectorMsgCallback, this);
+	head_moving_sub = ros_node.subscribe("/heroehs/alice/head_command", 5, &UpperBodyModule::headMovingMsgCallback, this);
 
 	// test desired pose
 	head_test = ros_node.subscribe("/desired_pose_head", 5, &UpperBodyModule::desiredPoseHeadMsgCallback, this);
