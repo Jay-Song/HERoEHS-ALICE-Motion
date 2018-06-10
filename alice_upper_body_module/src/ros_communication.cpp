@@ -159,6 +159,9 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 		{
 			current_x = msg->data[i].roi.x_offset + msg->data[i].roi.width/2;
 			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
+
+			printf("X value ::  %f \n",current_y);
+			printf("Y value ::  %f \n",current_y);
 		}
 		else
 			return;
