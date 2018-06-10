@@ -22,8 +22,8 @@ UpperBodyModule::UpperBodyModule()
 	control_mode_ = robotis_framework::PositionControl;
 
 	// Dynamixel initialize ////
-//result_["waist_pitch"]  = new robotis_framework::DynamixelState(); // joint 10
-    result_["waist_yaw"] = new robotis_framework::DynamixelState(); // joint 9
+	//result_["waist_pitch"]  = new robotis_framework::DynamixelState(); // joint 10
+	result_["waist_yaw"] = new robotis_framework::DynamixelState(); // joint 9
 
 	result_["head_pitch"]   = new robotis_framework::DynamixelState(); // joint 7
 	result_["head_yaw"]   = new robotis_framework::DynamixelState(); // joint 8
@@ -76,9 +76,7 @@ UpperBodyModule::UpperBodyModule()
 
 	control_angle_yaw = 0;
 	control_angle_pitch = 0;
-	current_x = 0;
-	current_y = 0;
-    pre_current_x = 0;
+	pre_current_x = 0;
 	pre_current_y = 0;
 	frame_x = 672;
 	frame_y = 376;
@@ -86,6 +84,8 @@ UpperBodyModule::UpperBodyModule()
 	int margin_desired_y = 93;
 	desired_x = (frame_x/2) + margin_desired_x;
 	desired_y = (frame_y/2) + margin_desired_y;
+	current_x = desired_x;
+	current_y = desired_y;
 
 	//balance param
 	balance_updating_duration_sec_ = 2.0;
@@ -171,7 +171,7 @@ void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg
 //test
 void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
-/*	current_x = msg->data[0];
+	/*	current_x = msg->data[0];
 	current_y = msg->data[1];*/
 
 }
