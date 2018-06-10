@@ -177,7 +177,7 @@ void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::Con
 }
 void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
-/*	balance_update_ = true;
+	balance_update_ = true;
 	balance_updating_duration_sec_ = msg->data[0];
 	x_p_gain = msg->data[1];
 	x_d_gain = msg->data[2];
@@ -186,7 +186,7 @@ void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray
 
 	printf("sec value ::  %f \n",balance_updating_duration_sec_ );
 	printf("P value ::  %f \n",x_p_gain );
-	printf("D P value ::  %f \n",x_d_gain );*/
+	printf("D P value ::  %f \n",x_d_gain );
 }
 
 
