@@ -67,8 +67,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		std::map<std::string, double> sensors)
 {
 
-	//algorithm_process(command);
-	tracking_function();
+	algorithm_process(command);
 
 	if (enable_ == false)
 	{
