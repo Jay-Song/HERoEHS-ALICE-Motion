@@ -13,13 +13,13 @@
     <node name="alice_manager_node" pkg="alice_manager" type="alice_manager_node" output="screen"/>
 
 <!-- 
-    <!-- sensors -->
+     sensors 
     <node name="ft_node" pkg="diana_sensors" type="ft_node"/>
     <include file="$(find microstrain_3dm_gx5_45)/launch/microstrain.launch"/> 
 
-    <!-- algorithm -->
+     algorithm 
     <node name="alice_foot_step_planner" pkg="alice_foot_step_planner" type="alice_foot_step_planner" output="screen"/>
-    <node name="alice_foot_step_generator" pkg="alice_foot_step_generator" type="alice_foot_step_generator" output="screen"/>-->
+    <node name="alice_foot_step_generator" pkg="alice_foot_step_generator" type="alice_foot_step_generator" output="screen"/> -->
 
     
     <!-- Robot Model & TF -->
