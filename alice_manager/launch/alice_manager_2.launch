@@ -5,13 +5,21 @@
     <param name="gazebo"                   value="false"     type="bool"/>
     <param name="gazebo_robot_name"        value="alice_robot" />
 
-    <param name="offset_file_path"             value="$(find alice_manager)/config/offset.yaml"/>
+    <param name="offset_file_path"             value="$(find alice_manager)/config/offset2.yaml"/>
     <param name="robot_file_path"          value="$(find alice_manager)/config/alice.robot"/>
     <param name="init_file_path"           value="$(find alice_manager)/config/dxl_init.yaml"/>
       
     <!-- alice Manager -->
     <node name="alice_manager_node" pkg="alice_manager" type="alice_manager_node" output="screen"/>
-    <!--<node name="decision_module" pkg="decision_module" type="decision_module" output="screen"/>-->
+
+    <!-- sensors -->
+    <node name="ft_node" pkg="diana_sensors" type="ft_node"/>
+    <include file="$(find microstrain_3dm_gx5_45)/launch/microstrain.launch"/> 
+
+    <!-- algorithm -->
+    <node name="alice_foot_step_planner" pkg="alice_foot_step_planner" type="alice_foot_step_planner" output="screen"/>
+    <node name="alice_foot_step_generator" pkg="alice_foot_step_generator" type="alice_foot_step_generator" output="screen"/>
+
     
     <!-- Robot Model & TF -->
     <include file="$(find alice_description)/launch/alice_soccer_motion.launch"/> 
