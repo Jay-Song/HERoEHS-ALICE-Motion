@@ -230,8 +230,8 @@ void UpperBodyModule::tracking_function()
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
-	//printf("yaw   control value ::  %f \n",control_angle_yaw);
-	//printf("pitch control value ::  %f \n",control_angle_pitch);
+	printf("yaw   control value ::  %f \n",control_angle_yaw);
+	printf("pitch control value ::  %f \n",control_angle_pitch);
 	pre_current_x = current_x;
 	pre_current_y = current_y;
 
