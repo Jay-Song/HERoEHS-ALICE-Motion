@@ -163,8 +163,6 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 			printf("X value ::  %f \n",current_x);
 			printf("Y value ::  %f \n",current_y);
 		}
-		else
-			return;
 	}
 }
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
