@@ -127,6 +127,9 @@ void UpperBodyModule::queueThread()
 
 
 
+
+
+
 	//desired_pose_all_sub = ros_node.subscribe("/desired_pose_all", 5, &UpperBodyModule::desiredPoseAllMsgCallback, this);
 
 	ros::WallDuration duration(control_cycle_msec_ / 1000.0);
