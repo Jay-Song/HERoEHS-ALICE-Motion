@@ -54,13 +54,13 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
   alice_kd_ = new KinematicsDynamics();
 
   robotis_framework::Pose3D r_foot, l_foot, pelvis;
-  r_foot.x = 0.0;    r_foot.y = -0.09;  r_foot.z = -0.55;
+  r_foot.x = 0.0;    r_foot.y = -0.09;  r_foot.z = 0.0;
   r_foot.roll = 0.0; r_foot.pitch = 0.0; r_foot.yaw = 0.0;
 
-  l_foot.x = 0.0;    l_foot.y = 0.09;   l_foot.z = -0.55;
+  l_foot.x = 0.0;    l_foot.y = 0.09;   l_foot.z = 0.0;
   l_foot.roll = 0.0; l_foot.pitch = 0.0; l_foot.yaw = 0.0;
 
-  pelvis.x = 0.0;    pelvis.y = 0.0;     pelvis.z = 0.0;
+  pelvis.x = 0.0;    pelvis.y = 0.0;     pelvis.z = 0.57;
   pelvis.roll = 0.0; pelvis.pitch = 0.0; pelvis.yaw = 0;
 
   walking_pattern_.setInitialPose(r_foot, l_foot, pelvis);
