@@ -14,7 +14,7 @@
 
 
       <!--sensors -->
-    <node name="ft_node" pkg="diana_sensors" type="ft_node"/>
+   <!-- <node name="ft_node" pkg="diana_sensors" type="ft_node"/>-->
     <include file="$(find microstrain_3dm_gx5_45)/launch/microstrain.launch"/> 
 
       <!--algorithm -->
