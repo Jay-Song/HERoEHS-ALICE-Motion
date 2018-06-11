@@ -43,8 +43,8 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 
 	for(int joint_num_= 3; joint_num_< 6 ; joint_num_ ++)  // waist 3, 5번 // head 345 초기화
 	{
-		waist_end_point_(joint_num_, 7) = traj_time_test;
-		head_end_point_ (joint_num_, 7) = traj_time_test;
+		waist_end_point_(joint_num_, 7) = 3.0;
+		head_end_point_ (joint_num_, 7) = 3.0;
 	}
 	waist_end_point_(4, 7) = 0;
 
@@ -122,6 +122,8 @@ void UpperBodyModule::finding_motion()
 
 	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
 	{
+head_end_point_(3,7) = 3.0;
+head_end_point_(4,7) = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -129,6 +131,8 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
 	{
+head_end_point_(3,7) =3.0;
+head_end_point_(4,7) =3.0;
 		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 90*DEGREE2RADIAN;
@@ -136,6 +140,8 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
 	{
+head_end_point_(3,7) = 3.0;
+head_end_point_(4,7) = 3.0;
 		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
@@ -143,6 +149,8 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
+head_end_point_(3,7) = 3.0;
+head_end_point_(4,7) =3.0;
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
 		//waist_end_point_(4, 1) = 0;
@@ -152,6 +160,8 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
+head_end_point_(3,7) = 3.0;
+head_end_point_(4,7) =3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
