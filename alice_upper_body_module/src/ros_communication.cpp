@@ -183,9 +183,6 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
 		}
 	}
-
-printf("X :: %f\n", current_x);
-printf("Y :: %f\n", current_y);
 }
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {

@@ -73,8 +73,8 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	{
 		return;
 	}
-	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),80,-80);
-	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,0);
+	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),60,-60);
+	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),80,0);
 
 	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 
@@ -231,8 +231,8 @@ void UpperBodyModule::tracking_function()
 	control_angle_yaw_temp   = pidController_x->PID_calculate(desired_x, current_x);
 	control_angle_pitch_temp = pidController_y->PID_calculate(desired_y, current_y);
 
-//	printf("X   control value ::  %f \n",control_angle_yaw);
-//	printf("Y   control value ::  %f \n",control_angle_pitch);
+	printf("X   control value ::  %f \n",control_angle_yaw_temp);
+	printf("Y   control value ::  %f \n",control_angle_pitch_temp);
 
 	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
 	control_angle_pitch = control_angle_pitch + -1*control_angle_pitch_temp;
