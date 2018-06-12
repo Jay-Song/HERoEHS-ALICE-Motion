@@ -187,7 +187,7 @@ void UpperBodyModule::finding_motion()
 		}
 	}
 
-	if(!status.compare("Walking_Started"))
+	if(leg_check == 1)
 		waist_end_point_(3, 1) = 0;
 
 	current_time_ = current_time_+ 0.008;

@@ -96,8 +96,8 @@ public:
 	void ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
-	std::string status;
 
+	bool leg_check;
 
 private:
 	void queueThread();

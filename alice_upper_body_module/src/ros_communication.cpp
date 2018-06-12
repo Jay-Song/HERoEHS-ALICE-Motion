@@ -100,7 +100,8 @@ UpperBodyModule::UpperBodyModule()
 	y_p_gain = 0;
 	y_d_gain = 0;
 
-	status = "";
+
+	leg_check = 0;
 }
 UpperBodyModule::~UpperBodyModule()
 {
@@ -142,8 +143,16 @@ void UpperBodyModule::queueThread()
 // TEST /////////////////////////////////////////////
 void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
 {
-	status = msg->status_msg;
-	printf("%s\n", status.c_str());
+
+	if(!msg->status_msg.compare("Walking_Started"))
+	{
+		leg_check = 1;
+	}
+	if(!msg->status_msg.compare("Walking_Finished"))
+	{
+		leg_check = 0;
+	}
+	printf("leg_check :: %d\n", leg_check);
 }
 void UpperBodyModule::desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
