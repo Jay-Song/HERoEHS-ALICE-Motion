@@ -236,8 +236,9 @@ void UpperBodyModule::tracking_function()
 	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
 
 	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
-	control_angle_pitch = control_angle_pitch - control_angle_pitch_temp + 20*DEGREE2RADIAN;
+	//control_angle_pitch = control_angle_pitch - control_angle_pitch_temp + 20*DEGREE2RADIAN;
 
+	control_angle_pitch = 20*DEGREE2RADIAN;
 
 
 	control_angle_yaw = limitCheck(control_angle_yaw,60,-60);
@@ -275,7 +276,7 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 		head_end_point_(4, 7)   = 0.2;
 		tracking_function();
 	}
-	else if(command_ == 3)// tracking algorithm
+	else if(command_ == 3)//
 	{
 		waist_end_point_(3, 7)  = 3.0;
 		head_end_point_(3, 7)   = 3.0;
