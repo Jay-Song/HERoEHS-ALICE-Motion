@@ -154,6 +154,8 @@ private:
 
 	double control_angle_yaw, control_angle_pitch;
 
+	//motion
+
 
 
 };

@@ -53,7 +53,7 @@ public:
 	/* ROS Topic Callback Functions */
 
 	void initPoseMsgCallback(const std_msgs::String::ConstPtr& msg);
-	void go_to_init_pose(std::string data);
+	void go_to_init_pose(std::string data, std::string file_name);
 	std::map<std::string, heroehs_math::FifthOrderTrajectory *> motion_trajectory;
 
 private:

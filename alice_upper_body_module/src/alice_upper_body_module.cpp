@@ -76,29 +76,20 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),90,-90);
 	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,0);
 
-	//result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
-	//is_moving_head_  = end_to_rad_head_  -> is_moving_check;
-
-	//temp_head_yaw   = limitCheck(result_rad_head_(3,0),90,-90);
-	//temp_head_pitch = limitCheck(result_rad_head_(4,0),85,-25);
-
+	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 
 
 	waist_end_point_(3,1)   = limitCheck(waist_end_point_(3,1),60,-60);
-	//waist_end_point_(4,1)   = limitCheck(waist_end_point_(4,1),85,-15);
 
 	result_rad_waist_ = end_to_rad_waist_ -> cal_end_point_to_rad(waist_end_point_);
-	//is_moving_waist_ = end_to_rad_waist_ -> is_moving_check;
 
 	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
 	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
-	result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(4,1);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  head_end_point_(3,1);
+	result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
+	result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
 
-	//printf("pitch ::  %f \n", result_[joint_id_to_name_[7]]-> goal_position_);
 
 	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist yaw
-	//result_[joint_id_to_name_[10]]-> goal_position_  = result_rad_waist_ (4,0); // waist pitch
 
 	temp_pre_roll  = temp_head_roll;
 	temp_pre_pitch = temp_head_pitch;
@@ -122,8 +113,6 @@ void UpperBodyModule::finding_motion()
 
 	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
 	{
-head_end_point_(3,7) = 3.0;
-head_end_point_(4,7) = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -131,17 +120,13 @@ head_end_point_(4,7) = 3.0;
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
 	{
-head_end_point_(3,7) =3.0;
-head_end_point_(4,7) =3.0;
-		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 90*DEGREE2RADIAN;
 		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
 	{
-head_end_point_(3,7) = 3.0;
-head_end_point_(4,7) = 3.0;
 		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
@@ -149,9 +134,7 @@ head_end_point_(4,7) = 3.0;
 	}
 	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
-head_end_point_(3,7) = 3.0;
-head_end_point_(4,7) =3.0;
-		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
+		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = -90*DEGREE2RADIAN;
@@ -160,8 +143,7 @@ head_end_point_(4,7) =3.0;
 	}
 	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
-head_end_point_(3,7) = 3.0;
-head_end_point_(4,7) =3.0;
+
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
