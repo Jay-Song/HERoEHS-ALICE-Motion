@@ -168,7 +168,7 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {
 	command = msg -> data;
-	printf("!!!!!!");
+	//printf("!!!!!!");
 }
 //test
 void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)

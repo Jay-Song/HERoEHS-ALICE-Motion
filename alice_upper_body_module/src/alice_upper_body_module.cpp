@@ -85,8 +85,17 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
 	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
-	result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
+	if(command != 1)
+	{
+		result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(4,1);
+		result_[joint_id_to_name_[8]]-> goal_position_  =  head_end_point_(3,1);
+
+	}
+	else
+	{
+		result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
+		result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
+	}
 
 
 	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist yaw
