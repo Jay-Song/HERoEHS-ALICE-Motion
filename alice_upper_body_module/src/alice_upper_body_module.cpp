@@ -232,7 +232,7 @@ void UpperBodyModule::tracking_function()
 	control_angle_pitch = pidController_y->PID_calculate(desired_y, current_y);
 
 	control_angle_yaw   += control_angle_yaw;
-	control_angle_pitch += control_angle_pitch;
+	control_angle_pitch += control_angle_pitch + 40*DEGREE2RADIAN;
 
 	control_angle_pitch = -control_angle_pitch;
 
