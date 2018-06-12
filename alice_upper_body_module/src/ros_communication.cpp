@@ -99,6 +99,8 @@ UpperBodyModule::UpperBodyModule()
 	x_d_gain = 0;
 	y_p_gain = 0;
 	y_d_gain = 0;
+
+	status = "";
 }
 UpperBodyModule::~UpperBodyModule()
 {
@@ -124,6 +126,10 @@ void UpperBodyModule::queueThread()
 	//test ball
 	ball_test_sub = ros_node.subscribe("/ball_test", 5, &UpperBodyModule::ballTestMsgCallback, this);
 	ball_param_sub = ros_node.subscribe("/ball_param", 5, &UpperBodyModule::ballTestParamMsgCallback, this);
+
+
+	//walking status
+	walking_module_status_sub = ros_node.subscribe("/heroehs/status", 10, &UpperBodyModule::walkingModuleStatusMsgCallback, this);
 
 
 

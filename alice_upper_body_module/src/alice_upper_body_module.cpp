@@ -50,6 +50,10 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 
 	ROS_INFO("< -------  Initialize Module : Upper Body Module  [HEAD  && WAIST] !!  ------->");
 }
+void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
+{
+	status = msg->status_msg;
+}
 double UpperBodyModule::limitCheck(double calculated_value, double max, double min)
 {
 	if(calculated_value > (max*DEGREE2RADIAN))
@@ -73,7 +77,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	{
 		return;
 	}
-	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),90,-90);
+	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),80,-80);
 	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),85,0);
 
 	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
@@ -88,7 +92,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 
 	result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
 	result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
-/*
+	/*
 	if(command == 2)
 	{
 		result_[joint_id_to_name_[7]]-> goal_position_  =  head_end_point_(4,1);
@@ -100,7 +104,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
 		result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
 	}
-*/
+	 */
 
 
 	result_[joint_id_to_name_[9]] -> goal_position_  = result_rad_waist_ (3,0); // waist yaw
@@ -136,7 +140,7 @@ void UpperBodyModule::finding_motion()
 	{
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = 90*DEGREE2RADIAN;
+		head_end_point_(3, 1)  = 60*DEGREE2RADIAN;
 		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
@@ -151,7 +155,7 @@ void UpperBodyModule::finding_motion()
 		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
 		//waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = -90*DEGREE2RADIAN;
+		head_end_point_(3, 1)  = -60*DEGREE2RADIAN;
 		//head_end_point_(3, 7)  = 6;
 		//head_end_point_(4, 1)  = 0;
 	}
@@ -186,6 +190,8 @@ void UpperBodyModule::finding_motion()
 			current_time_ = 0;
 		}
 	}
+	if(!status.compare("Walking_Started"))
+		waist_end_point_(3, 1) = 0;
 	current_time_ = current_time_+ 0.008;
 }
 void UpperBodyModule::updateBalanceParameter()
@@ -276,6 +282,7 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 		return;
 
 }
+
 
 
 

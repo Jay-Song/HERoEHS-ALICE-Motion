@@ -83,6 +83,8 @@ public:
 	ros::Subscriber ball_test_sub;
 	ros::Subscriber ball_param_sub;
 
+	ros::Subscriber walking_module_status_sub;
+
 
 	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
@@ -92,6 +94,8 @@ public:
 
 	void ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
+
+	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 
 
 private:
@@ -154,7 +158,8 @@ private:
 
 	double control_angle_yaw, control_angle_pitch;
 
-	//motion
+	//walking moving
+	std::string status;
 
 
 
