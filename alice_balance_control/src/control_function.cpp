@@ -49,8 +49,8 @@ double PID_function::PID_calculate(double ref_value, double current_value)
 
 			pre_error_ = error;
 
-			if(output < 0.0005 && output > -0.0005)
-			output = 0;
+	/*		if(output < 0.0005 && output > -0.0005)
+			output = 0;*/
 
 			return output;
 }
