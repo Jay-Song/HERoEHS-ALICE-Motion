@@ -232,8 +232,8 @@ void UpperBodyModule::tracking_function()
 	control_angle_yaw_temp   = pidController_x->PID_calculate(desired_x, current_x);
 	control_angle_pitch_temp = pidController_y->PID_calculate(desired_y, current_y);
 
-	printf("X   control value ::  %f \n", control_angle_yaw_temp);
-	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
+//	printf("X   control value ::  %f \n", control_angle_yaw_temp);
+//	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
 
 	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
 	control_angle_pitch = control_angle_pitch - control_angle_pitch_temp;
@@ -247,8 +247,8 @@ void UpperBodyModule::tracking_function()
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
-	printf("yaw   control value ::  %f \n",control_angle_yaw);
-	printf("pitch control value ::  %f \n",control_angle_pitch);
+//	printf("yaw   control value ::  %f \n",control_angle_yaw);
+//	printf("pitch control value ::  %f \n",control_angle_pitch);
 
 	pre_current_x = current_x;
 	pre_current_y = current_y;
