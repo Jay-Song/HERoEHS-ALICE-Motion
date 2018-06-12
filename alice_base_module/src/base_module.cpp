@@ -302,12 +302,12 @@ void BaseModule::stop()
 void BaseModule::go_to_init_pose(std::string data, std::string file_name)
 {
 
-	std::string init_pose_path;// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	//std::string init_pose_path;// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	if(data.compare("init_offset_pose") == 0 || data.compare("init_offset_pose_zero") == 0)
 	{
-		init_pose_path = ros::package::getPath("alice_manager") + "/config/"+file_name+".yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-		parse_init_offset_pose_data_(init_pose_path, data); // YAML 파일 로드
-		ROS_INFO("FILE LOAD  ::  %s",init_pose_path.c_str());
+		//init_pose_path = ros::package::getPath("alice_manager") + "/config/"+file_name+".yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+		parse_init_offset_pose_data_(file_name, data); // YAML 파일 로드
+		ROS_INFO("FILE LOAD  ::  %s",file_name.c_str());
 	}
 
 	new_count_ = 1;
