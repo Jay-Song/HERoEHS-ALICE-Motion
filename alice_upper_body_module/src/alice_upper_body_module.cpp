@@ -242,7 +242,8 @@ void UpperBodyModule::tracking_function()
 	control_angle_pitch = limitCheck(control_angle_pitch,75,0);
 
 	head_end_point_(3, 1)  = control_angle_yaw;
-	head_end_point_(4, 1)  = control_angle_pitch;
+	head_end_point_(4, 1)  = control_angle_pitch +20*DEGREE2RADIAN;
+
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
