@@ -221,8 +221,8 @@ void UpperBodyModule::updateBalanceParameter()
 }
 void UpperBodyModule::tracking_function()
 {
-	current_x = filter_head->lowPassFilter(current_x, pre_current_x, 0, 0.008);
-	current_y = filter_head->lowPassFilter(current_y, pre_current_y, 0, 0.008);
+	//current_x = filter_head->lowPassFilter(current_x, pre_current_x, 0, 0.008);
+	//current_y = filter_head->lowPassFilter(current_y, pre_current_y, 0, 0.008);
 	//printf("X   control value ::  %f \n",current_x);
 	//printf("Y   control value ::  %f \n",current_y);
 
@@ -241,8 +241,8 @@ void UpperBodyModule::tracking_function()
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
-	//printf("yaw   control value ::  %f \n",control_angle_yaw);
-	//printf("pitch control value ::  %f \n",control_angle_pitch);
+	printf("yaw   control value ::  %f \n",control_angle_yaw);
+	printf("pitch control value ::  %f \n",control_angle_pitch);
 	pre_current_x = current_x;
 	pre_current_y = current_y;
 
