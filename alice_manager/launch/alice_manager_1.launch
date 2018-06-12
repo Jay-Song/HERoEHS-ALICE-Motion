@@ -8,6 +8,8 @@
     <param name="offset_file_path"             value="$(find alice_manager)/config/offset1.yaml"/>
     <param name="robot_file_path"          value="$(find alice_manager)/config/alice.robot"/>
     <param name="init_file_path"           value="$(find alice_manager)/config/dxl_init.yaml"/>
+    <param name="balance_param_path"           value="$(find alice_foot_step_planner)/data/balance_param1.yaml"/>
+    <param name="joint_feedback_path"           value="$(find alice_foot_step_planner)/data/joint_feedback_gain1.yaml"/>
       
      <!-- alice Manager -->
     <node name="alice_manager_node" pkg="alice_manager" type="alice_manager_node" output="screen"/>
