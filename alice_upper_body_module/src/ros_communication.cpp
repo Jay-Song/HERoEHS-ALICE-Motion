@@ -132,10 +132,6 @@ void UpperBodyModule::queueThread()
 	walking_module_status_sub = ros_node.subscribe("/heroehs/status", 10, &UpperBodyModule::walkingModuleStatusMsgCallback, this);
 
 
-
-
-
-
 	//desired_pose_all_sub = ros_node.subscribe("/desired_pose_all", 5, &UpperBodyModule::desiredPoseAllMsgCallback, this);
 
 	ros::WallDuration duration(control_cycle_msec_ / 1000.0);
@@ -144,6 +140,11 @@ void UpperBodyModule::queueThread()
 
 }
 // TEST /////////////////////////////////////////////
+void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
+{
+	status = msg->status_msg;
+	printf("%s\n", status.c_str());
+}
 void UpperBodyModule::desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
 	waist_end_point_(3, 1) = msg->data[0]; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임

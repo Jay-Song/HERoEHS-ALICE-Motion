@@ -50,10 +50,6 @@ void UpperBodyModule::initialize(const int control_cycle_msec, robotis_framework
 
 	ROS_INFO("< -------  Initialize Module : Upper Body Module  [HEAD  && WAIST] !!  ------->");
 }
-void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
-{
-	status = msg->status_msg;
-}
 double UpperBodyModule::limitCheck(double calculated_value, double max, double min)
 {
 	if(calculated_value > (max*DEGREE2RADIAN))
@@ -190,8 +186,10 @@ void UpperBodyModule::finding_motion()
 			current_time_ = 0;
 		}
 	}
+
 	if(!status.compare("Walking_Started"))
 		waist_end_point_(3, 1) = 0;
+
 	current_time_ = current_time_+ 0.008;
 }
 void UpperBodyModule::updateBalanceParameter()

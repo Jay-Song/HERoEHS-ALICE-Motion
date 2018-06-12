@@ -96,6 +96,7 @@ public:
 	void ballTestParamMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
+	std::string status;
 
 
 private:
@@ -159,7 +160,7 @@ private:
 	double control_angle_yaw, control_angle_pitch;
 
 	//walking moving
-	std::string status;
+
 
 
 
