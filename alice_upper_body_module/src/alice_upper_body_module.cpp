@@ -228,16 +228,16 @@ void UpperBodyModule::tracking_function()
 
 	updateBalanceParameter();
 
-	control_angle_yaw   = pidController_x->PID_calculate(desired_x, current_x);
-	control_angle_pitch = pidController_y->PID_calculate(desired_y, current_y);
+	control_angle_yaw_temp   = pidController_x->PID_calculate(desired_x, current_x);
+	control_angle_pitch_temp = pidController_y->PID_calculate(desired_y, current_y);
 
 //	printf("X   control value ::  %f \n",control_angle_yaw);
 //	printf("Y   control value ::  %f \n",control_angle_pitch);
 
-	control_angle_yaw   += control_angle_yaw;
-	control_angle_pitch = -control_angle_pitch;
+	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
+	control_angle_pitch = control_angle_pitch + -1*control_angle_pitch_temp;
 
-	control_angle_pitch += control_angle_pitch + 35*DEGREE2RADIAN;
+	//control_angle_pitch += control_angle_pitch + 35*DEGREE2RADIAN;
 
 	head_end_point_(3, 1)  = control_angle_yaw;
 	head_end_point_(4, 1)  = control_angle_pitch;

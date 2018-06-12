@@ -76,6 +76,8 @@ UpperBodyModule::UpperBodyModule()
 
 	control_angle_yaw = 0;
 	control_angle_pitch = 0;
+	control_angle_yaw_temp = 0;
+	control_angle_pitch_temp = 0;
 	pre_current_x = 0;
 	pre_current_y = 0;
 	frame_x = 672;
@@ -102,6 +104,7 @@ UpperBodyModule::UpperBodyModule()
 
 
 	leg_check = 0;
+
 }
 UpperBodyModule::~UpperBodyModule()
 {

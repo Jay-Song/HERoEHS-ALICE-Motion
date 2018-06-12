@@ -158,6 +158,7 @@ private:
 	double desired_x, desired_y;
 
 	double control_angle_yaw, control_angle_pitch;
+	double control_angle_yaw_temp, control_angle_pitch_temp;
 
 	//walking moving
 
