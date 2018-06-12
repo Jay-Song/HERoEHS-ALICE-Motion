@@ -231,8 +231,8 @@ void UpperBodyModule::tracking_function()
 	control_angle_yaw   = pidController_x->PID_calculate(desired_x, current_x);
 	control_angle_pitch = pidController_y->PID_calculate(desired_y, current_y);
 
-	printf("X   control value ::  %f \n",current_x);
-	printf("Y   control value ::  %f \n",current_y);
+	printf("X   control value ::  %f \n",control_angle_yaw);
+	printf("Y   control value ::  %f \n",control_angle_pitch);
 
 /*	control_angle_yaw   += control_angle_yaw;
 	control_angle_pitch = -control_angle_pitch;
