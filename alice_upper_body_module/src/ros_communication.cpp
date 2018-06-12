@@ -206,8 +206,8 @@ void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray
 	y_d_gain = msg->data[4];
 
 	printf("sec value ::  %f \n",balance_updating_duration_sec_ );
-	printf("P value ::  %f \n",x_p_gain );
-	printf("D P value ::  %f \n",x_d_gain );
+	printf("P value ::  %f \n",y_p_gain );
+	printf("D P value ::  %f \n",y_d_gain );
 
 }
 
