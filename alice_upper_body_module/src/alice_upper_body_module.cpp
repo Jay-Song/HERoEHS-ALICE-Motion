@@ -236,10 +236,7 @@ void UpperBodyModule::tracking_function()
 	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
 
 	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
-	//control_angle_pitch = control_angle_pitch - control_angle_pitch_temp + 20*DEGREE2RADIAN;
-
-	control_angle_pitch = 20*DEGREE2RADIAN;
-
+	control_angle_pitch = control_angle_pitch - control_angle_pitch_temp;
 
 	control_angle_yaw = limitCheck(control_angle_yaw,60,-60);
 	control_angle_pitch = limitCheck(control_angle_pitch,75,0);
