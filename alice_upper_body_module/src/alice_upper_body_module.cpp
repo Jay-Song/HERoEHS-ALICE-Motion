@@ -74,7 +74,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 		return;
 	}
 	head_end_point_(3,1) = limitCheck(head_end_point_(3,1),60,-60);
-	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),80,0);
+	head_end_point_(4,1) = limitCheck(head_end_point_(4,1),75,0);
 
 	result_rad_head_  = end_to_rad_head_  -> cal_end_point_to_rad(head_end_point_);
 
