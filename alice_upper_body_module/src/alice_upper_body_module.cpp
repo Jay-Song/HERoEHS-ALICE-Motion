@@ -86,8 +86,13 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	//result_[joint_id_to_name_[7]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_pitch, temp_pre_pitch, 0.01, 0.008);
 	//result_[joint_id_to_name_[8]]-> goal_position_  =  filter_head->lowPassFilter(temp_head_yaw, temp_pre_yaw, 0.01, 0.008);
 
-	result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
-	result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
+	if (isnan(result_rad_head_(4,0)) || isnan(result_rad_head_(3,0)))
+		printf("NaN 입니다\n");
+	else
+	{
+		result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
+		result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
+	}
 	/*
 	if(command == 2)
 	{
@@ -117,19 +122,16 @@ void UpperBodyModule::stop()
 // algorithm
 void UpperBodyModule::finding_motion()
 {
-	double motion_time_ = 3.0;
+	static double motion_time_ = 3.0;
 	static double current_time_ = 0.0;
 	static int motion_num_ = 1;
-	waist_end_point_(3, 7)  = motion_time_;
-	waist_end_point_(4, 7)  = motion_time_;
-	head_end_point_(3, 7)   = motion_time_;
-	head_end_point_(4, 7)   = motion_time_;
+
 
 	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
 	{
-                waist_end_point_(3,7) = 3.0;
-                head_end_point_(3,7)  = 3.0;
-                head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7)  = 3.0;
+		head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -137,9 +139,9 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
 	{
-waist_end_point_(3,7) = 3.0;
-head_end_point_(3,7)  = 3.0;
-head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7)  = 3.0;
+		head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 60*DEGREE2RADIAN;
@@ -147,9 +149,9 @@ head_end_point_(4,7)  = 3.0;
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
 	{
-waist_end_point_(3,7) = 3.0;
-head_end_point_(3,7)  = 3.0;
-head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7)  = 3.0;
+		head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
@@ -157,9 +159,9 @@ head_end_point_(4,7)  = 3.0;
 	}
 	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
-waist_end_point_(3,7) = 3.0;
-head_end_point_(3,7)  = 3.0;
-head_end_point_(4,7)  =3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7)  = 3.0;
+		head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
 		//waist_end_point_(4, 1) = 0;
@@ -169,9 +171,9 @@ head_end_point_(4,7)  =3.0;
 	}
 	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
-waist_end_point_(3,7) = 3.0;
-head_end_point_(3,7)  = 3.0;
-head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7)  = 3.0;
+		head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -246,8 +248,8 @@ void UpperBodyModule::tracking_function()
 	control_angle_yaw_temp   = pidController_x->PID_calculate(desired_x, current_x);
 	control_angle_pitch_temp = pidController_y->PID_calculate(desired_y, current_y);
 
-//	printf("X   control value ::  %f \n", control_angle_yaw_temp);
-//	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
+	//	printf("X   control value ::  %f \n", control_angle_yaw_temp);
+	//	printf("Y   control value ::  %f \n", control_angle_pitch_temp);
 
 	control_angle_yaw   = control_angle_yaw + control_angle_yaw_temp;
 	control_angle_pitch = control_angle_pitch - control_angle_pitch_temp;
@@ -261,8 +263,8 @@ void UpperBodyModule::tracking_function()
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
-//	printf("yaw   control value ::  %f \n",control_angle_yaw);
-//	printf("pitch control value ::  %f \n",control_angle_pitch);
+	printf("yaw   control value ::  %f \n",control_angle_yaw);
+	printf("pitch control value ::  %f \n",control_angle_pitch);
 
 	pre_current_x = current_x;
 	pre_current_y = current_y;
@@ -272,9 +274,9 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 {
 	if(command_ == 0)
 	{
-              waist_end_point_(3,7) = 3.0;
-               head_end_point_(3,7) = 3.0;
-               head_end_point_(4,7) =3.0;
+		waist_end_point_(3,7) = 3.0;
+		head_end_point_(3,7) = 3.0;
+		head_end_point_(4,7) =3.0;
 		waist_end_point_(3, 1) = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
 		//waist_end_point_(4, 1) = 0; // pitch
 
@@ -283,8 +285,8 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 	}
 	else if(command_ == 1)
 	{
-               head_end_point_(3,7) = 3.0;
-               head_end_point_(4,7) = 3.0;
+		head_end_point_(3,7) = 3.0;
+		head_end_point_(4,7) = 3.0;
 		finding_motion();
 	}
 	else if(command_ == 2)// tracking algorithm

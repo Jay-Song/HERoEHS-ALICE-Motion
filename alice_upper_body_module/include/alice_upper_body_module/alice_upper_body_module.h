@@ -18,6 +18,7 @@
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <stdio.h>
+#include <float.h> // isnan()
 
 #include "robotis_framework_common/motion_module.h"
 //library
