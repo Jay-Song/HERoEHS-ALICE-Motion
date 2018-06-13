@@ -75,9 +75,14 @@ r_ankle_roll:
 head_pitch:
   position_p_gain: 850
   return_delay_time: 10
+  max_position_limit: 3075
+  min_position_limit: 2048
 head_yaw:
   position_p_gain: 850
   return_delay_time: 10
+  max_position_limit: 3075
+  min_position_limit: 1024
+  
 waist_pitch:
   position_p_gain: 850
   return_delay_time: 10
