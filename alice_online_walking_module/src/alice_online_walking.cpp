@@ -24,7 +24,7 @@ ALICEOnlineWalking::ALICEOnlineWalking()
   mat_imu_frame_ref_ = robotis_framework::getRotationX(M_PI) * robotis_framework::getRotationZ(-0.5*M_PI);
   mat_imu_frame_ref_inv_ = mat_imu_frame_ref_.transpose();
 
-  total_robot_mass_ = 16.0;
+  total_robot_mass_ = 18.4;
   right_dsp_fz_N_ = -0.5* total_robot_mass_ * 9.8;
   left_dsp_fz_N_  = -0.5* total_robot_mass_ * 9.8;
   right_ssp_fz_N_ = -total_robot_mass_ * 9.8;
