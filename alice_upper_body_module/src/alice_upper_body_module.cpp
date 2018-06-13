@@ -127,6 +127,9 @@ void UpperBodyModule::finding_motion()
 
 	if(current_time_ >= 0 && current_time_ < motion_time_&& motion_num_ == 1)
 	{
+                waist_end_point_(3,7) = 3.0;
+                head_end_point_(3,7)  = 3.0;
+                head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -134,6 +137,9 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*2 && motion_num_ == 2)
 	{
+waist_end_point_(3,7) = 3.0;
+head_end_point_(3,7)  = 3.0;
+head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 60*DEGREE2RADIAN;
@@ -141,6 +147,9 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_ && current_time_ < motion_time_*3 && motion_num_ == 3)
 	{
+waist_end_point_(3,7) = 3.0;
+head_end_point_(3,7)  = 3.0;
+head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
@@ -148,6 +157,9 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_*3 && current_time_ < motion_time_*4 && motion_num_ == 4)
 	{
+waist_end_point_(3,7) = 3.0;
+head_end_point_(3,7)  = 3.0;
+head_end_point_(4,7)  =3.0;
 		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
 		//waist_end_point_(3, 7)  = 6;
 		//waist_end_point_(4, 1) = 0;
@@ -157,7 +169,9 @@ void UpperBodyModule::finding_motion()
 	}
 	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
 	{
-
+waist_end_point_(3,7) = 3.0;
+head_end_point_(3,7)  = 3.0;
+head_end_point_(4,7)  = 3.0;
 		waist_end_point_(3, 1) = 0;
 		waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0;
@@ -258,6 +272,9 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 {
 	if(command_ == 0)
 	{
+              waist_end_point_(3,7) = 3.0;
+               head_end_point_(3,7) = 3.0;
+               head_end_point_(4,7) =3.0;
 		waist_end_point_(3, 1) = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
 		//waist_end_point_(4, 1) = 0; // pitch
 
@@ -266,6 +283,8 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 	}
 	else if(command_ == 1)
 	{
+               head_end_point_(3,7) = 3.0;
+               head_end_point_(4,7) = 3.0;
 		finding_motion();
 	}
 	else if(command_ == 2)// tracking algorithm
