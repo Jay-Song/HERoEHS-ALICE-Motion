@@ -211,8 +211,17 @@ void UpperBodyModule::scanning_motion()
 	else
 	{
 		if(motion_num_scanning == 6)
+		{
+			scan_done_msg.data = true;
+			scan_done_pub.publish(scan_done_msg);
+			motion_num_scanning ++;
+		}
+		else if (motion_num_scanning > 6)
 			return;
-		motion_num_scanning ++;
+		else
+		{
+			motion_num_scanning ++;
+		}
 	}
 
 	if(leg_check == 1)

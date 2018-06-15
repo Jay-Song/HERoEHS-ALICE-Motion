@@ -73,7 +73,7 @@ public:
 	bool gazebo_check;
 	double traj_time_test;
 	// publisher
-	//ros::Publisher  current_orientation_z_pub;
+	ros::Publisher  scan_done_pub;
 
 	// Subscriber
 	ros::Subscriber head_test;
@@ -86,6 +86,9 @@ public:
 	ros::Subscriber ball_param_sub;
 
 	ros::Subscriber walking_module_status_sub;
+
+	//msg
+	std_msgs::Bool scan_done_msg;
 
 
 	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);

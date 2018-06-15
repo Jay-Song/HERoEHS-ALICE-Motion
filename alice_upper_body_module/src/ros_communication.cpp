@@ -125,6 +125,7 @@ void UpperBodyModule::queueThread()
 	ros::CallbackQueue callback_queue;
 	ros_node.setCallbackQueue(&callback_queue);
 	// publish topics
+	scan_done_pub = ros_node.advertise<std_msgs::Bool>("/heroehs/alice/scan_done", 1);
 
 
 	// subscribe topics
