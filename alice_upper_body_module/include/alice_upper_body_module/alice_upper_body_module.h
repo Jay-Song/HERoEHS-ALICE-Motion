@@ -17,6 +17,7 @@
 #include <Eigen/Dense>
 #include <yaml-cpp/yaml.h>
 #include <fstream>
+#include <iostream>
 #include <stdio.h>
 #include <float.h> // isnan()
 
@@ -135,6 +136,7 @@ private:
 
 	//algorithm
 	void algorithm_process(uint8_t command_);
+	void scanning_motion();
 	void finding_motion();
 	void tracking_function();
 	uint8_t command;
@@ -161,7 +163,17 @@ private:
 	double control_angle_yaw, control_angle_pitch;
 	double control_angle_yaw_temp, control_angle_pitch_temp;
 
-	//walking moving
+	//ball detecting
+	bool ball_detected;
+
+	//motion
+	double current_time_scanning;
+	int motion_num_scanning;
+	double current_time_finding;
+	int motion_num_finding;
+
+	//log file
+	void logSaveFile();
 
 
 

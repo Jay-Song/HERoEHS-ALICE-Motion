@@ -76,7 +76,7 @@ head_pitch:
   position_p_gain: 850
   return_delay_time: 10
   max_position_limit: 3075
-  min_position_limit: 2048
+  min_position_limit: 1024
 head_yaw:
   position_p_gain: 850
   return_delay_time: 10

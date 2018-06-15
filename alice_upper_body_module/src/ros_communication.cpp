@@ -102,8 +102,16 @@ UpperBodyModule::UpperBodyModule()
 	y_p_gain = 0;
 	y_d_gain = 0;
 
+	//motion
+	current_time_scanning = 0;
+	motion_num_scanning = 0;
+	current_time_finding = 0;
+	motion_num_finding = 0;
+
+
 
 	leg_check = 0;
+	ball_detected = 0;
 
 }
 UpperBodyModule::~UpperBodyModule()
@@ -155,7 +163,7 @@ void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	{
 		leg_check = 0;
 	}
-	printf("leg_check :: %d\n", leg_check);
+	//printf("leg_check :: %d\n", leg_check);
 }
 void UpperBodyModule::desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
@@ -181,13 +189,19 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 		{
 			current_x = msg->data[i].roi.x_offset + msg->data[i].roi.width/2;
 			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
+			ball_detected = 1;
 		}
 	}
+	logSaveFile();
 }
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {
 	command = msg -> data;
-	//printf("!!!!!!");
+	if(command == 1)
+	{
+		current_time_scanning = 0;
+		motion_num_scanning = 0;
+	}
 }
 //test
 void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
@@ -205,10 +219,9 @@ void UpperBodyModule::ballTestParamMsgCallback(const std_msgs::Float64MultiArray
 	y_p_gain = msg->data[3];
 	y_d_gain = msg->data[4];
 
-	printf("sec value ::  %f \n",balance_updating_duration_sec_ );
-	printf("P value ::  %f \n",y_p_gain );
-	printf("D P value ::  %f \n",y_d_gain );
-
+	//printf("sec value ::  %f \n",balance_updating_duration_sec_ );
+	//printf("P value ::  %f \n",y_p_gain );
+	//printf("D P value ::  %f \n",y_d_gain );
 }
 
 
