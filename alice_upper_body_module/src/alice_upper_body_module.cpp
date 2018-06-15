@@ -466,11 +466,9 @@ void UpperBodyModule::logSaveFile()
 	writeFile.open(filePath.c_str(), ios::app);
 
 	if( writeFile.is_open() ){ // control yaw control pitch result yaw result pitch current x current y ball detected
-		writeFile << control_angle_yaw_temp << ","<< control_angle_pitch_temp << "," << result_rad_head_(3,0)<< "," << result_rad_head_(4,0) << "," << current_x << "," << current_y << "," << ball_detected <<"\n";
+		writeFile << control_angle_yaw_temp*DEGREE2RADIAN << ","<< control_angle_pitch_temp*DEGREE2RADIAN << "," << result_rad_head_(3,0)*DEGREE2RADIAN<< "," << result_rad_head_(4,0)*DEGREE2RADIAN << "," << current_x << "," << current_y << "," << ball_detected <<"\n";
 		writeFile.close();
 	}
-
-
 	return;
 }
 
