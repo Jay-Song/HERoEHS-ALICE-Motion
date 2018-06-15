@@ -193,7 +193,7 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 			ball_detected = 1;
 		}
 	}
-	logSaveFile();
+	//logSaveFile();
 }
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {

@@ -130,7 +130,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	temp_pre_yaw   = temp_head_yaw;*/
 
 	ball_detected = 0;
-	//logSaveFile();
+	logSaveFile();
 }
 void UpperBodyModule::stop()
 {
@@ -431,8 +431,8 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 	else if(command_ == 3)// tracking algorithm
 	{
 
-		head_end_point_(3, 7)   = 0.3;
-		head_end_point_(4, 7)   = 0.3;
+		head_end_point_(3, 7)   = 0.2;
+		head_end_point_(4, 7)   = 0.2;
 
 		waist_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
 
@@ -475,7 +475,7 @@ void UpperBodyModule::logSaveFile()
 	writeFile.open(filePath.c_str(), ios::app);
 
 	if( writeFile.is_open() ){ // control yaw control pitch result yaw result pitch current x current y ball detected
-		writeFile << control_angle_yaw_temp*DEGREE2RADIAN << ","<< control_angle_pitch_temp*DEGREE2RADIAN << "," << result_rad_head_(3,0)*DEGREE2RADIAN<< "," << result_rad_head_(4,0)*DEGREE2RADIAN << "," << current_x << "," << current_y << "," << ball_detected <<"\n";
+		writeFile << control_angle_yaw_temp*RADIAN2DEGREE << ","<< control_angle_pitch_temp*RADIAN2DEGREE << "," << result_rad_head_(3,0)*RADIAN2DEGREE<< "," << result_rad_head_(4,0)*RADIAN2DEGREE << "," << current_x << "," << current_y << "," << ball_detected <<"\n";
 		writeFile.close();
 	}
 	return;
