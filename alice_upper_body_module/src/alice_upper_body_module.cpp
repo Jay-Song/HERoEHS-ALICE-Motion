@@ -458,7 +458,7 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 		head_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
 		head_end_point_(4, 1)  = 75*DEGREE2RADIAN;
 
-		control_angle_yaw  = end_to_rad_head_  ->cal_end_point_tra_alpha->current_pose;
+		control_angle_yaw   = end_to_rad_head_  ->cal_end_point_tra_alpha->current_pose;
 		control_angle_pitch = end_to_rad_head_  ->cal_end_point_tra_betta->current_pose;
 	}
 	else
@@ -475,7 +475,7 @@ void UpperBodyModule::logSaveFile()
 	writeFile.open(filePath.c_str(), ios::app);
 
 	if( writeFile.is_open() ){ // control yaw control pitch result yaw result pitch current x current y ball detected
-		writeFile << control_angle_yaw_temp*RADIAN2DEGREE << ","<< control_angle_pitch_temp*RADIAN2DEGREE << "," << result_rad_head_(3,0)*RADIAN2DEGREE<< "," << result_rad_head_(4,0)*RADIAN2DEGREE << "," << current_x << "," << current_y << "," << ball_detected <<"\n";
+		writeFile << "COMMAND ::  " << (int) command << " |  "<< control_angle_yaw_temp*RADIAN2DEGREE << " , "<< control_angle_pitch_temp*RADIAN2DEGREE << " | " << result_rad_head_(3,0)*RADIAN2DEGREE<< " , " << result_rad_head_(4,0)*RADIAN2DEGREE << " | " << current_x << " , " << current_y << " | " << ball_detected << "\n";
 		writeFile.close();
 	}
 	return;

@@ -108,8 +108,6 @@ UpperBodyModule::UpperBodyModule()
 	current_time_finding = 0;
 	motion_num_finding = 0;
 
-
-
 	leg_check = 0;
 	ball_detected = 0;
 
@@ -155,7 +153,6 @@ void UpperBodyModule::queueThread()
 // TEST /////////////////////////////////////////////
 void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
 {
-
 	if(!msg->status_msg.compare("Walking_Started"))
 	{
 		leg_check = 1;
@@ -164,7 +161,6 @@ void UpperBodyModule::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	{
 		leg_check = 0;
 	}
-	//printf("leg_check :: %d\n", leg_check);
 }
 void UpperBodyModule::desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
