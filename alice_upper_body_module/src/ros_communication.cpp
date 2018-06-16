@@ -71,8 +71,8 @@ UpperBodyModule::UpperBodyModule()
 
 	// tracking
 	command = 0;
-	pidController_x = new control_function::PID_function(0.008,90*DEGREE2RADIAN,-90*DEGREE2RADIAN,0,0,0);
-	pidController_y = new control_function::PID_function(0.008,80*DEGREE2RADIAN,-30*DEGREE2RADIAN,0,0,0);
+	pidController_x = new control_function::PID_function(0.008,60*DEGREE2RADIAN,-60*DEGREE2RADIAN,0,0,0);
+	pidController_y = new control_function::PID_function(0.008,75*DEGREE2RADIAN,0*DEGREE2RADIAN,0,0,0);
 
 	control_angle_yaw = 0;
 	control_angle_pitch = 0;
