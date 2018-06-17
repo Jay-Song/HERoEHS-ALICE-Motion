@@ -83,7 +83,7 @@ UpperBodyModule::UpperBodyModule()
 	frame_x = 672;
 	frame_y = 376;
 	int margin_desired_x = 0;
-	int margin_desired_y = 20;
+	int margin_desired_y = 5;
 	desired_x = (frame_x/2) + margin_desired_x;
 	desired_y = (frame_y/2) + margin_desired_y;
 	current_x = desired_x;
@@ -110,6 +110,14 @@ UpperBodyModule::UpperBodyModule()
 
 	leg_check = 0;
 	ball_detected = 0;
+	//detected objects
+	current_goal_x = 0.0;
+	current_goal_y = 0.0;
+	current_center_x = 0.0;
+	current_center_y = 0.0;
+	current_robot_x  = 0.0;
+	current_robot_y  = 0.0;
+	current_robot_theta = 0.0;
 
 }
 UpperBodyModule::~UpperBodyModule()
@@ -124,10 +132,13 @@ void UpperBodyModule::queueThread()
 	ros_node.setCallbackQueue(&callback_queue);
 	// publish topics
 	scan_done_pub = ros_node.advertise<std_msgs::Bool>("/heroehs/alice/scan_done", 1);
+	robot_state_pub = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice/robot_state", 1);
 
 
 	// subscribe topics
 	environment_detector_sub = ros_node.subscribe("/heroehs/environment_detector", 5, &UpperBodyModule::environmentDetectorMsgCallback, this);
+	detected_objects_sub = ros_node.subscribe("/heroehs/detected_objects", 5, &UpperBodyModule::detectedObjectsMsgCallback, this);
+
 	head_moving_sub = ros_node.subscribe("/heroehs/alice/head_command", 5, &UpperBodyModule::headMovingMsgCallback, this);
 
 	// test desired pose
@@ -189,15 +200,161 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 			ball_detected = 1;
 		}
 	}
-	//logSaveFile();
 }
+void UpperBodyModule::detectedObjectsMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg)
+{
+	int data_cnt = 0;
+
+	for(int i = 0; i < msg->length; i++)
+	{
+		if(!msg->data[i].name.compare("goal"))
+		{
+			data_cnt ++;
+			current_goal_x  = msg->data[i].pos.x;
+			current_goal_y  = msg->data[i].pos.y;
+		}
+		if(!msg->data[i].name.compare("center"))
+		{
+			data_cnt ++;
+			current_center_x = msg->data[i].pos.x;
+			current_center_y = msg->data[i].pos.y;
+		}
+	}
+
+	if(data_cnt == 2)
+	{
+		double theta_center = 0;
+		double theta_goal = 0;
+		double length_center = 0;
+		double length_goal = 0;
+		double sin_robot = 0;
+		double cos_robot = 0;
+
+		if(current_center_x != 0 && current_goal_x != 0)
+		{
+			theta_center = fabs(atan2(current_center_y,current_center_x));
+			theta_goal   = fabs(atan2(current_goal_y, current_goal_x));
+			length_center = sqrt(pow(current_center_x,2) + pow(current_center_y,2));
+			length_goal = sqrt(pow(current_goal_x,2) + pow(current_goal_y,2));
+			sin_robot = (length_goal * sin(theta_center + theta_goal)) / 4.5;
+			cos_robot = sqrt(1-pow(sin_robot,2));
+
+			current_robot_x = length_center*sin_robot;
+			current_robot_y = length_center*cos_robot;
+
+			int sign_x = 1;
+			int sign_y = 1;
+
+			if((current_goal_y - current_center_y) < 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) < 0) //case 1
+			{
+				sign_x = 1;
+				sign_y = 1;
+			}
+			else if((current_goal_y - current_center_y) < 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) > 0)
+			{
+				sign_x = -1;
+				sign_y = 1;
+			}
+			else if((current_goal_y - current_center_y) > 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) > 0)
+			{
+				sign_x = -1;
+				sign_y = -1;
+			}
+			else if((current_goal_y - current_center_y) > 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) < 0)
+			{
+				sign_x = 1;
+				sign_y = -1;
+			}
+			current_robot_x = current_robot_x * sign_x;
+			current_robot_y = current_robot_y * sign_y;
+
+			if((current_goal_x - current_center_x) != 0)
+				current_robot_theta = atan2((current_goal_y - current_center_y), (current_goal_x - current_goal_x));
+			else
+			{
+				if((current_goal_y - current_center_y) > 0)
+					current_robot_theta = 90*DEGREE2RADIAN;
+				else if((current_goal_y - current_center_y) < 0)
+					current_robot_theta = 270*DEGREE2RADIAN;
+				else
+					current_robot_theta = 0;
+
+			}
+		}
+		else
+		{
+			current_center_x = 0.01;
+			current_goal_x = 0.01;
+
+			theta_center = fabs(atan2(current_center_y,current_center_x));
+			theta_goal   = fabs(atan2(current_goal_y, current_goal_x));
+			length_center = sqrt(pow(current_center_x,2) + pow(current_center_y,2));
+			length_goal = sqrt(pow(current_goal_x,2) + pow(current_goal_y,2));
+			sin_robot = (length_goal * sin(theta_center + theta_goal)) / 4.5;
+			cos_robot = sqrt(1-pow(sin_robot,2));
+
+			current_robot_x = length_center*sin_robot;
+			current_robot_y = length_center*cos_robot;
+
+			int sign_x = 1;
+			int sign_y = 1;
+
+			if((current_goal_y - current_center_y) < 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) < 0) //case 1
+			{
+				sign_x = 1;
+				sign_y = 1;
+			}
+			else if((current_goal_y - current_center_y) < 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) > 0)
+			{
+				sign_x = -1;
+				sign_y = 1;
+			}
+			else if((current_goal_y - current_center_y) > 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) > 0)
+			{
+				sign_x = -1;
+				sign_y = -1;
+			}
+			else if((current_goal_y - current_center_y) > 0 && (pow(length_goal,2) - pow(length_center,2) - pow(4.5,2)) < 0)
+			{
+				sign_x = 1;
+				sign_y = -1;
+			}
+			current_robot_x = current_robot_x * sign_x;
+			current_robot_y = current_robot_y * sign_y;
+
+			if((current_goal_x - current_center_x) != 0)
+				current_robot_theta = atan2((current_goal_y - current_center_y), (current_goal_x - current_goal_x));
+			else
+			{
+				if((current_goal_y - current_center_y) > 0)
+					current_robot_theta = 90*DEGREE2RADIAN;
+				else if((current_goal_y - current_center_y) < 0)
+					current_robot_theta = 270*DEGREE2RADIAN;
+				else
+					current_robot_theta = 0;
+
+			}
+		}
+	}
+
+	data_cnt = 0;
+
+
+	robot_state_msg.x = current_robot_x;
+	robot_state_msg.y = current_robot_y;
+	robot_state_msg.z = current_robot_theta;
+
+	robot_state_pub.publish(robot_state_msg);
+
+}
+
 void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
 {
 	command = msg -> data;
 	if(command == 1)
 	{
 		current_time_scanning = 0;
-		motion_num_scanning = 0;
+		motion_num_scanning = 1;
 	}
 }
 //test

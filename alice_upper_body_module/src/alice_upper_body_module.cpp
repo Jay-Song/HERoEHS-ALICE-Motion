@@ -115,10 +115,10 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	}
 	else
 	{
-		printf("-------------------\n\n");
-		printf("RESULT YAW   ::  %f \n\n",control_angle_yaw*RADIAN2DEGREE);
-		printf("RESULT PITCH ::  %f \n\n",control_angle_pitch*RADIAN2DEGREE);
-		printf("-------------------\n\n");
+		//printf("-------------------\n\n");
+		//printf("RESULT YAW   ::  %f \n\n",control_angle_yaw*RADIAN2DEGREE);
+		//printf("RESULT PITCH ::  %f \n\n",control_angle_pitch*RADIAN2DEGREE);
+		//printf("-------------------\n\n");
 		result_[joint_id_to_name_[7]]-> goal_position_  =  result_rad_head_(4,0);
 		result_[joint_id_to_name_[8]]-> goal_position_  =  result_rad_head_(3,0);
 	}
@@ -130,7 +130,7 @@ void UpperBodyModule::process(std::map<std::string, robotis_framework::Dynamixel
 	temp_pre_yaw   = temp_head_yaw;*/
 
 	ball_detected = 0;
-	logSaveFile();
+	//	logSaveFile();
 }
 void UpperBodyModule::stop()
 {
@@ -140,83 +140,163 @@ void UpperBodyModule::stop()
 // algorithm
 void UpperBodyModule::scanning_motion()
 {
-	static double motion_time_ = 3.0;
+	static double motion_time_ = 2.0;
 
 	if(current_time_scanning >= 0 && current_time_scanning < motion_time_&& motion_num_scanning == 1)
 	{
-		waist_end_point_(3,7) = 3.0;
-		head_end_point_(3,7)  = 3.0;
-		head_end_point_(4,7)  = 3.0;
-		waist_end_point_(3, 1) = 0;
-		waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = 0;
-		head_end_point_(4, 1)  = 70*DEGREE2RADIAN;
-	}
-	else if(current_time_scanning >= motion_time_ && current_time_scanning < motion_time_*2 && motion_num_scanning == 2)
-	{
-		waist_end_point_(3,7) = 3.0;
-		head_end_point_(3,7)  = 3.0;
-		head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
 		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = 60*DEGREE2RADIAN;
-		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
+		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
 	}
-	else if(current_time_scanning >= motion_time_*2 && current_time_scanning < motion_time_*3 && motion_num_scanning == 3)
+	else if(current_time_scanning >= motion_time_ && current_time_scanning < 3.0 && motion_num_scanning == 2)
 	{
-		waist_end_point_(3,7) = 3.0;
-		head_end_point_(3,7)  = 3.0;
-		head_end_point_(4,7)  = 3.0;
+		waist_end_point_(3,7) = 1.0;
+		head_end_point_(3,7)  = 1.0;
+		head_end_point_(4,7)  = 1.0;
+		//waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		//head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		//head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 3.0 && current_time_scanning < 5.0 && motion_num_scanning == 3)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 80*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 0*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 5.0 && current_time_scanning < 6.0 && motion_num_scanning == 4)
+	{
+		waist_end_point_(3,7) = 1.0;
+		head_end_point_(3,7)  = 1.0;
+		head_end_point_(4,7)  = 1.0;
+		//waist_end_point_(3, 1) = -55*DEGREE2RADIAN;
+		//waist_end_point_(3, 7)  = 6;
+		//waist_end_point_(4, 1) = 0;
+		//head_end_point_(3, 1)  = 80*DEGREE2RADIAN;
+		//head_end_point_(3, 7)  = 6;
+		//head_end_point_(4, 1)  = 0*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 6.0 && current_time_scanning < 8.0 && motion_num_scanning == 5)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
+		//waist_end_point_(3, 7)  = 6;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		//head_end_point_(3, 7)  = 6;
+		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 8.0 && current_time_scanning < 10.0 && motion_num_scanning == 6)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 10.0 && current_time_scanning < 11.0 && motion_num_scanning == 7)
+	{
+		waist_end_point_(3,7) = 1.0;
+		head_end_point_(3,7)  = 1.0;
+		head_end_point_(4,7)  = 1.0;
+		//waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		//head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		//head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 11.0 && current_time_scanning < 13.0 && motion_num_scanning == 8)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = -80*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 0*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 13.0 && current_time_scanning < 14.0 && motion_num_scanning == 9)
+	{
+		waist_end_point_(3,7) = 1.0;
+		head_end_point_(3,7)  = 1.0;
+		head_end_point_(4,7)  = 1.0;
+		//waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		//head_end_point_(3, 1)  = -80*DEGREE2RADIAN;
+		//head_end_point_(4, 1)  = 0*DEGREE2RADIAN;
+	}
+	else if(current_time_scanning >= 14.0 && current_time_scanning < 16.0 && motion_num_scanning == 10)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
 		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
 		//waist_end_point_(4, 1) = 0;
 		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
-		//head_end_point_(4, 1)  = 85*DEGREE2RADIAN;
-	}
-	else if(current_time_scanning >= motion_time_*3 && current_time_scanning < motion_time_*4 && motion_num_scanning == 4)
-	{
-		waist_end_point_(3,7) = 3.0;
-		head_end_point_(3,7)  = 3.0;
-		head_end_point_(4,7)  = 3.0;
-		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
-		//waist_end_point_(3, 7)  = 6;
-		//waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = -60*DEGREE2RADIAN;
-		//head_end_point_(3, 7)  = 6;
-		//head_end_point_(4, 1)  = 0;
-	}
-	else if(current_time_scanning >= motion_time_*4 && current_time_scanning < motion_time_*5 && motion_num_scanning == 5)
-	{
-		waist_end_point_(3,7) = 3.0;
-		head_end_point_(3,7)  = 3.0;
-		head_end_point_(4,7)  = 3.0;
-		waist_end_point_(3, 1) = 0;
-		waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = 0;
 		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
 	}
-	/*	else if(current_time_ >= motion_time_*4 && current_time_ < motion_time_*5 && motion_num_ == 5)
+	else if(current_time_scanning >= 16.0 && current_time_scanning < 18.0 && motion_num_scanning == 11)
 	{
-		waist_end_point_(3, 1) = 55*DEGREE2RADIAN;
-		waist_end_point_(4, 1) = 0;
-	    head_end_point_(3, 1)  = 0;
-		head_end_point_(4, 1)  = 0;
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 50*DEGREE2RADIAN;
 	}
-	else if(current_time_ >= motion_time_*5 && current_time_ < motion_time_*6 && motion_num_ == 6)
+	else if(current_time_scanning >= 18.0 && current_time_scanning < 19.0 && motion_num_scanning == 12)
 	{
-		waist_end_point_(3, 1) = 0;
-		waist_end_point_(4, 1) = 0;
-		head_end_point_(3, 1)  = 0;
-		head_end_point_(4, 1)  = 20*DEGREE2RADIAN;
-	}*/
+		waist_end_point_(3,7) = 1.0;
+		head_end_point_(3,7)  = 1.0;
+		head_end_point_(4,7)  = 1.0;
+	}
+	else if(current_time_scanning >= 19.0 && current_time_scanning < 21.0 && motion_num_scanning == 13)
+	{
+		waist_end_point_(3,7) = 2.0;
+		head_end_point_(3,7)  = 2.0;
+		head_end_point_(4,7)  = 2.0;
+		waist_end_point_(3, 1) = 0*DEGREE2RADIAN;
+		//waist_end_point_(4, 1) = 0;
+		head_end_point_(3, 1)  = 0*DEGREE2RADIAN;
+		head_end_point_(4, 1)  = 10*DEGREE2RADIAN;
+	}
+	/*
+		else if(current_time_ >= motion_time_*5 && current_time_ < motion_time_*6 && motion_num_ == 6)
+		{
+			waist_end_point_(3, 1) = 0;
+			waist_end_point_(4, 1) = 0;
+			head_end_point_(3, 1)  = 0;
+			head_end_point_(4, 1)  = 20*DEGREE2RADIAN;
+		}*/
+	/*
+		else if(current_time_ >= motion_time_*5 && current_time_ < motion_time_*6 && motion_num_ == 6)
+		{
+			waist_end_point_(3, 1) = 0;
+			waist_end_point_(4, 1) = 0;
+			head_end_point_(3, 1)  = 0;
+			head_end_point_(4, 1)  = 20*DEGREE2RADIAN;
+		}*/
 	else
 	{
-		if(motion_num_scanning == 6)
+		if(motion_num_scanning == 14)
 		{
 			scan_done_msg.data = true;
 			scan_done_pub.publish(scan_done_msg);
 			motion_num_scanning ++;
 		}
-		else if (motion_num_scanning > 6)
+		else if (motion_num_scanning > 14)
 			return;
 		else
 		{
@@ -224,8 +304,8 @@ void UpperBodyModule::scanning_motion()
 		}
 	}
 
-	if(leg_check == 1)
-		waist_end_point_(3, 1) = 0;
+/*	if(leg_check == 1)
+		waist_end_point_(3, 1) = 0;*/
 
 	current_time_scanning = current_time_scanning + 0.008;
 }
@@ -355,7 +435,7 @@ void UpperBodyModule::tracking_function()
 	{
 		control_angle_yaw_temp = 0;
 	}
-	if(fabs(desired_y - current_y) < 50)
+	if(fabs(desired_y - current_y) < 15)
 	{
 		control_angle_pitch_temp = 0;
 	}
@@ -376,10 +456,10 @@ void UpperBodyModule::tracking_function()
 	//head_end_point_(3, 7)  = 0.8;
 	//head_end_point_(4, 7)  = 0.8;
 
-	printf("***************\n\n");
-	printf("YAW  control value ::  %f \n\n",control_angle_yaw*RADIAN2DEGREE);
-	printf("PITCH control value ::  %f \n\n",control_angle_pitch*RADIAN2DEGREE);
-	printf("**************\n\n");
+	//printf("***************\n\n");
+	//printf("YAW  control value ::  %f \n\n",control_angle_yaw*RADIAN2DEGREE);
+	//printf("PITCH control value ::  %f \n\n",control_angle_pitch*RADIAN2DEGREE);
+	//printf("**************\n\n");
 	//pre_current_x = current_x;
 	//pre_current_y = current_y;
 
@@ -409,8 +489,8 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 	}
 	else if(command_ == 1)// scanning algorithm
 	{
-		head_end_point_(3,7) = 3.0;
-		head_end_point_(4,7) = 3.0;
+		head_end_point_(3,7) = 2.0;
+		head_end_point_(4,7) = 2.0;
 
 		current_time_finding = 0;
 		motion_num_finding = 1;
@@ -477,7 +557,7 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 }
 void UpperBodyModule::logSaveFile()
 {
-	string filePath = ros::package::getPath("alice_upper_body_module") + "/log_data/log_data.txt";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	/*string filePath = ros::package::getPath("alice_upper_body_module") + "/log_data/log_data.txt";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
 	// write File
 	ofstream writeFile;
@@ -488,7 +568,7 @@ void UpperBodyModule::logSaveFile()
 		writeFile << "COMMAND ::  " << (int) command << " |  "<< control_angle_yaw_temp*RADIAN2DEGREE << " , "<< control_angle_pitch_temp*RADIAN2DEGREE << " | " << result_rad_head_(3,0)*RADIAN2DEGREE<< " , " << result_rad_head_(4,0)*RADIAN2DEGREE << " | " << current_x << " , " << current_y << " | " << ball_detected << "\n";
 		writeFile.close();
 	}
-	return;
+	return;*/
 }
 
 

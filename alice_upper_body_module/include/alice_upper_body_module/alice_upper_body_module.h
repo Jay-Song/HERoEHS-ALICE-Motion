@@ -74,12 +74,14 @@ public:
 	double traj_time_test;
 	// publisher
 	ros::Publisher  scan_done_pub;
+	ros::Publisher  robot_state_pub;
 
 	// Subscriber
 	ros::Subscriber head_test;
 	ros::Subscriber waist_test;
 
 	ros::Subscriber environment_detector_sub;
+	ros::Subscriber detected_objects_sub;
 	ros::Subscriber head_moving_sub;
 
 	ros::Subscriber ball_test_sub;
@@ -94,6 +96,8 @@ public:
 	void desiredPoseWaistMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
+	void detectedObjectsMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
+
 	void headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg);
 
 
@@ -177,6 +181,13 @@ private:
 
 	//log file
 	void logSaveFile();
+
+	// detected objects and absolute
+	double current_goal_x,current_goal_y;
+	double current_center_x,current_center_y;
+	double current_robot_x, current_robot_y;
+	double current_robot_theta;
+	geometry_msgs::Vector3 robot_state_msg;
 
 
 
