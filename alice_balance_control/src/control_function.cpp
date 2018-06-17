@@ -42,11 +42,11 @@ double PID_function::PID_calculate(double ref_value, double current_value)
 
 			double output = p_control_value + i_control_value + d_control_value;
 
-			if(output > max_)
+		/*	if(output > max_)
 				output = max_;
 			else if (output < min_)
 				output = min_;
-
+*/
 			pre_error_ = error;
 
 	/*		if(output < 0.0005 && output > -0.0005)

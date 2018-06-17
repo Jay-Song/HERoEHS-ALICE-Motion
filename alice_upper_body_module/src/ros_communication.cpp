@@ -72,12 +72,12 @@ UpperBodyModule::UpperBodyModule()
 	// tracking
 	command = 0;
 	pidController_x = new control_function::PID_function(0.008,60*DEGREE2RADIAN,-60*DEGREE2RADIAN,0,0,0);
-	pidController_y = new control_function::PID_function(0.008,75*DEGREE2RADIAN,0*DEGREE2RADIAN,0,0,0);
+	pidController_y = new control_function::PID_function(0.008,75*DEGREE2RADIAN,0*DEGREE2RADIAN,0,0,0); // min max value check X
 
 	control_angle_yaw = 0;
 	control_angle_pitch = 0;
 	control_angle_yaw_temp = 0;
-	control_angle_pitch_temp = 0;
+	control_angle_pitch_temp = 20*DEGREE2RADIAN;
 	pre_current_x = 0;
 	pre_current_y = 0;
 	frame_x = 672;
@@ -195,8 +195,8 @@ void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObje
 	{
 		if(!msg->data[i].name.compare("ball"))
 		{
-			current_x = msg->data[i].roi.x_offset + msg->data[i].roi.width/2;
-			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
+			current_x = msg->data[i].roi.x_offset + (msg->data[i].roi.width/2);
+			current_y = msg->data[i].roi.y_offset + (msg->data[i].roi.height/2);
 			ball_detected = 1;
 		}
 	}
