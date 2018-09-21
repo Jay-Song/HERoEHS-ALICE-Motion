@@ -248,7 +248,7 @@ void ALICEOnlineWalking::process()
      break;
    }
 
-  //std::cout << l_target_fz_N << " " << r_target_fz_N <<" ";
+  //std::cout << l_target_fz_N << " " << r_target_fz_N <<" ";;
 
   l_target_fz_N = walking_pattern_.switching_ratio_*left_dsp_fz_N_ + left_dsp_fz_N_;
   r_target_fz_N = right_ssp_fz_N_ - l_target_fz_N;
