@@ -137,6 +137,15 @@ private:
   alice_walking_module_msgs::BalanceParam desired_balance_param_;
 
   heroehs::OnlineWalkingPatternGenerator online_walking;
+
+  //yitaek test
+
+  ros::Publisher reference_zmp_pub_;
+  ros::Publisher reference_body_pub_;
+
+  geometry_msgs::Vector3 reference_zmp_msg_;
+  geometry_msgs::Vector3 reference_body_msg_;
+
 };
 
 }

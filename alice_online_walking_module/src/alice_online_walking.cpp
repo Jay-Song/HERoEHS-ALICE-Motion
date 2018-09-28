@@ -53,6 +53,7 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
 {
   alice_kd_ = new KinematicsDynamics();
 
+  // global frame 에서 의 좌표
   robotis_framework::Pose3D r_foot, l_foot, pelvis;
   r_foot.x = 0.0;    r_foot.y = -0.09;  r_foot.z = 0.0;
   r_foot.roll = 0.0; r_foot.pitch = 0.0; r_foot.yaw = 0.0;
@@ -63,8 +64,11 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
   pelvis.x = 0.0;    pelvis.y = 0.0;     pelvis.z = 0.57;
   pelvis.roll = 0.0; pelvis.pitch = 0.0; pelvis.yaw = 0;
 
-  walking_pattern_.setInitialPose(r_foot, l_foot, pelvis);
-  walking_pattern_.initialize(0.4, 1.6, control_cycle_sec);
+  //
+
+
+  walking_pattern_.setInitialPose(r_foot, l_foot, pelvis); // global 좌표가 들어감
+  walking_pattern_.initialize(0.4, 1.6, control_cycle_sec); //왜 1.6초 인지
 
   // initialize balance
   balance_ctrl_.initialize(control_cycle_sec);
@@ -116,6 +120,16 @@ void ALICEOnlineWalking::getReferenceStepDatafotAddition(robotis_framework::Step
 void ALICEOnlineWalking::process()
 {
   walking_pattern_.process();
+
+  //yitaek test
+  reference_zmp_x_ = walking_pattern_.reference_zmp_x_;
+  reference_zmp_y_ = walking_pattern_.reference_zmp_y_;
+
+  reference_body_x_ = walking_pattern_.reference_body_x_;
+  reference_body_y_ = walking_pattern_.reference_body_y_;
+
+
+
   mat_g_to_pelvis_ = walking_pattern_.mat_g_to_pelvis_;
   mat_pelvis_to_g_ = robotis_framework::getInverseTransformation(mat_g_to_pelvis_);
   mat_g_to_rfoot_ = walking_pattern_.mat_g_to_rfoot_;
@@ -126,11 +140,13 @@ void ALICEOnlineWalking::process()
   mat_robot_to_lfoot_ = (mat_robot_to_pelvis_*mat_pelvis_to_g_)*mat_g_to_lfoot_;
 
   //balance
+
   imu_data_mutex_lock_.lock();
   balance_ctrl_.setCurrentGyroSensorOutput(current_gyro_roll_rad_per_sec_, current_gyro_pitch_rad_per_sec_);
   balance_ctrl_.setCurrentOrientationSensorOutput(current_imu_roll_rad_, current_imu_pitch_rad_);
   imu_data_mutex_lock_.unlock();
   ft_data_mutex_lock_.lock();
+
   balance_ctrl_.setCurrentFootForceTorqueSensorOutput(mat_right_force_.coeff(0,0),  mat_right_force_.coeff(1,0),  mat_right_force_.coeff(2,0),
                                                       mat_right_torque_.coeff(0,0), mat_right_torque_.coeff(1,0), mat_right_torque_.coeff(2,0),
                                                       mat_left_force_.coeff(0,0),   mat_left_force_.coeff(1,0),   mat_left_force_.coeff(2,0),
@@ -295,6 +311,7 @@ void ALICEOnlineWalking::process()
 //      out_angle_rad_[angle_idx+0] = r_leg_out_angle_rad_[angle_idx];
 //      out_angle_rad_[angle_idx+6] = l_leg_out_angle_rad_[angle_idx];
   }
+
 }
 
 bool ALICEOnlineWalking::isRunning()

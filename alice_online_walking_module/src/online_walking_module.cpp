@@ -148,6 +148,7 @@ void OnlineWalkingModule::initialize(const int control_cycle_msec, robotis_frame
   online_walking->balance_ctrl_.right_foot_torque_roll_ctrl_.d_gain_ = 0;
   online_walking->balance_ctrl_.right_foot_torque_pitch_ctrl_.p_gain_ = 0;
   online_walking->balance_ctrl_.right_foot_torque_pitch_ctrl_.d_gain_ = 0;
+
 }
 
 
@@ -164,6 +165,10 @@ void OnlineWalkingModule::queueThread()
   pelvis_base_msg_pub_ = ros_node.advertise<geometry_msgs::PoseStamped>("/heroehs/pelvis_pose_base_walking", 1);
   done_msg_pub_ = ros_node.advertise<std_msgs::String>("/heroehs/movement_done", 1);
   walking_joint_states_pub_ = ros_node.advertise<alice_walking_module_msgs::WalkingJointStatesStamped>("/robotis/walking/walking_joint_states", 1);
+
+
+  reference_zmp_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_reference_zmp", 1);
+  reference_body_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_reference_body", 1);
 
 
   /* ROS Service Callback Functions */
@@ -1113,6 +1118,17 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
 
   process_mutex_.lock();
   online_walking->process();
+
+  //yitaek test
+
+  reference_zmp_msg_.x = online_walking->reference_zmp_x_;
+  reference_zmp_msg_.y = online_walking->reference_zmp_y_;
+
+  reference_body_msg_.x = online_walking->reference_body_x_;
+  reference_body_msg_.y = online_walking->reference_body_y_;
+
+  reference_zmp_pub_.publish(reference_zmp_msg_);
+  reference_body_pub_.publish(reference_body_msg_);
 
   desired_matrix_g_to_pelvis_ = online_walking->mat_g_to_pelvis_;
   desired_matrix_g_to_rfoot_  = online_walking->mat_g_to_rfoot_;

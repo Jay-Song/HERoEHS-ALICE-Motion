@@ -80,6 +80,12 @@ public:
 
  Eigen::MatrixXd mat_g_to_acc_, mat_robot_to_acc_;
 
+
+ //yitaek test
+
+ double reference_zmp_x_ , reference_zmp_y_;
+ double reference_body_x_, reference_body_y_;
+
 private:
   heroehs::OnlineWalkingPatternGenerator walking_pattern_;
   KinematicsDynamics* alice_kd_;
