@@ -87,6 +87,9 @@ OnlineWalkingModule::OnlineWalkingModule()
   joint_feedback_update_duration_ = 2.0;
   joint_feedback_update_sys_time_ = 2.0;
   joint_feedback_update_tra_.changeTrajectory(0, 0, 0, 0, balance_update_duration_, 1, 0, 0);
+
+  real_zmp_x = 0;
+  real_zmp_y = 0;
 }
 
 OnlineWalkingModule::~OnlineWalkingModule()
@@ -167,9 +170,14 @@ void OnlineWalkingModule::queueThread()
   walking_joint_states_pub_ = ros_node.advertise<alice_walking_module_msgs::WalkingJointStatesStamped>("/robotis/walking/walking_joint_states", 1);
 
 
+  //yitaek
   reference_zmp_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_reference_zmp", 1);
   reference_body_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_reference_body", 1);
 
+  real_zmp_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_real_zmp", 1);
+
+  foot_right_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_right_foot", 1);
+  foot_left_pub_  = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_left_foot", 1);
 
   /* ROS Service Callback Functions */
   ros::ServiceServer get_ref_step_data_server  = ros_node.advertiseService("/heroehs/online_walking/get_reference_step_data",   &OnlineWalkingModule::getReferenceStepDataServiceCallback,   this);
@@ -1120,7 +1128,6 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   online_walking->process();
 
   //yitaek test
-
   reference_zmp_msg_.x = online_walking->reference_zmp_x_;
   reference_zmp_msg_.y = online_walking->reference_zmp_y_;
 
@@ -1130,13 +1137,32 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   reference_zmp_pub_.publish(reference_zmp_msg_);
   reference_body_pub_.publish(reference_body_msg_);
 
+  //실제 ZMP 출력
+
+  realZmpCalculate(online_walking->mat_g_to_rfoot_, online_walking->mat_g_to_lfoot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_);
+  real_zmp_msg_.x = real_zmp_x;
+  real_zmp_msg_.y = real_zmp_y;
+  real_zmp_msg_.z = 0;
+  real_zmp_pub_.publish(real_zmp_msg_);
+
+  //foot publish
+  foot_right_msg_.x = online_walking->mat_g_to_rfoot_(0,3);
+  foot_right_msg_.y = online_walking->mat_g_to_rfoot_(1,3);
+
+  foot_left_msg_.x = online_walking->mat_g_to_lfoot_(0,3);
+  foot_left_msg_.y = online_walking->mat_g_to_lfoot_(1,3);
+
+  foot_right_pub_.publish(foot_right_msg_);
+  foot_left_pub_.publish(foot_left_msg_);
+
+
+
   desired_matrix_g_to_pelvis_ = online_walking->mat_g_to_pelvis_;
   desired_matrix_g_to_rfoot_  = online_walking->mat_g_to_rfoot_;
   desired_matrix_g_to_lfoot_  = online_walking->mat_g_to_lfoot_;
   process_mutex_.unlock();
 
   //publishRobotPose();
-
   result_["r_hip_pitch"  ]->goal_position_ = online_walking->out_angle_rad_[0];
   result_["r_hip_roll"   ]->goal_position_ = online_walking->out_angle_rad_[1];
   result_["r_hip_yaw"    ]->goal_position_ = online_walking->out_angle_rad_[2];
@@ -1151,33 +1177,34 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   result_["l_ankle_pitch"]->goal_position_ = online_walking->out_angle_rad_[10];
   result_["l_ankle_roll" ]->goal_position_ = online_walking->out_angle_rad_[11];
 
-//  walking_joint_states_msg_.header.stamp = ros::Time::now();
-//  walking_joint_states_msg_.r_goal_hip_y = online_walking->r_leg_out_angle_rad_[0];
-//  walking_joint_states_msg_.r_goal_hip_r = online_walking->r_leg_out_angle_rad_[1];
-//  walking_joint_states_msg_.r_goal_hip_p = online_walking->r_leg_out_angle_rad_[2];
-//  walking_joint_states_msg_.r_goal_kn_p  = online_walking->r_leg_out_angle_rad_[3];
-//  walking_joint_states_msg_.r_goal_an_p  = online_walking->r_leg_out_angle_rad_[4];
-//  walking_joint_states_msg_.r_goal_an_r  = online_walking->r_leg_out_angle_rad_[5];
-//  walking_joint_states_msg_.l_goal_hip_y = online_walking->l_leg_out_angle_rad_[0];
-//  walking_joint_states_msg_.l_goal_hip_r = online_walking->l_leg_out_angle_rad_[1];
-//  walking_joint_states_msg_.l_goal_hip_p = online_walking->l_leg_out_angle_rad_[2];
-//  walking_joint_states_msg_.l_goal_kn_p  = online_walking->l_leg_out_angle_rad_[3];
-//  walking_joint_states_msg_.l_goal_an_p  = online_walking->l_leg_out_angle_rad_[4];
-//  walking_joint_states_msg_.l_goal_an_r  = online_walking->l_leg_out_angle_rad_[5];
-//
-//  walking_joint_states_msg_.r_present_hip_y = online_walking->curr_angle_rad_[0];
-//  walking_joint_states_msg_.r_present_hip_r = online_walking->curr_angle_rad_[1];
-//  walking_joint_states_msg_.r_present_hip_p = online_walking->curr_angle_rad_[2];
-//  walking_joint_states_msg_.r_present_kn_p  = online_walking->curr_angle_rad_[3];
-//  walking_joint_states_msg_.r_present_an_p  = online_walking->curr_angle_rad_[4];
-//  walking_joint_states_msg_.r_present_an_r  = online_walking->curr_angle_rad_[5];
-//  walking_joint_states_msg_.l_present_hip_y = online_walking->curr_angle_rad_[6];
-//  walking_joint_states_msg_.l_present_hip_r = online_walking->curr_angle_rad_[7];
-//  walking_joint_states_msg_.l_present_hip_p = online_walking->curr_angle_rad_[8];
-//  walking_joint_states_msg_.l_present_kn_p  = online_walking->curr_angle_rad_[9];
-//  walking_joint_states_msg_.l_present_an_p  = online_walking->curr_angle_rad_[10];
-//  walking_joint_states_msg_.l_present_an_r  = online_walking->curr_angle_rad_[11];
-//  walking_joint_states_pub_.publish(walking_joint_states_msg_);
+  // 결과 출력
+  walking_joint_states_msg_.header.stamp = ros::Time::now();
+  walking_joint_states_msg_.r_goal_hip_y = online_walking->r_leg_out_angle_rad_[0];
+  walking_joint_states_msg_.r_goal_hip_r = online_walking->r_leg_out_angle_rad_[1];
+  walking_joint_states_msg_.r_goal_hip_p = online_walking->r_leg_out_angle_rad_[2];
+  walking_joint_states_msg_.r_goal_kn_p  = online_walking->r_leg_out_angle_rad_[3];
+  walking_joint_states_msg_.r_goal_an_p  = online_walking->r_leg_out_angle_rad_[4];
+  walking_joint_states_msg_.r_goal_an_r  = online_walking->r_leg_out_angle_rad_[5];
+  walking_joint_states_msg_.l_goal_hip_y = online_walking->l_leg_out_angle_rad_[0];
+  walking_joint_states_msg_.l_goal_hip_r = online_walking->l_leg_out_angle_rad_[1];
+  walking_joint_states_msg_.l_goal_hip_p = online_walking->l_leg_out_angle_rad_[2];
+  walking_joint_states_msg_.l_goal_kn_p  = online_walking->l_leg_out_angle_rad_[3];
+  walking_joint_states_msg_.l_goal_an_p  = online_walking->l_leg_out_angle_rad_[4];
+  walking_joint_states_msg_.l_goal_an_r  = online_walking->l_leg_out_angle_rad_[5];
+
+  walking_joint_states_msg_.r_present_hip_y = online_walking->curr_angle_rad_[0];
+  walking_joint_states_msg_.r_present_hip_r = online_walking->curr_angle_rad_[1];
+  walking_joint_states_msg_.r_present_hip_p = online_walking->curr_angle_rad_[2];
+  walking_joint_states_msg_.r_present_kn_p  = online_walking->curr_angle_rad_[3];
+  walking_joint_states_msg_.r_present_an_p  = online_walking->curr_angle_rad_[4];
+  walking_joint_states_msg_.r_present_an_r  = online_walking->curr_angle_rad_[5];
+  walking_joint_states_msg_.l_present_hip_y = online_walking->curr_angle_rad_[6];
+  walking_joint_states_msg_.l_present_hip_r = online_walking->curr_angle_rad_[7];
+  walking_joint_states_msg_.l_present_hip_p = online_walking->curr_angle_rad_[8];
+  walking_joint_states_msg_.l_present_kn_p  = online_walking->curr_angle_rad_[9];
+  walking_joint_states_msg_.l_present_an_p  = online_walking->curr_angle_rad_[10];
+  walking_joint_states_msg_.l_present_an_r  = online_walking->curr_angle_rad_[11];
+  walking_joint_states_pub_.publish(walking_joint_states_msg_);
 
 
   present_running = isRunning();
@@ -1196,6 +1223,13 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
     }
   }
   previous_running_ = present_running;
+}
+
+//yitaek zmp output
+void OnlineWalkingModule::realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force)
+{
+  real_zmp_x = (g_right_foot(0,3)*g_right_force(2,0) + g_left_foot(0,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
+  real_zmp_y = (g_right_foot(1,3)*g_right_force(2,0) + g_left_foot(1,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
 }
 
 void OnlineWalkingModule::stop()

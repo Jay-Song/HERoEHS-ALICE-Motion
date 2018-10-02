@@ -200,6 +200,7 @@ private:
 	double updating_duration_cop;
 	double zmpFz_p_gain;
 	double zmpFz_d_gain;
+
 };
 }
 

@@ -93,6 +93,9 @@ private:
   void setJointFeedBackGain(alice_walking_module_msgs::JointFeedBackGain& msg);
   void updateJointFeedBackGain();
 
+  //yitake zmp output
+  void realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force);
+
   std::map<std::string, int> joint_name_to_index_;
 
   bool            gazebo_;
@@ -139,12 +142,22 @@ private:
   heroehs::OnlineWalkingPatternGenerator online_walking;
 
   //yitaek test
-
   ros::Publisher reference_zmp_pub_;
   ros::Publisher reference_body_pub_;
+  ros::Publisher foot_right_pub_;
+  ros::Publisher foot_left_pub_;
 
   geometry_msgs::Vector3 reference_zmp_msg_;
   geometry_msgs::Vector3 reference_body_msg_;
+
+  geometry_msgs::Vector3 foot_right_msg_;
+  geometry_msgs::Vector3 foot_left_msg_;
+
+  //yitaek zmp output
+  double real_zmp_x, real_zmp_y;
+
+  ros::Publisher real_zmp_pub_;
+  geometry_msgs::Vector3 real_zmp_msg_;
 
 };
 

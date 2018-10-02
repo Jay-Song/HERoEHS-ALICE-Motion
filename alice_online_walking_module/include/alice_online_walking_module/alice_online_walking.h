@@ -72,6 +72,7 @@ public:
   double current_gyro_roll_rad_per_sec_, current_gyro_pitch_rad_per_sec_;
 
   Eigen::MatrixXd mat_right_force_, mat_left_force_;
+  Eigen::MatrixXd mat_g_right_force_, mat_g_left_force_; // yitaek
   Eigen::MatrixXd mat_right_torque_, mat_left_torque_;
   double current_right_fx_N_,  current_right_fy_N_,  current_right_fz_N_;
   double current_right_tx_Nm_, current_right_ty_Nm_, current_right_tz_Nm_;
