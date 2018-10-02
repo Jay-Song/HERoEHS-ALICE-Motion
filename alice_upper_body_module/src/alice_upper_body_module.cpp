@@ -555,13 +555,28 @@ void UpperBodyModule::algorithm_process(uint8_t command_)
 		control_angle_yaw   = end_to_rad_head_  ->cal_end_point_tra_alpha->current_pose;
 		control_angle_pitch = end_to_rad_head_  ->cal_end_point_tra_betta->current_pose;
 	}
+	else if(command_ == 5)// tracking algorithm
+	{
+
+		head_end_point_(3, 7)   = 0.2;
+		head_end_point_(4, 7)   = 0.2;
+
+		waist_end_point_(3, 1)  = 0; // yaw  트레젝토리 6 * 8 은 xyz yaw(z) pitch(y) roll(x) 이며 8은 처음 위치 나중 위치 / 속도 속도 / 가속도 가속도 / 시간 시간 / 임
+
+		current_time_scanning = 0.0;
+		motion_num_scanning = 1;
+		current_time_finding = 0;
+		motion_num_finding = 1;
+
+		tracking_function();
+	}
 	else
 		return;
 
 }
 void UpperBodyModule::logSaveFile()
 {
-/*	string filePath = ros::package::getPath("alice_upper_body_module") + "/log_data/log_data.txt";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	/*	string filePath = ros::package::getPath("alice_upper_body_module") + "/log_data/log_data.txt";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
 	// write File
 	ofstream writeFile;

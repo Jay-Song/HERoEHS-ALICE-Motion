@@ -189,15 +189,38 @@ void UpperBodyModule::desiredPoseHeadMsgCallback(const std_msgs::Float64MultiArr
 	head_end_point_ (4, 7) = msg->data[3];
 	is_moving_head_ = true;
 }
+void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
+{
+	command = msg -> data;
+	if(command == 1)
+	{
+		current_time_scanning = 0;
+		motion_num_scanning = 1;
+	}
+}
 void UpperBodyModule::environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg)
 {
 	for(int i = 0; i < msg->length; i++)
 	{
-		if(!msg->data[i].name.compare("ball"))
+		if(command == 3)
 		{
-			current_x = msg->data[i].roi.x_offset + (msg->data[i].roi.width/2);
-			current_y = msg->data[i].roi.y_offset + (msg->data[i].roi.height/2);
-			ball_detected = 1;
+			if(!msg->data[i].name.compare("ball"))
+			{
+				current_x = msg->data[i].roi.x_offset + (msg->data[i].roi.width/2);
+				current_y = msg->data[i].roi.y_offset + (msg->data[i].roi.height/2);
+				ball_detected = 1;
+			}
+
+		}
+		if(command == 5)
+		{
+			if(!msg->data[i].name.compare("center"))
+			{
+				current_x = msg->data[i].roi.x_offset + (msg->data[i].roi.width/2);
+				current_y = msg->data[i].roi.y_offset + (msg->data[i].roi.height/2);
+				ball_detected = 1;
+			}
+
 		}
 	}
 }
@@ -346,16 +369,6 @@ void UpperBodyModule::detectedObjectsMsgCallback(const alice_msgs::FoundObjectAr
 
 	robot_state_pub.publish(robot_state_msg);
 
-}
-
-void UpperBodyModule::headMovingMsgCallback(const std_msgs::UInt8::ConstPtr& msg)
-{
-	command = msg -> data;
-	if(command == 1)
-	{
-		current_time_scanning = 0;
-		motion_num_scanning = 1;
-	}
 }
 //test
 void UpperBodyModule::ballTestMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
