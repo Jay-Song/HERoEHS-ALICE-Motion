@@ -87,6 +87,9 @@ public:
  double reference_zmp_x_ , reference_zmp_y_;
  double reference_body_x_, reference_body_y_;
 
+ double reference_foot_left_x_,reference_foot_left_y_,reference_foot_left_z_;
+ double reference_foot_right_x_,reference_foot_right_y_,reference_foot_right_z_;
+
 private:
   heroehs::OnlineWalkingPatternGenerator walking_pattern_;
   KinematicsDynamics* alice_kd_;

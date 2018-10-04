@@ -1138,7 +1138,6 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   reference_body_pub_.publish(reference_body_msg_);
 
   //실제 ZMP 출력
-
   realZmpCalculate(online_walking->mat_g_to_rfoot_, online_walking->mat_g_to_lfoot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_);
   real_zmp_msg_.x = real_zmp_x;
   real_zmp_msg_.y = real_zmp_y;
@@ -1146,11 +1145,14 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   real_zmp_pub_.publish(real_zmp_msg_);
 
   //foot publish
-  foot_right_msg_.x = online_walking->mat_g_to_rfoot_(0,3);
-  foot_right_msg_.y = online_walking->mat_g_to_rfoot_(1,3);
+  foot_right_msg_.x = online_walking->reference_foot_right_x_;
+  foot_right_msg_.y = online_walking->reference_foot_right_y_;
+  //foot_right_msg_.z = online_walking->reference_foot_right_z_;
 
-  foot_left_msg_.x = online_walking->mat_g_to_lfoot_(0,3);
-  foot_left_msg_.y = online_walking->mat_g_to_lfoot_(1,3);
+  foot_left_msg_.x = online_walking->reference_foot_left_x_;
+  foot_left_msg_.y = online_walking->reference_foot_left_y_;
+ //foot_left_msg_.z = online_walking->reference_foot_left_z_;
+
 
   foot_right_pub_.publish(foot_right_msg_);
   foot_left_pub_.publish(foot_left_msg_);

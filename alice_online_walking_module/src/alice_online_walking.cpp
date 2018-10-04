@@ -45,6 +45,8 @@ ALICEOnlineWalking::ALICEOnlineWalking()
 
   reference_zmp_x_ = 0;  reference_zmp_y_ = 0;
   reference_body_x_= 0 ;  reference_body_y_ = 0;
+  reference_foot_left_x_  = 0; reference_foot_left_y_  = 0; reference_foot_left_z_ = 0;
+  reference_foot_right_x_ = 0; reference_foot_right_y_ = 0; reference_foot_right_z_ = 0;
 }
 
 ALICEOnlineWalking::~ALICEOnlineWalking()
@@ -134,6 +136,13 @@ void ALICEOnlineWalking::process()
 
   reference_body_x_ = walking_pattern_.reference_body_x_;
   reference_body_y_ = walking_pattern_.reference_body_y_;
+
+  reference_foot_left_x_  = walking_pattern_.reference_foot_left_x_ ;
+  reference_foot_left_y_  = walking_pattern_.reference_foot_left_y_ ;
+  reference_foot_left_z_  = walking_pattern_.reference_foot_left_z_ ;
+  reference_foot_right_x_ = walking_pattern_.reference_foot_right_x_;
+  reference_foot_right_y_ = walking_pattern_.reference_foot_right_y_;
+  reference_foot_right_z_ = walking_pattern_.reference_foot_right_z_;
 
 
 
