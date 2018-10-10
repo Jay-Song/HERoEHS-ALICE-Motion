@@ -71,9 +71,14 @@ public:
   double current_imu_roll_rad_, current_imu_pitch_rad_;
   double current_gyro_roll_rad_per_sec_, current_gyro_pitch_rad_per_sec_;
 
+  // yitaek
   Eigen::MatrixXd mat_right_force_, mat_left_force_;
-  Eigen::MatrixXd mat_g_right_force_, mat_g_left_force_; // yitaek
+  Eigen::MatrixXd mat_g_right_force_, mat_g_left_force_;
   Eigen::MatrixXd mat_right_torque_, mat_left_torque_;
+  Eigen::MatrixXd mat_g_right_foot_, mat_g_left_foot_;
+  Eigen::MatrixXd mat_robot_right_foot_, mat_robot_left_foot_;
+  //
+
   double current_right_fx_N_,  current_right_fy_N_,  current_right_fz_N_;
   double current_right_tx_Nm_, current_right_ty_Nm_, current_right_tz_Nm_;
   double current_left_fx_N_,  current_left_fy_N_,  current_left_fz_N_;
@@ -89,6 +94,9 @@ public:
 
  double reference_foot_left_x_,reference_foot_left_y_,reference_foot_left_z_;
  double reference_foot_right_x_,reference_foot_right_y_,reference_foot_right_z_;
+
+ double current_foot_left_x_,current_foot_left_y_,current_foot_left_z_;
+ double current_foot_right_x_,current_foot_right_y_,current_foot_right_z_;
 
 private:
   heroehs::OnlineWalkingPatternGenerator walking_pattern_;

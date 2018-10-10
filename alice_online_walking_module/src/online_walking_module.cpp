@@ -1125,6 +1125,8 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   }
 
   process_mutex_.lock();
+
+
   online_walking->process();
 
   //yitaek test
@@ -1136,28 +1138,6 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
 
   reference_zmp_pub_.publish(reference_zmp_msg_);
   reference_body_pub_.publish(reference_body_msg_);
-
-  //실제 ZMP 출력
-  realZmpCalculate(online_walking->mat_g_to_rfoot_, online_walking->mat_g_to_lfoot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_);
-  real_zmp_msg_.x = real_zmp_x;
-  real_zmp_msg_.y = real_zmp_y;
-  real_zmp_msg_.z = 0;
-  real_zmp_pub_.publish(real_zmp_msg_);
-
-  //foot publish
-  foot_right_msg_.x = online_walking->reference_foot_right_x_;
-  foot_right_msg_.y = online_walking->reference_foot_right_y_;
-  //foot_right_msg_.z = online_walking->reference_foot_right_z_;
-
-  foot_left_msg_.x = online_walking->reference_foot_left_x_;
-  foot_left_msg_.y = online_walking->reference_foot_left_y_;
- //foot_left_msg_.z = online_walking->reference_foot_left_z_;
-
-
-  foot_right_pub_.publish(foot_right_msg_);
-  foot_left_pub_.publish(foot_left_msg_);
-
-
 
   desired_matrix_g_to_pelvis_ = online_walking->mat_g_to_pelvis_;
   desired_matrix_g_to_rfoot_  = online_walking->mat_g_to_rfoot_;
@@ -1179,30 +1159,59 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   result_["l_ankle_pitch"]->goal_position_ = online_walking->out_angle_rad_[10];
   result_["l_ankle_roll" ]->goal_position_ = online_walking->out_angle_rad_[11];
 
+
+  //실제 ZMP 출력
+  realZmpCalculate(online_walking->mat_g_right_foot_, online_walking->mat_g_left_foot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_);
+  real_zmp_msg_.x = real_zmp_x;
+  real_zmp_msg_.y = real_zmp_y;
+  real_zmp_msg_.z = 0;
+  real_zmp_pub_.publish(real_zmp_msg_);
+
+  //foot publish
+  foot_right_msg_.x = online_walking->mat_g_right_foot_(0,3);
+  foot_right_msg_.y = online_walking->mat_g_right_foot_(1,3);
+  foot_right_msg_.z = online_walking->mat_g_right_foot_(2,3);
+
+  //foot_right_msg_.x = online_walking->reference_foot_right_x_;
+  //foot_right_msg_.y = online_walking->reference_foot_right_y_;
+  //foot_right_msg_.z = online_walking->reference_foot_right_z_;
+
+  //foot_left_msg_.x = online_walking->reference_foot_left_x_;
+  //foot_left_msg_.y = online_walking->reference_foot_left_y_;
+ //foot_left_msg_.z = online_walking->reference_foot_left_z_;
+
+  foot_left_msg_.x = online_walking->mat_g_left_foot_(0,3);
+  foot_left_msg_.y = online_walking->mat_g_left_foot_(1,3);
+  foot_left_msg_.z = online_walking->mat_g_left_foot_(2,3);
+
+
+  foot_right_pub_.publish(foot_right_msg_);
+  foot_left_pub_.publish(foot_left_msg_);
+
   // 결과 출력
   walking_joint_states_msg_.header.stamp = ros::Time::now();
-  walking_joint_states_msg_.r_goal_hip_y = online_walking->r_leg_out_angle_rad_[0];
+  walking_joint_states_msg_.r_goal_hip_p = online_walking->r_leg_out_angle_rad_[0];
   walking_joint_states_msg_.r_goal_hip_r = online_walking->r_leg_out_angle_rad_[1];
-  walking_joint_states_msg_.r_goal_hip_p = online_walking->r_leg_out_angle_rad_[2];
+  walking_joint_states_msg_.r_goal_hip_y = online_walking->r_leg_out_angle_rad_[2];
   walking_joint_states_msg_.r_goal_kn_p  = online_walking->r_leg_out_angle_rad_[3];
   walking_joint_states_msg_.r_goal_an_p  = online_walking->r_leg_out_angle_rad_[4];
   walking_joint_states_msg_.r_goal_an_r  = online_walking->r_leg_out_angle_rad_[5];
-  walking_joint_states_msg_.l_goal_hip_y = online_walking->l_leg_out_angle_rad_[0];
+  walking_joint_states_msg_.l_goal_hip_p = online_walking->l_leg_out_angle_rad_[0];
   walking_joint_states_msg_.l_goal_hip_r = online_walking->l_leg_out_angle_rad_[1];
-  walking_joint_states_msg_.l_goal_hip_p = online_walking->l_leg_out_angle_rad_[2];
+  walking_joint_states_msg_.l_goal_hip_y = online_walking->l_leg_out_angle_rad_[2];
   walking_joint_states_msg_.l_goal_kn_p  = online_walking->l_leg_out_angle_rad_[3];
   walking_joint_states_msg_.l_goal_an_p  = online_walking->l_leg_out_angle_rad_[4];
   walking_joint_states_msg_.l_goal_an_r  = online_walking->l_leg_out_angle_rad_[5];
 
-  walking_joint_states_msg_.r_present_hip_y = online_walking->curr_angle_rad_[0];
+  walking_joint_states_msg_.r_present_hip_p = online_walking->curr_angle_rad_[0];
   walking_joint_states_msg_.r_present_hip_r = online_walking->curr_angle_rad_[1];
-  walking_joint_states_msg_.r_present_hip_p = online_walking->curr_angle_rad_[2];
+  walking_joint_states_msg_.r_present_hip_y = online_walking->curr_angle_rad_[2];
   walking_joint_states_msg_.r_present_kn_p  = online_walking->curr_angle_rad_[3];
   walking_joint_states_msg_.r_present_an_p  = online_walking->curr_angle_rad_[4];
   walking_joint_states_msg_.r_present_an_r  = online_walking->curr_angle_rad_[5];
-  walking_joint_states_msg_.l_present_hip_y = online_walking->curr_angle_rad_[6];
+  walking_joint_states_msg_.l_present_hip_p = online_walking->curr_angle_rad_[6];
   walking_joint_states_msg_.l_present_hip_r = online_walking->curr_angle_rad_[7];
-  walking_joint_states_msg_.l_present_hip_p = online_walking->curr_angle_rad_[8];
+  walking_joint_states_msg_.l_present_hip_y = online_walking->curr_angle_rad_[8];
   walking_joint_states_msg_.l_present_kn_p  = online_walking->curr_angle_rad_[9];
   walking_joint_states_msg_.l_present_an_p  = online_walking->curr_angle_rad_[10];
   walking_joint_states_msg_.l_present_an_r  = online_walking->curr_angle_rad_[11];
