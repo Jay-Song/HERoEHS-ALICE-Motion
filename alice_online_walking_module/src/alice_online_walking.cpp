@@ -107,6 +107,10 @@ void ALICEOnlineWalking::initialize(double control_cycle_sec)
   mat_g_right_force_.resize(4,1); mat_g_left_force_.resize(4,1);
   mat_g_right_force_.fill(0); mat_g_left_force_.fill(0);
 
+  mat_g_right_torque_.resize(4,1); mat_g_left_torque_.resize(4,1);
+  mat_g_right_torque_.fill(0); mat_g_left_torque_.fill(0);
+
+
   for(int feed_forward_idx = 0; feed_forward_idx < 12; feed_forward_idx++)
   {
     leg_angle_feed_back_[feed_forward_idx].p_gain_ = 0;
@@ -473,13 +477,17 @@ void ALICEOnlineWalking::setCurrentFTSensorOutput(double rfx, double rfy, double
 
   mat_right_force_ = mat_robot_right_foot_*mat_right_force_;
   mat_right_torque_= mat_robot_right_foot_*mat_right_torque_;
+
   mat_g_right_force_= mat_g_right_foot_*mat_right_force_;
+  mat_g_right_torque_ = mat_g_right_foot_*mat_right_torque_;
 
  // mat_left_force_  = mat_robot_to_lfoot_*mat_left_force_;
  // mat_left_torque_ = mat_robot_to_lfoot_*mat_left_torque_;
   mat_left_force_  = mat_robot_left_foot_*mat_left_force_;
   mat_left_torque_ = mat_robot_left_foot_*mat_left_torque_;
+
   mat_g_left_force_= mat_g_left_foot_*mat_left_force_;
+  mat_g_left_torque_ = mat_g_left_foot_*mat_right_torque_;
 
   ft_data_mutex_lock_.unlock();
 }

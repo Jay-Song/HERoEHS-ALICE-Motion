@@ -75,6 +75,7 @@ public:
   Eigen::MatrixXd mat_right_force_, mat_left_force_;
   Eigen::MatrixXd mat_g_right_force_, mat_g_left_force_;
   Eigen::MatrixXd mat_right_torque_, mat_left_torque_;
+  Eigen::MatrixXd mat_g_right_torque_,mat_g_left_torque_;
   Eigen::MatrixXd mat_g_right_foot_, mat_g_left_foot_;
   Eigen::MatrixXd mat_robot_right_foot_, mat_robot_left_foot_;
   //

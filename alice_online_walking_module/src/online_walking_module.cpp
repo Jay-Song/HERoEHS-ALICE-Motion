@@ -1161,7 +1161,7 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
 
 
   //실제 ZMP 출력
-  realZmpCalculate(online_walking->mat_g_right_foot_, online_walking->mat_g_left_foot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_);
+  realZmpCalculate(online_walking->mat_g_right_foot_, online_walking->mat_g_left_foot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_ , online_walking->mat_g_right_torque_, online_walking->mat_g_left_torque_);
   real_zmp_msg_.x = real_zmp_x;
   real_zmp_msg_.y = real_zmp_y;
   real_zmp_msg_.z = 0;
@@ -1237,10 +1237,12 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
 }
 
 //yitaek zmp output
-void OnlineWalkingModule::realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force)
+void OnlineWalkingModule::realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force , Eigen::MatrixXd g_right_torque, Eigen::MatrixXd g_left_torque)
 {
-  real_zmp_x = (g_right_foot(0,3)*g_right_force(2,0) + g_left_foot(0,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
-  real_zmp_y = (g_right_foot(1,3)*g_right_force(2,0) + g_left_foot(1,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
+  //real_zmp_x = (g_right_foot(0,3)*g_right_force(2,0) + g_left_foot(0,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
+  //real_zmp_y = (g_right_foot(1,3)*g_right_force(2,0) + g_left_foot(1,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
+  real_zmp_x = (-(g_right_torque(1,0)+g_left_torque(1,0))+ (g_right_foot(0,3)*g_right_force(2,0)) + (g_left_foot(0,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
+  real_zmp_y = (-(g_right_torque(0,0)+g_left_torque(0,0))+ (g_right_foot(1,3)*g_right_force(2,0)) + (g_left_foot(1,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
 }
 
 void OnlineWalkingModule::stop()

@@ -94,7 +94,7 @@ private:
   void updateJointFeedBackGain();
 
   //yitake zmp output
-  void realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force);
+  void realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::Matrix4d g_left_foot, Eigen::MatrixXd g_right_force, Eigen::MatrixXd g_left_force , Eigen::MatrixXd g_right_torque, Eigen::MatrixXd g_left_torque);
 
   std::map<std::string, int> joint_name_to_index_;
 
