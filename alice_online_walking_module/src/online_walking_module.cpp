@@ -179,6 +179,11 @@ void OnlineWalkingModule::queueThread()
   foot_right_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_right_foot", 1);
   foot_left_pub_  = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_left_foot", 1);
 
+  left_force_sensor_pub_  = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_left_force", 1);
+  right_force_sensor_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_right_force", 1);
+  left_torque_sensor_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_left_torque", 1);
+  right_torque_sensor_pub_= ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_right_torque", 1);
+
   /* ROS Service Callback Functions */
   ros::ServiceServer get_ref_step_data_server  = ros_node.advertiseService("/heroehs/online_walking/get_reference_step_data",   &OnlineWalkingModule::getReferenceStepDataServiceCallback,   this);
   ros::ServiceServer add_step_data_array_sever = ros_node.advertiseService("/heroehs/online_walking/add_step_data",             &OnlineWalkingModule::addStepDataServiceCallback,            this);
@@ -1166,6 +1171,29 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   real_zmp_msg_.y = real_zmp_y;
   real_zmp_msg_.z = 0;
   real_zmp_pub_.publish(real_zmp_msg_);
+
+
+  left_force_sensor_msg_ .x  = online_walking->mat_g_left_force_(0,0);
+  left_force_sensor_msg_ .y  = online_walking->mat_g_left_force_(1,0);
+  left_force_sensor_msg_ .z  = online_walking->mat_g_left_force_(2,0);
+
+  right_force_sensor_msg_ .x  = online_walking->mat_g_right_force_(0,0);
+  right_force_sensor_msg_ .y  = online_walking->mat_g_right_force_(1,0);
+  right_force_sensor_msg_ .z  = online_walking->mat_g_right_force_(2,0);
+
+
+  left_torque_sensor_msg_ .x  = online_walking->mat_g_left_torque_(0,0);
+  left_torque_sensor_msg_ .y  = online_walking->mat_g_left_torque_(1,0);
+  left_torque_sensor_msg_ .z  = online_walking->mat_g_left_torque_(2,0);
+
+  right_torque_sensor_msg_ .x  = online_walking->mat_g_right_torque_(0,0);
+  right_torque_sensor_msg_ .y  = online_walking->mat_g_right_torque_(1,0);
+  right_torque_sensor_msg_ .z  = online_walking->mat_g_right_torque_(2,0);
+
+  left_force_sensor_pub_.publish(left_force_sensor_msg_);
+  right_force_sensor_pub_.publish(right_force_sensor_msg_);
+  left_torque_sensor_pub_.publish(left_torque_sensor_msg_);
+  right_torque_sensor_pub_.publish(right_torque_sensor_msg_);
 
   //foot publish
   foot_right_msg_.x = online_walking->mat_g_right_foot_(0,3);

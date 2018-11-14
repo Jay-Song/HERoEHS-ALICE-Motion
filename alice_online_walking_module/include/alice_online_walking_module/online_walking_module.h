@@ -147,6 +147,17 @@ private:
   ros::Publisher foot_right_pub_;
   ros::Publisher foot_left_pub_;
 
+  ros::Publisher left_force_sensor_pub_;
+  ros::Publisher right_force_sensor_pub_;
+  ros::Publisher left_torque_sensor_pub_;
+  ros::Publisher right_torque_sensor_pub_;
+
+  geometry_msgs::Vector3 left_force_sensor_msg_;
+  geometry_msgs::Vector3 right_force_sensor_msg_;
+
+  geometry_msgs::Vector3 left_torque_sensor_msg_;
+  geometry_msgs::Vector3 right_torque_sensor_msg_;
+
   geometry_msgs::Vector3 reference_zmp_msg_;
   geometry_msgs::Vector3 reference_body_msg_;
 
