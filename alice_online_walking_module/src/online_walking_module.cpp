@@ -184,6 +184,9 @@ void OnlineWalkingModule::queueThread()
   left_torque_sensor_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_left_torque", 1);
   right_torque_sensor_pub_= ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_right_torque", 1);
 
+  angle_sensor_pub_     = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_angle", 1);
+  angle_acc_sensor_pub_ = ros_node.advertise<geometry_msgs::Vector3>("/heroehs/alice_angle_acc", 1);
+
   /* ROS Service Callback Functions */
   ros::ServiceServer get_ref_step_data_server  = ros_node.advertiseService("/heroehs/online_walking/get_reference_step_data",   &OnlineWalkingModule::getReferenceStepDataServiceCallback,   this);
   ros::ServiceServer add_step_data_array_sever = ros_node.advertiseService("/heroehs/online_walking/add_step_data",             &OnlineWalkingModule::addStepDataServiceCallback,            this);
@@ -1164,7 +1167,6 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   result_["l_ankle_pitch"]->goal_position_ = online_walking->out_angle_rad_[10];
   result_["l_ankle_roll" ]->goal_position_ = online_walking->out_angle_rad_[11];
 
-
   //실제 ZMP 출력
   realZmpCalculate(online_walking->mat_g_right_foot_, online_walking->mat_g_left_foot_, online_walking->mat_g_right_force_, online_walking->mat_g_left_force_ , online_walking->mat_g_right_torque_, online_walking->mat_g_left_torque_);
   real_zmp_msg_.x = real_zmp_x;
@@ -1194,6 +1196,15 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   right_force_sensor_pub_.publish(right_force_sensor_msg_);
   left_torque_sensor_pub_.publish(left_torque_sensor_msg_);
   right_torque_sensor_pub_.publish(right_torque_sensor_msg_);
+
+  angle_sensor_msg_.x =   online_walking->current_imu_roll_rad_;
+  angle_sensor_msg_.y =   online_walking->current_imu_pitch_rad_;
+
+  angle_acc_sensor_msg_.x =  online_walking->current_gyro_roll_rad_per_sec_;
+  angle_acc_sensor_msg_.x =  online_walking->current_gyro_pitch_rad_per_sec_;
+
+  angle_sensor_pub_.publish(angle_sensor_msg_);
+  angle_acc_sensor_pub_.publish(angle_acc_sensor_msg_);
 
   //foot publish
   foot_right_msg_.x = online_walking->mat_g_right_foot_(0,3);

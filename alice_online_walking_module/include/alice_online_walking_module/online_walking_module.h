@@ -152,6 +152,12 @@ private:
   ros::Publisher left_torque_sensor_pub_;
   ros::Publisher right_torque_sensor_pub_;
 
+  ros::Publisher angle_sensor_pub_;
+  ros::Publisher angle_acc_sensor_pub_;
+
+  geometry_msgs::Vector3 angle_sensor_msg_;
+  geometry_msgs::Vector3 angle_acc_sensor_msg_;
+
   geometry_msgs::Vector3 left_force_sensor_msg_;
   geometry_msgs::Vector3 right_force_sensor_msg_;
 
