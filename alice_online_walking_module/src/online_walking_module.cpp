@@ -90,6 +90,11 @@ OnlineWalkingModule::OnlineWalkingModule()
 
   real_zmp_x = 0;
   real_zmp_y = 0;
+
+  temp_right_zmp_x = 0;
+  temp_right_zmp_y = 0;
+  temp_left_zmp_x  = 0;
+  temp_left_zmp_y  = 0;
 }
 
 OnlineWalkingModule::~OnlineWalkingModule()
@@ -1175,23 +1180,6 @@ void OnlineWalkingModule::process(std::map<std::string, robotis_framework::Dynam
   real_zmp_pub_.publish(real_zmp_msg_);
 
 
-  left_force_sensor_msg_ .x  = online_walking->mat_g_left_force_(0,0);
-  left_force_sensor_msg_ .y  = online_walking->mat_g_left_force_(1,0);
-  left_force_sensor_msg_ .z  = online_walking->mat_g_left_force_(2,0);
-
-  right_force_sensor_msg_ .x  = online_walking->mat_g_right_force_(0,0);
-  right_force_sensor_msg_ .y  = online_walking->mat_g_right_force_(1,0);
-  right_force_sensor_msg_ .z  = online_walking->mat_g_right_force_(2,0);
-
-
-  left_torque_sensor_msg_ .x  = online_walking->mat_g_left_torque_(0,0);
-  left_torque_sensor_msg_ .y  = online_walking->mat_g_left_torque_(1,0);
-  left_torque_sensor_msg_ .z  = online_walking->mat_g_left_torque_(2,0);
-
-  right_torque_sensor_msg_ .x  = online_walking->mat_g_right_torque_(0,0);
-  right_torque_sensor_msg_ .y  = online_walking->mat_g_right_torque_(1,0);
-  right_torque_sensor_msg_ .z  = online_walking->mat_g_right_torque_(2,0);
-
   left_force_sensor_pub_.publish(left_force_sensor_msg_);
   right_force_sensor_pub_.publish(right_force_sensor_msg_);
   left_torque_sensor_pub_.publish(left_torque_sensor_msg_);
@@ -1280,8 +1268,31 @@ void OnlineWalkingModule::realZmpCalculate(Eigen::Matrix4d g_right_foot, Eigen::
 {
   //real_zmp_x = (g_right_foot(0,3)*g_right_force(2,0) + g_left_foot(0,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
   //real_zmp_y = (g_right_foot(1,3)*g_right_force(2,0) + g_left_foot(1,3)*g_left_force(2,0)) / (g_right_force(2,0) + g_left_force(2,0));
-  real_zmp_x = (-(g_right_torque(1,0)+g_left_torque(1,0))+ (g_right_foot(0,3)*g_right_force(2,0)) + (g_left_foot(0,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
-  real_zmp_y = (-(g_right_torque(0,0)+g_left_torque(0,0))+ (g_right_foot(1,3)*g_right_force(2,0)) + (g_left_foot(1,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
+  //real_zmp_x = (-(g_right_torque(1,0)+g_left_torque(1,0))+ (g_right_foot(0,3)*g_right_force(2,0)) + (g_left_foot(0,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
+  //real_zmp_y = (-(g_right_torque(0,0)+g_left_torque(0,0))+ (g_right_foot(1,3)*g_right_force(2,0)) + (g_left_foot(1,3)*g_left_force(2,0)))/(g_right_force(2,0) + g_left_force(2,0));
+
+  temp_right_zmp_x = (-(g_right_torque(1,0))+ (-0.127*g_right_force(0,0)))/(g_right_force(2,0));
+  temp_right_zmp_y = ((g_right_torque(0,0))+ (-0.127*g_right_force(1,0)))/(g_right_force(2,0));
+
+
+  temp_left_zmp_x = (-(g_left_torque(1,0))+ (-0.127*g_left_force(0,0)))/(g_left_force(2,0));
+  temp_left_zmp_y = ((g_left_torque(0,0))+ (-0.127*g_left_force(1,0)))/(g_left_force(2,0));
+
+  real_zmp_x = (temp_right_zmp_x*g_right_force(2,0) + temp_left_zmp_x*g_left_force(2,0))/(g_right_force(2,0) + g_left_force(2,0));
+  real_zmp_y = (temp_right_zmp_y*g_right_force(2,0) + temp_left_zmp_y*g_left_force(2,0))/(g_right_force(2,0) + g_left_force(2,0));
+
+    left_force_sensor_msg_.x   = g_left_force(0,0);
+    left_force_sensor_msg_.y   = g_left_force(1,0);
+    left_force_sensor_msg_.z   = g_left_force(2,0);
+    right_force_sensor_msg_.x  = g_right_force(0,0);
+    right_force_sensor_msg_.y  = g_right_force(1,0);
+    right_force_sensor_msg_.z  = g_right_force(2,0);
+    left_torque_sensor_msg_.x  = g_left_torque(0,0);
+    left_torque_sensor_msg_.y  = g_left_torque(1,0);
+    left_torque_sensor_msg_.z  = g_left_torque(2,0);
+    right_torque_sensor_msg_.x = g_right_torque(0,0);
+    right_torque_sensor_msg_.y = g_right_torque(1,0);
+    right_torque_sensor_msg_.z = g_right_torque(2,0);
 }
 
 void OnlineWalkingModule::stop()

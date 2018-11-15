@@ -171,6 +171,8 @@ private:
   geometry_msgs::Vector3 foot_left_msg_;
 
   //yitaek zmp output
+  double temp_right_zmp_x, temp_left_zmp_x;
+  double temp_right_zmp_y, temp_left_zmp_y;
   double real_zmp_x, real_zmp_y;
 
   ros::Publisher real_zmp_pub_;
